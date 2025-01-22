@@ -5,6 +5,7 @@ import { useWorkgroup, Workgroup } from "@/hooks/feature/use-workgroup";
 import { ColumnDef } from "@tanstack/react-table";
 import { ManageUserDialog } from "./ManageUserDialog";
 import { ManageGroupDistributionDialog } from "./ManageGroupDistributionDialog";
+import { ManageTaskDialog } from "./ManageTaskDialog";
 
 export const WorkgroupDatatable = () => {
   const { data } = useWorkgroup();
@@ -32,6 +33,7 @@ const columns: ColumnDef<Workgroup["data"][0]>[] = [
         <div className="space-x-2">
           <ManageUserDialog id={props.row.original.id} />
           <ManageGroupDistributionDialog id={props.row.original.id} />
+          <ManageTaskDialog id={props.row.original.id} />
         </div>
       );
     },

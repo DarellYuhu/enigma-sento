@@ -6,6 +6,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ManageUserDialog } from "./ManageUserDialog";
 import { ManageGroupDistributionDialog } from "./ManageGroupDistributionDialog";
 import { ManageTaskDialog } from "./ManageTaskDialog";
+import Link from "next/link";
+import { badgeVariants } from "@/components/ui/badge";
 
 export const WorkgroupDatatable = () => {
   const { data } = useWorkgroup();
@@ -16,6 +18,16 @@ const columns: ColumnDef<Workgroup["data"][0]>[] = [
   {
     accessorKey: "name",
     header: "Name",
+    cell({ row }) {
+      return (
+        <Link
+          href={`/workgroup/${row.original.id}/project`}
+          className={badgeVariants({ variant: "outline" })}
+        >
+          {row.original.name}
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "projectStoryPerUser",

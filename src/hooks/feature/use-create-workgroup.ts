@@ -1,17 +1,21 @@
 import { SentoClient } from "@/lib/sento-client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { z } from "zod";
 
 export const useCreateWorkgroup = () => {
   const { data: session } = useSession();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: CreateWorkgroup) => {
       const { data } = await SentoClient.post("/workgroups", payload, {
         headers: { Authorization: `Bearer ${session?.user?.token}` },
       });
       return data;
+    },
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ["workgroup"] });
     },
     onError(error) {
       toast.error(error?.message || "Something went wrong!");

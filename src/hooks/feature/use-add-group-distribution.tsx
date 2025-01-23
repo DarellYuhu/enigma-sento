@@ -1,11 +1,12 @@
 import { SentoClient } from "@/lib/sento-client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 
 export const useAddGroupDistribution = () => {
+  const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const id = searchParams.get("workgroupId");
   const { data: session } = useSession();
@@ -26,6 +27,9 @@ export const useAddGroupDistribution = () => {
     },
     onSuccess() {
       toast.success("Group distribution added!");
+      queryClient.invalidateQueries({
+        queryKey: ["workgroup", id, "group-distribution"],
+      });
     },
     onError(err) {
       toast.error(err?.message || "Something went wrong!");

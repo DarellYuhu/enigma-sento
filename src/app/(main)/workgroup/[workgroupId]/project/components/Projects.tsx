@@ -1,14 +1,14 @@
 "use client";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useProjects } from "@/hooks/feature/use-proejcts";
+import { useProjects } from "@/hooks/feature/use-projects";
 import { Story } from "./Story";
 
 export const Projects = () => {
   const { data } = useProjects();
   return (
     <div>
-      <Tabs defaultValue="tab-1">
+      <Tabs className="m-3 p-3">
         <TabsList>
           {data?.data.map((item) => (
             <TabsTrigger value={item.id} key={item.id}>
@@ -17,7 +17,7 @@ export const Projects = () => {
           ))}
         </TabsList>
         {data?.data.map((item, idx) => (
-          <Story value={item.id} key={idx} />
+          <Story value={item.id} key={idx} idx={idx} />
         ))}
       </Tabs>
     </div>

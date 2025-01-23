@@ -1,9 +1,13 @@
 import { SentoClient } from "@/lib/sento-client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 
 export const useCreateStory = () => {
+  const { invalidateQueries } = useQueryClient();
+  const { workgroupId } = useParams();
+
   return useMutation({
     mutationFn: async ({ data: json, ...rest }: CreateStorySchema) => {
       const normalized = {
@@ -32,6 +36,7 @@ export const useCreateStory = () => {
     },
     onSuccess() {
       toast.success("Story created!");
+      invalidateQueries({ queryKey: ["projects", workgroupId] });
     },
     onError(err) {
       toast.error(err?.message || "Something went wrong!");

@@ -28,10 +28,12 @@ import {
 } from "@/hooks/feature/use-create-story";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Trash2 } from "lucide-react";
+import { useRef } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 
 export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
-  const { mutate } = useCreateStory();
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const { mutateAsync } = useCreateStory();
   const form = useForm<CreateStorySchema>({
     resolver: zodResolver(createStorySchema),
     defaultValues: {
@@ -58,7 +60,7 @@ export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
         ),
       })),
     };
-    mutate(modified);
+    mutateAsync(modified).then(() => closeBtnRef.current?.click());
   };
 
   return (
@@ -198,7 +200,10 @@ export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
         </Button>
         <DialogFooter>
           <Button type="submit">Submit</Button>
-          <DialogClose className={buttonVariants({ variant: "outline" })}>
+          <DialogClose
+            className={buttonVariants({ variant: "outline" })}
+            ref={closeBtnRef}
+          >
             Cancel
           </DialogClose>
         </DialogFooter>

@@ -1,10 +1,11 @@
 import { SentoClient } from "@/lib/sento-client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 
 export const useCreateProject = () => {
+  const { invalidateQueries } = useQueryClient();
   const { data: session } = useSession();
   const { workgroupId } = useParams();
 
@@ -22,6 +23,7 @@ export const useCreateProject = () => {
     },
     onSuccess() {
       toast.success("Project created!");
+      invalidateQueries({ queryKey: ["projects", workgroupId] });
     },
     onError(err) {
       toast.error(err?.message || "Something went wrong!");

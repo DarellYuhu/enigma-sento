@@ -30,5 +30,33 @@ export type GetProjectsResponse = {
     status: boolean;
     id: string;
     workgroupUserId: number;
+    Story: Story[];
   }[];
+};
+
+export type StoryData = {
+  texts: string[];
+  images: string[];
+  textColor: string;
+  textPosition:
+    | "top-left"
+    | "top-center"
+    | "top-right"
+    | "middle-left"
+    | "middle-center"
+    | "middle-right"
+    | "bottom-left"
+    | "bottom-center"
+    | "bottom-right";
+};
+
+export type Story = {
+  id: string;
+  section: number;
+  contentPerStory: null;
+  type: string;
+  projectId: string;
+  data: StoryData[];
+  captions: string[];
+  hashtags: null | string[];
 };

@@ -22,7 +22,8 @@
         "pattern": "- Local:.+(https?://.+)",
         "uriFormat": "%s",
         "action": "debugWithEdge"
-      }
+      },
+      "autoAttachChildProcesses": true
     },
     {
       "name": "Next.js: debug full stack",

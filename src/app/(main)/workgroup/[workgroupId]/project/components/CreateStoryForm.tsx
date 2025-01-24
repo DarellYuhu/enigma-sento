@@ -6,7 +6,6 @@ import { FileUploader } from "@/components/ui/file-uploader";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -38,7 +37,7 @@ export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
     resolver: zodResolver(createStorySchema),
     defaultValues: {
       projectId,
-      type: "Section",
+      type: "SYSTEM_GENERATE",
       section: 1,
       data: [
         { images: [], texts: [], textColor: "", textPosition: "top-left" },
@@ -53,7 +52,7 @@ export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
   const handleSubmit = (data: CreateStorySchema) => {
     const modified = {
       ...data,
-      data: data.data.map((item, idx) => ({
+      data: data.data?.map((item, idx) => ({
         ...item,
         images: item.images.map(
           (image) => new File([image], `${idx}_${image.name}`)
@@ -66,22 +65,6 @@ export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
   return (
     <Form {...form}>
       <form className="space-y-4" onSubmit={form.handleSubmit(handleSubmit)}>
-        <FormField
-          control={form.control}
-          name="type"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Story Type</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormDescription>
-                Just type &quot;Section&quot; for now
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <FormField
           control={form.control}
           name="section"

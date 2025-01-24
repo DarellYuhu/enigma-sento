@@ -19,10 +19,14 @@ export const GenerateContentDistributionAlert = ({
   projectId: string;
 }) => {
   const closeBtnRef = useRef<HTMLButtonElement>(null);
-  const { mutateAsync } = useGenerateContentDist();
+  const { mutate } = useGenerateContentDist();
 
   const handleGenerate = () => {
-    mutateAsync(projectId).then(() => closeBtnRef.current?.click());
+    mutate(projectId, {
+      onSuccess() {
+        closeBtnRef.current?.click();
+      },
+    });
   };
 
   return (

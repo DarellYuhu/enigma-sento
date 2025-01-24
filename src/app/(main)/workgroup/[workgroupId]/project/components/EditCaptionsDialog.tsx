@@ -40,11 +40,8 @@ export const EditCaptionsDialog = ({ storyId }: { storyId: string }) => {
   });
 
   const handleSubmit = (data: UpdateStoryBody) => {
-    console.log("huhi");
     mutateAsync(data).then(() => cluseBtnRef.current?.click());
   };
-
-  console.log(form.formState.errors);
 
   return (
     <Dialog>

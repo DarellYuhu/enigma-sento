@@ -1,7 +1,7 @@
 "use client";
 
 import { Datatable } from "@/components/datatable";
-import { useWorkgroup, Workgroup } from "@/hooks/feature/use-workgroup";
+import { useWorkgroups, Workgroup } from "@/hooks/feature/use-workgroups";
 import { ColumnDef } from "@tanstack/react-table";
 import { ManageUserDialog } from "./ManageUserDialog";
 import { ManageGroupDistributionDialog } from "./ManageGroupDistributionDialog";
@@ -10,7 +10,7 @@ import Link from "next/link";
 import { badgeVariants } from "@/components/ui/badge";
 
 export const WorkgroupDatatable = () => {
-  const { data } = useWorkgroup();
+  const { data } = useWorkgroups();
   return <div>{data && <Datatable columns={columns} data={data.data} />}</div>;
 };
 

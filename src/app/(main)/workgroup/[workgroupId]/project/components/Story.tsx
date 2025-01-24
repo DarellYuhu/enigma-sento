@@ -37,10 +37,15 @@ export const Story = ({ value, idx }: { value: string; idx: number }) => {
         <div className="grid grid-cols-4 gap-3 p-4" key={idx}>
           <div className="col-span-4 flex flex-row justify-between">
             <p className="font-semibold">Story {idx + 1}</p>
-            <Badge variant={"secondary"}>
-              Required captions: {story.captions.length}/
-              {story.contentPerStory ?? "-"}
-            </Badge>
+            <div className="space-x-3">
+              <Badge variant={"secondary"}>
+                {storyType[story.type as keyof typeof storyType]}
+              </Badge>
+              <Badge variant={"secondary"}>
+                Required captions: {story.captions.length}/
+                {story.contentPerStory ?? "-"}
+              </Badge>
+            </div>
           </div>
           <div className="col-span-full grid grid-cols-2 gap-3">
             <Card>
@@ -64,7 +69,7 @@ export const Story = ({ value, idx }: { value: string; idx: number }) => {
               </CardContent>
             </Card>
           </div>
-          {story.data.map((item, idx) => (
+          {story.data?.map((item, idx) => (
             <div
               key={idx}
               className="p-4 space-y-2 border-2 shadow-md rounded-md"
@@ -104,4 +109,9 @@ export const Story = ({ value, idx }: { value: string; idx: number }) => {
       ))}
     </TabsContent>
   );
+};
+
+const storyType = {
+  DRAFT_ONLY: "Draft Only",
+  SYSTEM_GENERATE: "System Generate",
 };

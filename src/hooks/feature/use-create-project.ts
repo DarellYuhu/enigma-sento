@@ -11,7 +11,6 @@ export const useCreateProject = () => {
 
   return useMutation({
     mutationFn: async (payload: { name: string }) => {
-      console.log("huhi");
       const { data } = await SentoClient.post(
         "/projects",
         { ...payload, workgroupId },

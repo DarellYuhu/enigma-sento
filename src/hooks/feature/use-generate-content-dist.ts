@@ -5,7 +5,7 @@ import { toast } from "sonner";
 export const useGenerateContentDist = () => {
   return useMutation({
     mutationFn: async (projectId: string) => {
-      const { data } = await SentoClient.get(
+      const { data } = await SentoClient.post(
         `/project/${projectId}/content-distribution`
       );
       return data;

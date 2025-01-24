@@ -40,7 +40,6 @@ export const EditHashtagsDialog = ({ storyId }: { storyId: string }) => {
   });
 
   const handleSubmit = (data: UpdateStoryBody) => {
-    console.log("huhi");
     mutateAsync(data).then(() => cluseBtnRef.current?.click());
   };
 

@@ -10,7 +10,6 @@ export const useProjects = () => {
   return useQuery({
     queryKey: ["projects", workgroupId],
     queryFn: async () => {
-      console.log("workgorupId", workgroupId);
       const { data } = await SentoClient.get<GetProjectsResponse>(
         `/workgroups/${workgroupId}/projects`,
         {
@@ -56,7 +55,7 @@ export type Story = {
   contentPerStory: null;
   type: string;
   projectId: string;
-  data: StoryData[];
+  data: StoryData[] | null;
   captions: string[];
   hashtags: null | string[];
 };

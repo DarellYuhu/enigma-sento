@@ -1,5 +1,6 @@
 import { SentoClient } from "@/lib/sento-client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -40,7 +41,9 @@ export const useCreateStory = () => {
       invalidateQueries({ queryKey: ["projects", workgroupId] });
     },
     onError(err) {
-      toast.error(err?.message || "Something went wrong!");
+      if (err instanceof AxiosError)
+        return toast.error(err.response?.data.message || err.response?.data);
+      toast.error("Something went wrong!");
     },
   });
 };
@@ -52,24 +55,14 @@ export const createStorySchema = z
       .regex(/^[0-9]+$/i, "Section must be a number")
       .transform((value) => parseInt(value, 10))
       .optional(),
-    type: z.enum(["DRAFT_ONLY", "SYSTEM_GENERATE"]),
+    type: z.enum(["USER_GENERATE", "SYSTEM_GENERATE"]),
     projectId: z.string().trim().min(1, "Required"),
     data: z
       .array(
         z.object({
           texts: z.string().transform((value) => value.split("\n")),
           textColor: z.string(),
-          textPosition: z.enum([
-            "top-left",
-            "top-center",
-            "top-right",
-            "middle-left",
-            "middle-center",
-            "middle-right",
-            "bottom-left",
-            "bottom-center",
-            "bottom-right",
-          ]),
+          textPosition: z.enum(["random", "middle", "bottom"]),
           images: z
             .array(
               z

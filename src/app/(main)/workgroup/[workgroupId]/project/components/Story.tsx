@@ -15,6 +15,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EditCaptionsDialog } from "./EditCaptionsDialog";
 import { EditHashtagsDialog } from "./EditHashtagsDialog";
+import { UserGeneratedContentForm } from "./UserGeneratedContentForm";
+import { DownloadContentButton } from "./DownloadContentButton";
 
 export const Story = ({ value, idx }: { value: string; idx: number }) => {
   const { data } = useProjects();
@@ -34,7 +36,7 @@ export const Story = ({ value, idx }: { value: string; idx: number }) => {
         </div>
       </div>
       {data?.data[idx].Story.map((story, idx) => (
-        <div className="grid grid-cols-4 gap-3 p-4" key={idx}>
+        <div className="grid grid-cols-4 gap-3 p-4 border-b-2" key={idx}>
           <div className="col-span-4 flex flex-row justify-between">
             <p className="font-semibold">Story {idx + 1}</p>
             <div className="space-x-3">
@@ -42,7 +44,7 @@ export const Story = ({ value, idx }: { value: string; idx: number }) => {
                 {storyType[story.type as keyof typeof storyType]}
               </Badge>
               <Badge variant={"secondary"}>
-                Required captions: {story.captions.length}/
+                Required captions & generated content: {story.captions.length}/
                 {story.contentPerStory ?? "-"}
               </Badge>
             </div>
@@ -105,6 +107,13 @@ export const Story = ({ value, idx }: { value: string; idx: number }) => {
               </ScrollArea>
             </div>
           ))}
+          {story.contentPerStory && story.type === "USER_GENERATE" && (
+            <UserGeneratedContentForm
+              storyId={story.id}
+              fileLength={story.contentPerStory}
+            />
+          )}
+          <DownloadContentButton storyId={story.id} />
         </div>
       ))}
     </TabsContent>
@@ -112,6 +121,6 @@ export const Story = ({ value, idx }: { value: string; idx: number }) => {
 };
 
 const storyType = {
-  DRAFT_ONLY: "Draft Only",
+  USER_GENERATE: "User Generate",
   SYSTEM_GENERATE: "System Generate",
 };

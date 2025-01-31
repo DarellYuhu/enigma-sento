@@ -1,5 +1,6 @@
 import { SentoClient } from "@/lib/sento-client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -17,8 +18,10 @@ export const useCreateWorkgroup = () => {
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ["workgroup"] });
     },
-    onError(error) {
-      toast.error(error?.message || "Something went wrong!");
+    onError(err) {
+      if (err instanceof AxiosError)
+        return toast.error(err.response?.data.message || err.response?.data);
+      toast.error("Something went wrong!");
     },
   });
 };

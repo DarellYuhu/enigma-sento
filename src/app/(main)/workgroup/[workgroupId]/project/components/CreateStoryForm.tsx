@@ -39,9 +39,7 @@ export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
       projectId,
       type: "SYSTEM_GENERATE",
       section: 1,
-      data: [
-        { images: [], texts: [], textColor: "", textPosition: "top-left" },
-      ],
+      data: [{ images: [], texts: [], textColor: "", textPosition: "random" }],
     },
   });
   const { fields, remove, append } = useFieldArray({
@@ -175,7 +173,7 @@ export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
               images: [],
               texts: [],
               textColor: "",
-              textPosition: "top-left",
+              textPosition: "random",
             })
           }
         >
@@ -196,13 +194,7 @@ export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
 };
 
 const options = [
-  { value: "top-left", label: "Top Left" },
-  { value: "top-center", label: "Top Center" },
-  { value: "top-right", label: "Top Right" },
-  { value: "middle-left", label: "Middle Left" },
-  { value: "middle-center", label: "Middle Center" },
-  { value: "middle-right", label: "Middle Right" },
-  { value: "bottom-left", label: "Bottom Left" },
-  { value: "bottom-center", label: "Bottom Center" },
-  { value: "bottom-right", label: "Bottom Right" },
+  { value: "random", label: "Random" },
+  { value: "bottom", label: "Bottom" },
+  { value: "middle", label: "Middle" },
 ];

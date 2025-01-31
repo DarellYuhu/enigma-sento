@@ -1,5 +1,6 @@
 import { SentoClient } from "@/lib/sento-client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -21,7 +22,9 @@ export const useEditStory = () => {
       invalidateQueries({ queryKey: ["projects", params.workgroupId] });
     },
     onError(err) {
-      toast.error(err?.message || "Something went wrong!");
+      if (err instanceof AxiosError)
+        return toast.error(err.response?.data.message || err.response?.data);
+      toast.error("Something went wrong!");
     },
   });
 };

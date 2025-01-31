@@ -1,5 +1,6 @@
 import { SentoClient } from "@/lib/sento-client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
@@ -28,7 +29,9 @@ export const useAddWorkgroupUsers = () => {
       });
     },
     onError(err) {
-      toast.error(err?.message || "Something went wrong!");
+      if (err instanceof AxiosError)
+        return toast.error(err.response?.data.message || err.response?.data);
+      toast.error("Something went wrong!");
     },
   });
 };

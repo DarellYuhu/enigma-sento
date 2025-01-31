@@ -16,7 +16,7 @@ export const CreateDraftOnlyAlert = ({ projectId }: { projectId: string }) => {
   const { mutate } = useCreateStory();
 
   const handleSubmit = () => {
-    mutate({ type: "DRAFT_ONLY", projectId });
+    mutate({ type: "USER_GENERATE", projectId });
   };
 
   return (

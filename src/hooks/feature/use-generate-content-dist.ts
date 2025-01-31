@@ -1,5 +1,6 @@
 import { SentoClient } from "@/lib/sento-client";
 import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { toast } from "sonner";
 
 export const useGenerateContentDist = () => {
@@ -14,7 +15,9 @@ export const useGenerateContentDist = () => {
       toast.success("Content distribution generated!");
     },
     onError(err) {
-      toast.error(err?.message || "Something went wrong!");
+      if (err instanceof AxiosError)
+        return toast.error(err.response?.data.message || err.response?.data);
+      toast.error("Something went wrong!");
     },
   });
 };

@@ -5,21 +5,29 @@ import { toast } from "sonner";
 
 export const useDownloadContent = () =>
   useMutation({
-    mutationFn: async (storyId: string) => {
-      const response = await SentoClient.get(`/stories/${storyId}/contents`, {
-        responseType: "blob",
-      });
+    mutationFn: async ({
+      groupDistributionId,
+      projectIds,
+    }: {
+      groupDistributionId: string;
+      projectIds: string[];
+    }) => {
+      const response = await SentoClient.post(
+        `/group-distributions/${groupDistributionId}/contents`,
+        { projectIds },
+        {
+          responseType: "blob",
+        }
+      );
       const blob = new Blob([response.data]);
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
 
       // Extract filename from Content-Disposition if available
       const contentDisposition = response.headers["content-disposition"];
-      console.log(contentDisposition);
       let fileName = "downloaded-file";
       if (contentDisposition) {
         const match = contentDisposition.match(/filename\*?=([^;]+)/);
-        console.log(match);
         if (match) fileName = match[1].trim().replace(/^["']|["']$/g, "");
       }
 

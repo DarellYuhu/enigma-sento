@@ -52,7 +52,7 @@ export type StoryData = {
 export type Story = {
   id: string;
   section: number;
-  contentPerStory: null;
+  contentPerStory: number | null;
   type: "USER_GENERATE" | "SYSTEM_GENERATE";
   projectId: string;
   data: StoryData[] | null;

@@ -13,13 +13,12 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  OnChangeFn,
-  RowSelectionState,
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
 import { DataTablePagination } from "./DataTablePagination";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[] | (() => ColumnDef<TData, TValue>[]);
@@ -29,7 +28,7 @@ interface DataTableProps<TData, TValue> {
   initialPageSize?: number;
   initialSortingState?: SortingState;
   enableMultiRowSelection?: boolean;
-  onRowSelectionChange?: OnChangeFn<RowSelectionState>;
+  onRowSelect?: (values: TData[]) => void;
 }
 
 export function Datatable<TData, TValue>({
@@ -40,7 +39,10 @@ export function Datatable<TData, TValue>({
   initialPageSize = 5,
   initialSortingState,
   enableMultiRowSelection,
+  onRowSelect,
 }: DataTableProps<TData, TValue>) {
+  const [rowSelection, setRowSelection] = useState({});
+
   const table = useReactTable({
     data,
     columns: Array.isArray(columns) ? columns : columns(),
@@ -48,13 +50,23 @@ export function Datatable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     enableMultiRowSelection: enableMultiRowSelection,
+    onRowSelectionChange: setRowSelection,
     initialState: {
       sorting: initialSortingState,
       pagination: {
         pageSize: initialPageSize,
       },
     },
+    state: { rowSelection },
   });
+
+  useEffect(() => {
+    if (onRowSelect) {
+      onRowSelect(
+        table.getFilteredSelectedRowModel().rows.map((row) => row.original)
+      );
+    }
+  }, [rowSelection, onRowSelect, table]);
 
   return (
     <div className={cn("space-y-4", className)}>

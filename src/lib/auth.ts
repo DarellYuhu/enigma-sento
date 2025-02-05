@@ -27,6 +27,7 @@ declare module "next-auth" {
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  trustHost: true,
   providers: [
     Credentials({
       credentials: {
@@ -39,7 +40,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             data: { data },
           } = await SentoClient.post<SignInResponse>(
             "/auth/sign-in",
-            credentials
+            credentials,
+            {
+              baseURL: process.env.NEXT_PUBLIC_BASE_URL_API_AUTH,
+            }
           );
           const user = { ...data.user, token: data.token };
           return user;

@@ -32,7 +32,7 @@ export const GenerateContentDistributionAlert = ({
   return (
     <AlertDialog>
       <AlertDialogTrigger className={buttonVariants()}>
-        Generate Content Distribution
+        Allocate Contents
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

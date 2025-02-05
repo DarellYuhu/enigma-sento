@@ -11,6 +11,7 @@ import {
 import { ClipboardList } from "lucide-react";
 import { GenerateTaskDistributionAlert } from "./GenerateTaskDistributionAlert";
 import { TaskDistributionDatatable } from "./TaskDistributionDatatable";
+import Link from "next/link";
 
 export const ManageTaskDialog = ({ id }: { id: string }) => {
   return (
@@ -36,7 +37,15 @@ export const ManageTaskDialog = ({ id }: { id: string }) => {
             workgroup here
           </DialogDescription>
         </DialogHeader>
-        <GenerateTaskDistributionAlert />
+        <div className="flex flex-row justify-between">
+          <GenerateTaskDistributionAlert />
+          <Link
+            href={`/workgroup/${id}/group-distribution`}
+            className={buttonVariants({ variant: "outline" })}
+          >
+            View All
+          </Link>
+        </div>
         <TaskDistributionDatatable />
       </DialogContent>
     </Dialog>

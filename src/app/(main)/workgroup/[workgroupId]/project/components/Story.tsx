@@ -16,7 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EditCaptionsDialog } from "./EditCaptionsDialog";
 import { EditHashtagsDialog } from "./EditHashtagsDialog";
 import { UserGeneratedContentForm } from "./UserGeneratedContentForm";
-import { DownloadContentButton } from "./DownloadContentButton";
+import { GenerateContentButton } from "./GenerateContentButton";
 
 export const Story = ({ value, idx }: { value: string; idx: number }) => {
   const { data } = useProjects();
@@ -113,7 +113,12 @@ export const Story = ({ value, idx }: { value: string; idx: number }) => {
               fileLength={story.contentPerStory}
             />
           )}
-          <DownloadContentButton storyId={story.id} />
+          {story.type === "SYSTEM_GENERATE" &&
+            story.contentPerStory !== null && (
+              <div className="col-span-full">
+                <GenerateContentButton storyId={story.id} />
+              </div>
+            )}
         </div>
       ))}
     </TabsContent>

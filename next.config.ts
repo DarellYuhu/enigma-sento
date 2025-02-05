@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "http",
-        hostname: process.env.NEXT_PUBLIC_MINIO_HOSTNAME ?? "",
+        hostname: process.env.NEXT_PUBLIC_MINIO_HOSTNAME ?? "localhost",
         port: process.env.NEXT_PUBLIC_MINIO_PORT,
         pathname: "/**",
       },

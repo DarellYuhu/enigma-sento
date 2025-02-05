@@ -7,7 +7,7 @@ import { z } from "zod";
 
 export const useEditStory = () => {
   const params = useParams();
-  const { invalidateQueries } = useQueryClient();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (payload: UpdateStoryBody) => {
@@ -19,7 +19,9 @@ export const useEditStory = () => {
     },
     onSuccess() {
       toast.success("Story updated!");
-      invalidateQueries({ queryKey: ["projects", params.workgroupId] });
+      queryClient.invalidateQueries({
+        queryKey: ["projects", params.workgroupId],
+      });
     },
     onError(err) {
       if (err instanceof AxiosError)

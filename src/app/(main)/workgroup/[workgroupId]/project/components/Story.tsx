@@ -17,12 +17,19 @@ import { EditCaptionsDialog } from "./EditCaptionsDialog";
 import { EditHashtagsDialog } from "./EditHashtagsDialog";
 import { UserGeneratedContentForm } from "./UserGeneratedContentForm";
 import { GenerateContentButton } from "./GenerateContentButton";
+import { Check } from "lucide-react";
 
-export const Story = ({ value, idx }: { value: string; idx: number }) => {
+export const Story = ({
+  value,
+  idx,
+}: {
+  value: { id: string; status: boolean };
+  idx: number;
+}) => {
   const { data } = useProjects();
 
   return (
-    <TabsContent value={value} className="border-2 rounded-md space-y-3 p-3">
+    <TabsContent value={value.id} className="border-2 rounded-md space-y-3 p-3">
       <div className="flex flex-row justify-between">
         <Badge
           variant={"outline"}
@@ -31,8 +38,8 @@ export const Story = ({ value, idx }: { value: string; idx: number }) => {
           {data?.data[idx].status ? "Published" : "Draft"}
         </Badge>
         <div className="space-x-2">
-          <GenerateContentDistributionAlert projectId={value} />
-          <CreateStoryDialog projectId={value} />
+          <GenerateContentDistributionAlert projectId={value.id} />
+          <CreateStoryDialog projectId={value.id} />
         </div>
       </div>
       {data?.data[idx].Story.map((story, idx) => (
@@ -40,6 +47,7 @@ export const Story = ({ value, idx }: { value: string; idx: number }) => {
           <div className="col-span-4 flex flex-row justify-between">
             <p className="font-semibold">Story {idx + 1}</p>
             <div className="space-x-3">
+              <GeneratorBadge status={story.generatorStatus} />
               <Badge variant={"secondary"}>
                 {storyType[story.type as keyof typeof storyType]}
               </Badge>
@@ -53,7 +61,7 @@ export const Story = ({ value, idx }: { value: string; idx: number }) => {
             <Card>
               <CardHeader className="flex flex-row justify-between border-b-2 items-center">
                 <CardTitle>Captions</CardTitle>
-                <EditCaptionsDialog storyId={story.id} />
+                {!value.status && <EditCaptionsDialog storyId={story.id} />}
               </CardHeader>
               <CardContent className="p-2">
                 <ScrollArea className="h-[100px]">
@@ -64,7 +72,7 @@ export const Story = ({ value, idx }: { value: string; idx: number }) => {
             <Card>
               <CardHeader className="flex flex-row justify-between border-b-2 items-center">
                 <CardTitle>Hashtags</CardTitle>
-                <EditHashtagsDialog storyId={story.id} />
+                {!value.status && <EditHashtagsDialog storyId={story.id} />}
               </CardHeader>
               <CardContent className="p-2">
                 <ScrollArea className="h-[100px]">{story.hashtags}</ScrollArea>
@@ -123,6 +131,65 @@ export const Story = ({ value, idx }: { value: string; idx: number }) => {
       ))}
     </TabsContent>
   );
+};
+
+const GeneratorBadge = ({
+  status,
+}: {
+  status: keyof typeof generatorStatus;
+}) => {
+  switch (status) {
+    case "FINISHED":
+      return (
+        <Badge variant="outline" className="gap-1.5">
+          <Check
+            className="text-emerald-500"
+            size={12}
+            strokeWidth={2}
+            aria-hidden="true"
+          />
+          {generatorStatus[status]}
+        </Badge>
+      );
+    case "RUNNING":
+      return (
+        <Badge variant="outline" className="gap-1.5">
+          <span
+            className="size-1.5 rounded-full bg-amber-500"
+            aria-hidden="true"
+          ></span>
+          {generatorStatus[status]}
+        </Badge>
+      );
+    case "ERROR":
+      return (
+        <Badge variant="outline" className="gap-1.5">
+          <span
+            className="size-1.5 rounded-full bg-red-500"
+            aria-hidden="true"
+          ></span>
+          {generatorStatus[status]}
+        </Badge>
+      );
+
+    default:
+      return (
+        <Badge variant="outline" className="gap-1.5">
+          <span
+            className="size-1.5 rounded-full bg-slate-500"
+            aria-hidden="true"
+          ></span>
+          {generatorStatus[status]}
+        </Badge>
+      );
+  }
+};
+
+const generatorStatus = {
+  NOT_GENERATE: "Not Generate",
+  RUNNING: "Running",
+  FINISHED: "Finished",
+  ERROR: "Error Generating",
 };
 
 const storyType = {

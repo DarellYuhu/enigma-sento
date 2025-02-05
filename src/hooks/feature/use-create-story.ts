@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 export const useCreateStory = () => {
-  const { invalidateQueries } = useQueryClient();
+  const queryClient = useQueryClient();
   const { workgroupId } = useParams();
 
   return useMutation({
@@ -38,7 +38,7 @@ export const useCreateStory = () => {
     },
     onSuccess() {
       toast.success("Story created!");
-      invalidateQueries({ queryKey: ["projects", workgroupId] });
+      queryClient.invalidateQueries({ queryKey: ["projects", workgroupId] });
     },
     onError(err) {
       if (err instanceof AxiosError)

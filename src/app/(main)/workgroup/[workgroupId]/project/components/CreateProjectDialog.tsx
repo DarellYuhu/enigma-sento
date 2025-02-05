@@ -43,7 +43,9 @@ export const CreateProjectDialog = () => {
 
   return (
     <Dialog onOpenChange={() => form.reset()}>
-      <DialogTrigger className={buttonVariants()}>Create Project</DialogTrigger>
+      <DialogTrigger className={`${buttonVariants()} self-end`}>
+        Create Project
+      </DialogTrigger>
       <DialogContent>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
           <DialogHeader>

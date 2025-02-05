@@ -1,16 +1,22 @@
 import { SentoClient } from "@/lib/sento-client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { useParams } from "next/navigation";
 import { toast } from "sonner";
 
 export const useGenerateContent = () => {
+  const params = useParams();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (storyId: string) => {
       const { data } = await SentoClient.patch(`/stories/${storyId}/contents`);
       return data;
     },
     onSuccess() {
-      toast.success("Content generated!");
+      toast.success("Content is being generated!");
+      queryClient.invalidateQueries({
+        queryKey: ["projects", params.workgroupId],
+      });
     },
     onError(err) {
       if (err instanceof AxiosError)

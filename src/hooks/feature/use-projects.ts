@@ -58,4 +58,5 @@ export type Story = {
   data: StoryData[] | null;
   captions: string[];
   hashtags: null | string[];
+  generatorStatus: "NOT_GENERATE" | "RUNNING" | "FINISHED" | "ERROR";
 };

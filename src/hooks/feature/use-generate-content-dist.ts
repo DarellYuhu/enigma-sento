@@ -1,9 +1,12 @@
 import { SentoClient } from "@/lib/sento-client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { useParams } from "next/navigation";
 import { toast } from "sonner";
 
 export const useGenerateContentDist = () => {
+  const params = useParams();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (projectId: string) => {
       const { data } = await SentoClient.post(
@@ -13,6 +16,9 @@ export const useGenerateContentDist = () => {
     },
     onSuccess() {
       toast.success("Content distribution generated!");
+      queryClient.invalidateQueries({
+        queryKey: ["projects", params.workgroupId],
+      });
     },
     onError(err) {
       if (err instanceof AxiosError)

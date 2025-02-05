@@ -3,7 +3,7 @@ import { Projects } from "./components/Projects";
 
 export default function ProjectPage() {
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <CreateProjectDialog />
       <Projects />
     </div>

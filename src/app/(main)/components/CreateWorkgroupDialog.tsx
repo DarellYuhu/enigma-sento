@@ -12,7 +12,7 @@ import { CreateWorkgroupForm } from "./CreateWorkgroupForm";
 export const CreateWorkgroupDialog = () => {
   return (
     <Dialog>
-      <DialogTrigger className={buttonVariants()}>
+      <DialogTrigger className={`${buttonVariants()} self-end`}>
         Create Workgroup
       </DialogTrigger>
       <DialogContent>

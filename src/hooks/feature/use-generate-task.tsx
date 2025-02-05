@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
 export const useGenerateTask = () => {
-  const { invalidateQueries } = useQueryClient();
+  const queryClient = useQueryClient();
   const params = useSearchParams();
   const id = params.get("workgroupId");
 
@@ -18,7 +18,7 @@ export const useGenerateTask = () => {
     },
     onSuccess() {
       toast.success("Task generated!");
-      invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ["workgroup", id, "group-distribution"],
       });
     },

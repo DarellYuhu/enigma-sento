@@ -7,7 +7,7 @@ import { z } from "zod";
 
 export const useCreateStory = () => {
   const queryClient = useQueryClient();
-  const { workgroupId } = useParams();
+  const params = useParams();
 
   return useMutation({
     mutationFn: async ({ data: json, ...rest }: CreateStorySchema) => {
@@ -38,7 +38,9 @@ export const useCreateStory = () => {
     },
     onSuccess() {
       toast.success("Story created!");
-      queryClient.invalidateQueries({ queryKey: ["projects", workgroupId] });
+      queryClient.invalidateQueries({
+        queryKey: ["projects", params.workgroupId],
+      });
     },
     onError(err) {
       if (err instanceof AxiosError)

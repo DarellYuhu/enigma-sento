@@ -12,7 +12,7 @@ export const ProjectList = ({ item }: { item: GroupDistribution }) => {
   const [selected, setSelected] = useState<Projects[]>([]);
 
   return (
-    <>
+    <div className="space-y-4">
       <DownloadContentButton
         groupDistributionId={item.id}
         projectIds={selected.map((item) => item.id)}
@@ -23,7 +23,7 @@ export const ProjectList = ({ item }: { item: GroupDistribution }) => {
         enableMultiRowSelection={true}
         onRowSelect={setSelected}
       />
-    </>
+    </div>
   );
 };
 

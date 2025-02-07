@@ -1,6 +1,6 @@
 import { TabsContent } from "@/components/ui/tabs";
 import { CreateStoryDialog } from "./CreateStoryDialog";
-import { useProjects } from "@/hooks/feature/use-projects";
+import { Story as TStory } from "@/hooks/feature/use-projects";
 import Image from "next/image";
 import {
   Carousel,
@@ -20,29 +20,26 @@ import { GenerateContentButton } from "./GenerateContentButton";
 import { Check } from "lucide-react";
 
 export const Story = ({
-  value,
-  idx,
+  story,
+  tabValue,
+  status,
 }: {
-  value: { id: string; status: boolean };
-  idx: number;
+  story: TStory[];
+  tabValue: string;
+  status: boolean;
 }) => {
-  const { data } = useProjects();
-
   return (
-    <TabsContent value={value.id} className="border-2 rounded-md space-y-3 p-3">
+    <TabsContent value={tabValue} className="border-2 rounded-md space-y-3 p-3">
       <div className="flex flex-row justify-between">
-        <Badge
-          variant={"outline"}
-          color={data?.data[idx].status ? "red" : "green"}
-        >
-          {data?.data[idx].status ? "Published" : "Draft"}
+        <Badge variant={"outline"} color={status ? "red" : "green"}>
+          {status ? "Allocated" : "Draft"}
         </Badge>
         <div className="space-x-2">
-          <GenerateContentDistributionAlert projectId={value.id} />
-          <CreateStoryDialog projectId={value.id} />
+          <GenerateContentDistributionAlert projectId={tabValue} />
+          {!status && <CreateStoryDialog projectId={tabValue} />}
         </div>
       </div>
-      {data?.data[idx].Story.map((story, idx) => (
+      {story.map((story, idx) => (
         <div className="grid grid-cols-4 gap-3 p-4 border-b-2" key={idx}>
           <div className="col-span-4 flex flex-row justify-between">
             <p className="font-semibold">Story {idx + 1}</p>
@@ -61,7 +58,7 @@ export const Story = ({
             <Card>
               <CardHeader className="flex flex-row justify-between border-b-2 items-center">
                 <CardTitle>Captions</CardTitle>
-                {!value.status && <EditCaptionsDialog storyId={story.id} />}
+                <EditCaptionsDialog storyId={story.id} />
               </CardHeader>
               <CardContent className="p-2">
                 <ScrollArea className="h-[100px]">
@@ -72,7 +69,7 @@ export const Story = ({
             <Card>
               <CardHeader className="flex flex-row justify-between border-b-2 items-center">
                 <CardTitle>Hashtags</CardTitle>
-                {!value.status && <EditHashtagsDialog storyId={story.id} />}
+                <EditHashtagsDialog storyId={story.id} />
               </CardHeader>
               <CardContent className="p-2">
                 <ScrollArea className="h-[100px]">{story.hashtags}</ScrollArea>

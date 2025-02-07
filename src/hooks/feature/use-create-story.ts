@@ -64,6 +64,7 @@ export const createStorySchema = z
         z.object({
           texts: z.string().transform((value) => value.split("\n")),
           textColor: z.string(),
+          textBgColor: z.string(),
           textPosition: z.enum(["random", "middle", "bottom"]),
           images: z
             .array(

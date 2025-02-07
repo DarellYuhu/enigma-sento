@@ -17,9 +17,10 @@ export const Projects = () => {
       </TabsList>
       {data?.data.map((item, idx) => (
         <Story
-          value={{ id: item.id, status: item.status }}
+          story={item.Story}
+          tabValue={item.id}
+          status={item.status}
           key={idx}
-          idx={idx}
         />
       ))}
     </Tabs>

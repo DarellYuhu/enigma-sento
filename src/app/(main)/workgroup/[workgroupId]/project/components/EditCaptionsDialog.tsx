@@ -25,12 +25,12 @@ import {
 } from "@/hooks/feature/use-edit-story";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 
 export const EditCaptionsDialog = ({ storyId }: { storyId: string }) => {
   const cluseBtnRef = useRef<HTMLButtonElement>(null);
-  const { mutateAsync, isPending } = useEditStory();
+  const { mutate, isPending } = useEditStory();
   const form = useForm<UpdateStoryBody>({
     resolver: zodResolver(updateStoryBody),
     defaultValues: {
@@ -40,8 +40,21 @@ export const EditCaptionsDialog = ({ storyId }: { storyId: string }) => {
   });
 
   const handleSubmit = (data: UpdateStoryBody) => {
-    mutateAsync(data).then(() => cluseBtnRef.current?.click());
+    mutate(data, {
+      onSuccess() {
+        cluseBtnRef.current?.click();
+      },
+    });
   };
+
+  useEffect(() => {
+    if (storyId) {
+      form.reset({
+        storyId,
+        captions: [""],
+      });
+    }
+  }, [storyId]);
 
   return (
     <Dialog>

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useDownloadContent } from "@/hooks/feature/use-download-content";
-import { Download } from "lucide-react";
+import { Download, LoaderCircle } from "lucide-react";
 
 export const DownloadContentButton = ({
   groupDistributionId,
@@ -9,18 +9,24 @@ export const DownloadContentButton = ({
   groupDistributionId: string;
   projectIds: string[];
 }) => {
-  const { mutate } = useDownloadContent();
+  const { mutate, isPending } = useDownloadContent();
 
   return (
-    <div className="col-span-full">
-      <Button
-        size={"sm"}
-        onClick={() => mutate({ groupDistributionId, projectIds })}
-        disabled={projectIds.length === 0}
-      >
-        Download Content
-        <Download className="size-4" />
-      </Button>
-    </div>
+    <Button
+      size={"sm"}
+      onClick={() => mutate({ groupDistributionId, projectIds })}
+      disabled={projectIds.length === 0 || isPending}
+    >
+      {isPending && (
+        <LoaderCircle
+          className="-ms-1 me-2 animate-spin"
+          size={16}
+          strokeWidth={2}
+          aria-hidden="true"
+        />
+      )}
+      Download Content
+      <Download className="size-4" />
+    </Button>
   );
 };

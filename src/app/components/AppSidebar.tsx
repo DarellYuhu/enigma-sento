@@ -10,10 +10,9 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { ChevronsUpDown, HardDrive, Home, User } from "lucide-react";
+import { HardDrive, Home, User } from "lucide-react";
 import { SignOut } from "../(main)/components/SignOut";
 import Link from "next/link";
-import { auth } from "@/lib/auth";
 import { useSession } from "next-auth/react";
 
 export const AppSidebar = ({

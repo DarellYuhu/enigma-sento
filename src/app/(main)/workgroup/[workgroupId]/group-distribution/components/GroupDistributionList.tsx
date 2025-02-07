@@ -1,20 +1,12 @@
 "use client";
 
-import { Datatable } from "@/components/datatable";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Projects,
-  useGroupDistributions,
-} from "@/hooks/feature/use-group-distributions";
-import { ColumnDef } from "@tanstack/react-table";
-import { useState } from "react";
-import { DownloadContentButton } from "./DownloadContentButton";
+import { useGroupDistributions } from "@/hooks/feature/use-group-distributions";
 import { ProjectList } from "./ProjectList";
 
 export const GroupDistributionList = () => {

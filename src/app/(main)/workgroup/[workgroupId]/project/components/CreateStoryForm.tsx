@@ -39,7 +39,15 @@ export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
       projectId,
       type: "SYSTEM_GENERATE",
       section: 1,
-      data: [{ images: [], texts: [], textColor: "", textPosition: "random" }],
+      data: [
+        {
+          images: [],
+          texts: [],
+          textColor: "#ffffff",
+          textBgColor: "#000000",
+          textPosition: "random",
+        },
+      ],
     },
   });
   const { fields, remove, append } = useFieldArray({
@@ -97,6 +105,22 @@ export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Text color</FormLabel>
+                      <FormControl>
+                        <ColorPicker
+                          onChange={field.onChange}
+                          value={field.value}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`data.${index}.textBgColor`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Background color</FormLabel>
                       <FormControl>
                         <ColorPicker
                           onChange={field.onChange}
@@ -172,8 +196,9 @@ export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
             append({
               images: [],
               texts: [],
-              textColor: "",
               textPosition: "random",
+              textBgColor: "#000000",
+              textColor: "#ffffff",
             })
           }
         >

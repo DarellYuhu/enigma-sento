@@ -14,6 +14,7 @@ import {
   usePostGeneratedContent,
 } from "@/hooks/feature/use-post-generated-content";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 type Params = { storyId: string; fileLength: number };
@@ -28,6 +29,10 @@ export const UserGeneratedContentForm = (params: Params) => {
   const handleSubmit = (data: PostGeneratedContentBody) => {
     mutate(data);
   };
+
+  useEffect(() => {
+    if (params.storyId) form.reset({ storyId: params.storyId });
+  }, [params.storyId]);
 
   return (
     <Form {...form}>
@@ -51,6 +56,7 @@ export const UserGeneratedContentForm = (params: Params) => {
                   multiple={true}
                   onValueChange={field.onChange}
                   value={field.value}
+                  accept={{ "image/jpeg": [] }}
                 />
               </FormControl>
               <FormMessage />

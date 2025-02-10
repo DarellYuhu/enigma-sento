@@ -120,7 +120,20 @@ export const Story = ({
               </Carousel>
               <p className="font-semibold">Text Position</p>
               <p>{item.textPosition}</p>
-
+              <p className="font-semibold">Text Color</p>
+              <Badge
+                style={{
+                  height: "20px",
+                  backgroundColor: item.textColor,
+                }}
+              />
+              <p className="font-semibold">Background Color</p>
+              <Badge
+                style={{
+                  height: "20px",
+                  backgroundColor: item.textBgColor ?? "white",
+                }}
+              />
               <p className="font-semibold">Text Overlay</p>
               <ScrollArea className="h-[200px] mt-0">
                 {item.texts.map((text, idx) => (

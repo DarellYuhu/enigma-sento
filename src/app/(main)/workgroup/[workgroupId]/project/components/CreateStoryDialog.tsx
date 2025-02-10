@@ -15,7 +15,11 @@ export const CreateStoryDialog = ({ projectId }: { projectId: string }) => {
   return (
     <Dialog>
       <DialogTrigger className={buttonVariants()}>Create Story</DialogTrigger>
-      <DialogContent>
+      <DialogContent
+        onInteractOutside={(e) => {
+          e.preventDefault();
+        }}
+      >
         <DialogHeader>
           <DialogTitle>Create new story?</DialogTitle>
           <DialogDescription>

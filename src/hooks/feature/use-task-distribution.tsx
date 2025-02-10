@@ -14,7 +14,7 @@ export const useTaskDistribution = () => {
         `/workgroups/${workgroupId}/user-tasks`,
         { headers: { Authorization: `Bearer ${session?.user?.token}` } }
       );
-      return Object.values(data.data);
+      return data;
     },
   });
 };
@@ -32,5 +32,13 @@ export type WorkgroupUserTasks = {
 
 type GetWorkgroupUserTasksResponse = {
   message: string;
-  data: Record<number, WorkgroupUserTasks>;
+  data: Record<
+    string,
+    {
+      id: number;
+      createdAt: Date;
+      workgroupId: string;
+      users: WorkgroupUserTasks[];
+    }
+  >;
 };

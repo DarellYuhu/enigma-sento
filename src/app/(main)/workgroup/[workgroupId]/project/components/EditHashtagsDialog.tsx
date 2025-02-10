@@ -54,7 +54,7 @@ export const EditHashtagsDialog = ({ storyId }: { storyId: string }) => {
         hashtags: "",
       });
     }
-  }, [storyId]);
+  }, [storyId, form]);
 
   return (
     <Dialog>

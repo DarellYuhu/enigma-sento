@@ -37,6 +37,7 @@ export type StoryData = {
   texts: string[];
   images: string[];
   textColor: string;
+  textBgColor: string;
   textPosition:
     | "top-left"
     | "top-center"

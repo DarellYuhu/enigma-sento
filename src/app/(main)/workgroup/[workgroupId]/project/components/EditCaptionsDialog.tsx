@@ -54,7 +54,7 @@ export const EditCaptionsDialog = ({ storyId }: { storyId: string }) => {
         captions: [""],
       });
     }
-  }, [storyId]);
+  }, [storyId, form]);
 
   return (
     <Dialog>

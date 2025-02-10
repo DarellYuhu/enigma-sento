@@ -32,7 +32,7 @@ export const UserGeneratedContentForm = (params: Params) => {
 
   useEffect(() => {
     if (params.storyId) form.reset({ storyId: params.storyId });
-  }, [params.storyId]);
+  }, [params.storyId, form]);
 
   return (
     <Form {...form}>
@@ -56,7 +56,7 @@ export const UserGeneratedContentForm = (params: Params) => {
                   multiple={true}
                   onValueChange={field.onChange}
                   value={field.value}
-                  accept={{ "image/jpeg": [] }}
+                  accept={{ "image/jpeg": [], "video/mp4": [] }}
                 />
               </FormControl>
               <FormMessage />

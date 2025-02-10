@@ -5,24 +5,27 @@ import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
-export const useGenerateTask = () => {
-  const queryClient = useQueryClient();
-  const params = useSearchParams();
-  const id = params.get("workgroupId");
+export const useDeleteWorkgroupUser = () => {
+  const searchParams = useSearchParams();
   const { data: session } = useSession();
-
+  const queryClient = useQueryClient();
+  const workgroupId = searchParams.get("workgroupId");
   return useMutation({
-    mutationFn: async () => {
-      const { data } = await SentoClient.get(
-        `/workgroup/${id}/generate-distribution`,
-        { headers: { Authorization: `Bearer ${session?.user?.token}` } }
+    mutationFn: async (userId: string) => {
+      const { data } = await SentoClient.delete(
+        `/workgroups/${workgroupId}/users/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${session?.user?.token}`,
+          },
+        }
       );
       return data;
     },
     onSuccess() {
-      toast.success("Task generated!");
+      toast.success("User deleted!");
       queryClient.invalidateQueries({
-        queryKey: ["workgroup", id, "group-distribution"],
+        queryKey: ["workgroup", workgroupId, "user"],
       });
     },
     onError(err) {

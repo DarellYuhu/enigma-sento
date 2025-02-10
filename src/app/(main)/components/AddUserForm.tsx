@@ -42,35 +42,48 @@ export const AddUserForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmittion)}>
-        <FormField
-          control={form.control}
-          name="users"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Select new users</FormLabel>
-              <FormControl>
-                <MultipleSelector
-                  commandProps={{
-                    label: "Click to select",
-                  }}
-                  value={field.value}
-                  onChange={field.onChange}
-                  defaultOptions={options}
-                  placeholder="Click to select"
-                  hideClearAllButton
-                  hidePlaceholderWhenSelected
-                  emptyIndicator={
-                    <p className="text-center text-sm">No results found</p>
-                  }
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button className="w-full mt-2">Add</Button>
-      </form>
+      {data?.data && (
+        <form onSubmit={form.handleSubmit(handleSubmittion)}>
+          <FormField
+            control={form.control}
+            name="users"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Select new users</FormLabel>
+                <FormControl>
+                  <MultipleSelector
+                    value={field.value}
+                    onChange={field.onChange}
+                    options={options}
+                    placeholder="Click to select"
+                    hideClearAllButton
+                    hidePlaceholderWhenSelected
+                    onSearch={async (value) => {
+                      if (value !== "")
+                        return data?.data
+                          .filter((user) =>
+                            user.displayName
+                              .toLowerCase()
+                              .includes(value.toLowerCase())
+                          )
+                          .map((user) => ({
+                            label: user.displayName,
+                            value: user.id,
+                          }));
+                      return options ?? [];
+                    }}
+                    emptyIndicator={
+                      <p className="text-center text-sm">No results found</p>
+                    }
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button className="w-full mt-2">Add</Button>
+        </form>
+      )}
     </Form>
   );
 };

@@ -8,8 +8,16 @@ export const useGenerateContent = () => {
   const params = useParams();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (storyId: string) => {
-      const { data } = await SentoClient.patch(`/stories/${storyId}/contents`);
+    mutationFn: async ({
+      storyId,
+      withMusic,
+    }: {
+      storyId: string;
+      withMusic: boolean;
+    }) => {
+      const { data } = await SentoClient.patch(
+        `/stories/${storyId}/contents?withMusic=${withMusic}`
+      );
       return data;
     },
     onSuccess() {

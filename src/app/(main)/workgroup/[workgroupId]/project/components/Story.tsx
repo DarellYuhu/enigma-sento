@@ -1,3 +1,16 @@
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { CircleAlert, LoaderCircle, Trash2 } from "lucide-react";
 import { TabsContent } from "@/components/ui/tabs";
 import { CreateStoryDialog } from "./CreateStoryDialog";
 import { Story as TStory } from "@/hooks/feature/use-projects";
@@ -18,6 +31,8 @@ import { EditHashtagsDialog } from "./EditHashtagsDialog";
 import { UserGeneratedContentForm } from "./UserGeneratedContentForm";
 import { GenerateContentButton } from "./GenerateContentButton";
 import { Check } from "lucide-react";
+import { useDeleteStory } from "@/hooks/feature/use-delete-story";
+import { useState } from "react";
 
 export const Story = ({
   story,
@@ -35,8 +50,12 @@ export const Story = ({
           {status ? "Allocated" : "Draft"}
         </Badge>
         <div className="space-x-2">
-          <GenerateContentDistributionAlert projectId={tabValue} />
-          {!status && <CreateStoryDialog projectId={tabValue} />}
+          {!status && (
+            <>
+              <GenerateContentDistributionAlert projectId={tabValue} />
+              <CreateStoryDialog projectId={tabValue} />
+            </>
+          )}
         </div>
       </div>
       {story.map((story, idx) => (
@@ -99,13 +118,20 @@ export const Story = ({
                 <CarouselPrevious className="left-3" />
                 <CarouselNext className="right-3" />
               </Carousel>
-              <p className="font-semibold">
-                <span className="font-normal">Text Position: </span>
-                {item.textPosition}
-              </p>
-              <ScrollArea className="h-[200px]">
+              <p className="font-semibold">Text Position</p>
+              <p>{item.textPosition}</p>
+
+              <p className="font-semibold">Text Overlay</p>
+              <ScrollArea className="h-[200px] mt-0">
                 {item.texts.map((text, idx) => (
-                  <p key={idx} style={{ color: item.textColor }}>
+                  <p
+                    key={idx}
+                    style={{
+                      // color: item.textColor,
+                      // backgroundColor: item.textBgColor ?? "",
+                      color: "black",
+                    }}
+                  >
                     {text}
                   </p>
                 ))}
@@ -124,6 +150,11 @@ export const Story = ({
                 <GenerateContentButton storyId={story.id} />
               </div>
             )}
+          {!status && (
+            <div className="col-span-full">
+              <DeleteStoryAlert storyId={story.id} />
+            </div>
+          )}
         </div>
       ))}
     </TabsContent>
@@ -180,6 +211,59 @@ const GeneratorBadge = ({
         </Badge>
       );
   }
+};
+
+const DeleteStoryAlert = ({ storyId }: { storyId: string }) => {
+  const [open, setOpen] = useState(false);
+  const { mutate, isPending } = useDeleteStory();
+
+  const handleClick = () => {
+    mutate(storyId, {
+      onSuccess() {
+        setOpen(false);
+      },
+    });
+  };
+  return (
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogTrigger asChild>
+        <Button variant="destructive" size={"icon"}>
+          <Trash2 />
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <div className="flex flex-col gap-2 max-sm:items-center sm:flex-row sm:gap-4">
+          <div
+            className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border"
+            aria-hidden="true"
+          >
+            <CircleAlert className="opacity-80" size={16} strokeWidth={2} />
+          </div>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this story? All data related to
+              this story will be deleted.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+        </div>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={handleClick} disabled={isPending}>
+            {isPending && (
+              <LoaderCircle
+                className="-ms-1 me-2 animate-spin"
+                size={16}
+                strokeWidth={2}
+                aria-hidden="true"
+              />
+            )}
+            Confirm
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
 };
 
 const generatorStatus = {

@@ -12,31 +12,16 @@ export const useDownloadContent = () =>
       groupDistributionId: string;
       projectIds: string[];
     }) => {
-      const response = await SentoClient.post(
+      const { data, status } = await SentoClient.post<{ data: string }>(
         `/group-distributions/${groupDistributionId}/contents`,
-        { projectIds },
-        {
-          responseType: "blob",
-        }
+        { projectIds }
       );
-      const blob = new Blob([response.data]);
-      const url = window.URL.createObjectURL(blob);
+      if (status === 404) return toast.error("Content not found!");
       const a = document.createElement("a");
-
-      // Extract filename from Content-Disposition if available
-      const contentDisposition = response.headers["content-disposition"];
-      let fileName = "downloaded-file";
-      if (contentDisposition) {
-        const match = contentDisposition.match(/filename\*?=([^;]+)/);
-        if (match) fileName = match[1].trim().replace(/^["']|["']$/g, "");
-      }
-
-      a.href = url;
-      a.download = fileName;
+      a.href = data.data;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
     },
     onSuccess() {
       toast.success("Content downloaded!");

@@ -26,7 +26,16 @@ import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-const formSchema = z.object({ name: z.string().trim().min(1, "Required") });
+const formSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, "Required")
+    .refine(
+      (value) => !/[^a-zA-Z0-9_-]/.test(value),
+      "Name can only contain letters, numbers, underscores, and dashes"
+    ),
+});
 type FormSchema = z.infer<typeof formSchema>;
 
 export const CreateProjectDialog = () => {

@@ -32,7 +32,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 
 export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
   const closeBtnRef = useRef<HTMLButtonElement>(null);
-  const { mutateAsync } = useCreateStory();
+  const { mutate } = useCreateStory();
   const form = useForm<CreateStorySchema>({
     resolver: zodResolver(createStorySchema),
     defaultValues: {
@@ -65,7 +65,11 @@ export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
         ),
       })),
     };
-    mutateAsync(modified).then(() => closeBtnRef.current?.click());
+    mutate(modified, {
+      onSuccess() {
+        closeBtnRef.current?.click();
+      },
+    });
   };
 
   return (

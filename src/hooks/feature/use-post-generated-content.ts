@@ -1,21 +1,30 @@
 import { SentoClient } from "@/lib/sento-client";
 import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 import { z } from "zod";
 
 export const usePostGeneratedContent = () => {
   return useMutation({
     mutationFn: async (payload: PostGeneratedContentBody) => {
-      const formData = new FormData();
-      payload.files.forEach((file) => {
-        formData.append("files", file);
-      });
-      formData.append("storyId", payload.storyId);
+      const files = await Promise.all(
+        payload.files.map(async (file) => {
+          const path = `${payload.storyId}/${file.name}`;
+          const { data } = await SentoClient.get<{ data: string }>(
+            "/storage/upload",
+            {
+              params: { path },
+            }
+          );
+          console.log(data.data);
+          await axios.put(data.data, file);
+          return path;
+        })
+      );
+
       const { data } = await SentoClient.post(
         `/stories/${payload.storyId}/content-distribution`,
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
+        { storyId: payload.storyId, files }
       );
       return data;
     },

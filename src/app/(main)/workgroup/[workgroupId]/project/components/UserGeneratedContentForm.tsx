@@ -14,13 +14,14 @@ import {
   usePostGeneratedContent,
 } from "@/hooks/feature/use-post-generated-content";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LoaderCircle } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 type Params = { storyId: string; fileLength: number };
 
 export const UserGeneratedContentForm = (params: Params) => {
-  const { mutate } = usePostGeneratedContent();
+  const { mutate, isPending } = usePostGeneratedContent();
   const form = useForm<PostGeneratedContentBody>({
     resolver: zodResolver(postGeneratedContentBody(params.fileLength)),
     defaultValues: { storyId: params.storyId, files: [] },
@@ -64,7 +65,17 @@ export const UserGeneratedContentForm = (params: Params) => {
           )}
         />
         <div className="space-x-2">
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={isPending}>
+            {isPending && (
+              <LoaderCircle
+                className="-ms-1 me-2 animate-spin"
+                size={16}
+                strokeWidth={2}
+                aria-hidden="true"
+              />
+            )}
+            Submit
+          </Button>
           <Button type="reset" variant={"outline"}>
             Reset
           </Button>

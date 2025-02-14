@@ -9,14 +9,13 @@ export const usePostGeneratedContent = () => {
     mutationFn: async (payload: PostGeneratedContentBody) => {
       const files = await Promise.all(
         payload.files.map(async (file) => {
-          const path = `${payload.storyId}/${file.name}`;
+          const path = `${file.name}`;
           const { data } = await SentoClient.get<{ data: string }>(
             "/storage/upload",
             {
               params: { path },
             }
           );
-          console.log(data.data);
           await axios.put(data.data, file);
           return path;
         })

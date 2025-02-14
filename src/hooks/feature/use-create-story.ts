@@ -1,6 +1,6 @@
 import { SentoClient } from "@/lib/sento-client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -10,30 +10,38 @@ export const useCreateStory = () => {
   const params = useParams();
 
   return useMutation({
-    mutationFn: async ({ data: json, ...rest }: CreateStorySchema) => {
-      const normalized = {
-        ...rest,
-        images: json?.flatMap((item) => item.images),
-        data: JSON.stringify(
-          json?.map(({ images, ...rest }) => ({
-            images: images.map((image) => image.name),
-            ...rest,
+    mutationFn: async ({ data: sections, ...rest }: CreateStorySchema) => {
+      let sectionPayload:
+        | (Omit<CreateStorySchema["data"], "images"> & {
+            images: { path: string; name: string }[];
+          })[]
+        | undefined = undefined;
+      if (sections) {
+        sectionPayload = await Promise.all(
+          sections.map(async ({ images, ...sectionProps }, sectionIdx) => ({
+            ...sectionProps,
+            images: await Promise.all(
+              images.map(async (image) => {
+                const path = `stories/section-${sectionIdx}/${image.name}`;
+                const { data } = await SentoClient.get<{ data: string }>(
+                  "/storage/upload",
+                  {
+                    params: { path },
+                  }
+                );
+                await axios.put(data.data, image);
+                return { path, name: image.name };
+              })
+            ),
           }))
-        ),
-      };
-      const formData = new FormData();
-      formData.append("data", normalized.data);
-      formData.append("projectId", normalized.projectId);
-      formData.append("type", normalized.type);
-      if (normalized.section)
-        formData.append("section", normalized.section.toString());
-      if (normalized.images)
-        normalized.images.forEach((image) => {
-          formData.append(`images`, image);
-        });
-      const { data } = await SentoClient.post("/stories", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        );
+      }
+
+      const { data } = await SentoClient.post("/stories", {
+        ...rest,
+        data: sectionPayload,
       });
+
       return data;
     },
     onSuccess() {
@@ -44,7 +52,7 @@ export const useCreateStory = () => {
     },
     onError(err) {
       if (err instanceof AxiosError)
-        return toast.error(err.response?.data.message || err.response?.data);
+        return toast.error(err.response?.data.message || err.message);
       toast.error("Something went wrong!");
     },
   });
@@ -65,6 +73,7 @@ export const createStorySchema = z
           texts: z.string().transform((value) => value.split("\n")),
           textColor: z.string(),
           textBgColor: z.string(),
+          textStroke: z.string(),
           textPosition: z.enum(["random", "middle", "bottom"]),
           images: z
             .array(

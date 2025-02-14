@@ -45,6 +45,7 @@ export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
           texts: [],
           textColor: "#ffffff",
           textBgColor: "#000000",
+          textStroke: "#000000",
           textPosition: "random",
         },
       ],
@@ -56,16 +57,7 @@ export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
   });
 
   const handleSubmit = (data: CreateStorySchema) => {
-    const modified = {
-      ...data,
-      data: data.data?.map((item, idx) => ({
-        ...item,
-        images: item.images.map(
-          (image) => new File([image], `${idx}_${image.name}`)
-        ),
-      })),
-    };
-    mutate(modified, {
+    mutate(data, {
       onSuccess() {
         closeBtnRef.current?.click();
       },
@@ -109,6 +101,22 @@ export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Text color</FormLabel>
+                      <FormControl>
+                        <ColorPicker
+                          onChange={field.onChange}
+                          value={field.value}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`data.${index}.textStroke`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Stroke color</FormLabel>
                       <FormControl>
                         <ColorPicker
                           onChange={field.onChange}
@@ -203,6 +211,7 @@ export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
               textPosition: "random",
               textBgColor: "#000000",
               textColor: "#ffffff",
+              textStroke: "#000000",
             })
           }
         >

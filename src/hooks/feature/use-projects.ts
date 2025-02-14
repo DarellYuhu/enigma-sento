@@ -34,29 +34,22 @@ export type GetProjectsResponse = {
 };
 
 export type StoryData = {
+  _id: string;
   texts: string[];
-  images: string[];
+  images: { path: string; name: string; url: string; _id: string }[];
   textColor: string;
   textBgColor: string;
-  textPosition:
-    | "top-left"
-    | "top-center"
-    | "top-right"
-    | "middle-left"
-    | "middle-center"
-    | "middle-right"
-    | "bottom-left"
-    | "bottom-center"
-    | "bottom-right";
+  textStroke: string;
+  textPosition: "random" | "middle" | "bottom";
 };
 
 export type Story = {
-  id: string;
+  _id: string;
   section: number;
   contentPerStory: number | null;
   type: "USER_GENERATE" | "SYSTEM_GENERATE";
   projectId: string;
-  data: StoryData[] | null;
+  data: StoryData[];
   captions: string[];
   hashtags: null | string[];
   generatorStatus: "NOT_GENERATE" | "RUNNING" | "FINISHED" | "ERROR";

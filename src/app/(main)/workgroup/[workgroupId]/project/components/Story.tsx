@@ -14,14 +14,6 @@ import { CircleAlert, LoaderCircle, Trash2 } from "lucide-react";
 import { TabsContent } from "@/components/ui/tabs";
 import { CreateStoryDialog } from "./CreateStoryDialog";
 import { Story as TStory } from "@/hooks/feature/use-projects";
-import Image from "next/image";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { GenerateContentDistributionAlert } from "./GenerateContentDistributionAlert";
 import { Badge } from "@/components/ui/badge";
@@ -33,6 +25,7 @@ import { GenerateContentButton } from "./GenerateContentButton";
 import { Check } from "lucide-react";
 import { useDeleteStory } from "@/hooks/feature/use-delete-story";
 import { useState } from "react";
+import { SectionCard } from "./SectionCard";
 
 export const Story = ({
   story,
@@ -77,7 +70,7 @@ export const Story = ({
             <Card>
               <CardHeader className="flex flex-row justify-between border-b-2 items-center">
                 <CardTitle>Captions</CardTitle>
-                <EditCaptionsDialog storyId={story.id} />
+                <EditCaptionsDialog storyId={story._id} />
               </CardHeader>
               <CardContent className="p-2">
                 <ScrollArea className="h-[100px]">
@@ -88,7 +81,7 @@ export const Story = ({
             <Card>
               <CardHeader className="flex flex-row justify-between border-b-2 items-center">
                 <CardTitle>Hashtags</CardTitle>
-                <EditHashtagsDialog storyId={story.id} />
+                <EditHashtagsDialog storyId={story._id} />
               </CardHeader>
               <CardContent className="p-2">
                 <ScrollArea className="h-[100px]">{story.hashtags}</ScrollArea>
@@ -96,76 +89,23 @@ export const Story = ({
             </Card>
           </div>
           {story.data?.map((item, idx) => (
-            <div
-              key={idx}
-              className="p-4 space-y-2 border-2 shadow-md rounded-md"
-            >
-              <Carousel>
-                <CarouselContent>
-                  {item.images.map((image, idx) => (
-                    <CarouselItem key={idx}>
-                      <Image
-                        className="size-44 object-cover w-full rounded-md border-2"
-                        src={image}
-                        alt="story_img"
-                        width={1080}
-                        height={1080}
-                        key={idx}
-                      />
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious className="left-3" />
-                <CarouselNext className="right-3" />
-              </Carousel>
-              <p className="font-semibold">Text Position</p>
-              <p>{item.textPosition}</p>
-              <p className="font-semibold">Text Color</p>
-              <Badge
-                style={{
-                  height: "20px",
-                  backgroundColor: item.textColor,
-                }}
-              />
-              <p className="font-semibold">Background Color</p>
-              <Badge
-                style={{
-                  height: "20px",
-                  backgroundColor: item.textBgColor ?? "white",
-                }}
-              />
-              <p className="font-semibold">Text Overlay</p>
-              <ScrollArea className="h-[200px] mt-0">
-                {item.texts.map((text, idx) => (
-                  <p
-                    key={idx}
-                    style={{
-                      // color: item.textColor,
-                      // backgroundColor: item.textBgColor ?? "",
-                      color: "black",
-                    }}
-                  >
-                    {text}
-                  </p>
-                ))}
-              </ScrollArea>
-            </div>
+            <SectionCard item={item} key={idx} storyId={story._id} />
           ))}
           {story.contentPerStory && story.type === "USER_GENERATE" && (
             <UserGeneratedContentForm
-              storyId={story.id}
+              storyId={story._id}
               fileLength={story.contentPerStory}
             />
           )}
           {story.type === "SYSTEM_GENERATE" &&
             story.contentPerStory !== null && (
               <div className="col-span-full">
-                <GenerateContentButton storyId={story.id} />
+                <GenerateContentButton storyId={story._id} />
               </div>
             )}
           {!status && (
             <div className="col-span-full">
-              <DeleteStoryAlert storyId={story.id} />
+              <DeleteStoryAlert storyId={story._id} />
             </div>
           )}
         </div>

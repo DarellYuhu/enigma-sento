@@ -13,8 +13,11 @@ export const ColorList = () => {
           key={item._id}
           className="space-x-2 border-2 p-2 rounded-md flex shadow-md"
         >
-          <Badge className="size-6" style={{ color: item.primary }} />
-          <Badge className="size-6" style={{ color: item.secondary }} />
+          <Badge className="size-6" style={{ backgroundColor: item.primary }} />
+          <Badge
+            className="size-6"
+            style={{ backgroundColor: item.secondary }}
+          />
         </div>
       ))}
     </div>

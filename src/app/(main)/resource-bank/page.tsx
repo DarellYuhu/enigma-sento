@@ -1,9 +1,10 @@
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ALargeSmall, LucideIcon, Music, Palette } from "lucide-react";
+import { ALargeSmall, Cog, LucideIcon, Music, Palette } from "lucide-react";
 import { MusicPanel } from "./components/music-panel";
 import { FontPanel } from "./components/font-panel";
 import { ColorPanel } from "./components/color-panel";
+import { RepurposePanel } from "./components/repurpose-panel";
 
 export default function ResourceBankPage() {
   return (
@@ -25,6 +26,9 @@ export default function ResourceBankPage() {
         </TabsContent>
         <TabsContent value="color">
           <ColorPanel />
+        </TabsContent>
+        <TabsContent value="repurpose" className="h-full">
+          <RepurposePanel />
         </TabsContent>
       </Tabs>
     </div>
@@ -68,5 +72,10 @@ const tabMenu: Props[] = [
     icon: Palette,
     label: "Color",
     value: "color",
+  },
+  {
+    icon: Cog,
+    label: "Repurpose",
+    value: "repurpose",
   },
 ];

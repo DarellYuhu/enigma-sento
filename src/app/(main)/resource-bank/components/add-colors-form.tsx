@@ -56,8 +56,9 @@ export const AddColorsForm = () => {
         <DialogHeader>
           <DialogTitle>Add new colors</DialogTitle>
           <DialogDescription>
-            Drag and drop xlsx file bellow. The file must have "primary" and
-            "secondary" columns. The value must be a hex color.
+            Drag and drop xlsx file bellow. The file must have
+            &quot;primary&quot; and &quot;secondary&quot; columns. The value
+            must be a hex color.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

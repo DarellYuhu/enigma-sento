@@ -26,7 +26,7 @@ export const WorkgroupDatatable = () => {
 const columns: (role?: string) => ColumnDef<Workgroup["data"][0]>[] = (
   role
 ) => {
-  let menu: ColumnDef<Workgroup["data"][0]>[] = [
+  const menu: ColumnDef<Workgroup["data"][0]>[] = [
     {
       accessorKey: "name",
       header: "Name",

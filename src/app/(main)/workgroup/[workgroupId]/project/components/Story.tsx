@@ -11,11 +11,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { CircleAlert, LoaderCircle, Trash2 } from "lucide-react";
-import { TabsContent } from "@/components/ui/tabs";
-import { CreateStoryDialog } from "./CreateStoryDialog";
 import { Story as TStory } from "@/hooks/feature/use-projects";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { GenerateContentDistributionAlert } from "./GenerateContentDistributionAlert";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EditCaptionsDialog } from "./EditCaptionsDialog";
@@ -24,93 +21,89 @@ import { UserGeneratedContentForm } from "./UserGeneratedContentForm";
 import { GenerateContentButton } from "./GenerateContentButton";
 import { Check } from "lucide-react";
 import { useDeleteStory } from "@/hooks/feature/use-delete-story";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { SectionCard } from "./SectionCard";
+import { Separator } from "@/components/ui/separator";
 
 export const Story = ({
   story,
-  tabValue,
   status,
+  allocationType,
 }: {
   story: TStory[];
-  tabValue: string;
   status: boolean;
+  allocationType: "GENERIC" | "SPECIFIC";
 }) => {
   return (
-    <TabsContent value={tabValue} className="border-2 rounded-md space-y-3 p-3">
-      <div className="flex flex-row justify-between">
-        <Badge variant={"outline"} color={status ? "red" : "green"}>
-          {status ? "Allocated" : "Draft"}
-        </Badge>
-        <div className="space-x-2">
-          {!status && (
-            <>
-              <GenerateContentDistributionAlert projectId={tabValue} />
-              <CreateStoryDialog projectId={tabValue} />
-            </>
-          )}
-        </div>
-      </div>
-      {story.map((story, idx) => (
-        <div className="grid grid-cols-4 gap-3 p-4 border-b-2" key={idx}>
-          <div className="col-span-4 flex flex-row justify-between">
-            <p className="font-semibold">Story {idx + 1}</p>
-            <div className="space-x-3">
-              <GeneratorBadge status={story.generatorStatus} />
-              <Badge variant={"secondary"}>
-                {storyType[story.type as keyof typeof storyType]}
-              </Badge>
-              <Badge variant={"secondary"}>
-                Required captions & generated content: {story.captions.length}/
-                {story.contentPerStory ?? "-"}
-              </Badge>
+    <>
+      {story.map((item, idx) => (
+        <Fragment key={idx}>
+          <div className="grid grid-cols-4 gap-3 p-4">
+            <div className="col-span-4 flex flex-row justify-between">
+              <p className="font-semibold">Story {idx + 1}</p>
+              <div className="space-x-3">
+                <GeneratorBadge status={item.generatorStatus} />
+                <Badge variant={"secondary"}>
+                  {storyType[item.type as keyof typeof storyType]}
+                </Badge>
+                <Badge variant={"secondary"}>
+                  Generated Contents: {item.contentPerStory ?? "-"}
+                </Badge>
+              </div>
             </div>
-          </div>
-          <div className="col-span-full grid grid-cols-2 gap-3">
-            <Card>
-              <CardHeader className="flex flex-row justify-between border-b-2 items-center">
-                <CardTitle>Captions</CardTitle>
-                <EditCaptionsDialog storyId={story._id} />
-              </CardHeader>
-              <CardContent className="p-2">
-                <ScrollArea className="h-[100px]">
-                  <p>{story.captions.join("\n")}</p>
-                </ScrollArea>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row justify-between border-b-2 items-center">
-                <CardTitle>Hashtags</CardTitle>
-                <EditHashtagsDialog storyId={story._id} />
-              </CardHeader>
-              <CardContent className="p-2">
-                <ScrollArea className="h-[100px]">{story.hashtags}</ScrollArea>
-              </CardContent>
-            </Card>
-          </div>
-          {story.data?.map((item, idx) => (
-            <SectionCard item={item} key={idx} storyId={story._id} />
-          ))}
-          {story.contentPerStory && story.type === "USER_GENERATE" && (
-            <UserGeneratedContentForm
-              storyId={story._id}
-              fileLength={story.contentPerStory}
-            />
-          )}
-          {story.type === "SYSTEM_GENERATE" &&
-            story.contentPerStory !== null && (
-              <div className="col-span-full">
-                <GenerateContentButton storyId={story._id} />
+            {allocationType === "SPECIFIC" && (
+              <div className="col-span-full grid grid-cols-2 gap-3">
+                <Card>
+                  <CardHeader className="flex flex-row justify-between border-b-2 items-center">
+                    <CardTitle>Captions</CardTitle>
+                    <EditCaptionsDialog storyId={item._id} />
+                  </CardHeader>
+                  <CardContent className="p-2">
+                    <ScrollArea className="h-[100px]">
+                      <p>{item.captions.join("\n")}</p>
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader className="flex flex-row justify-between border-b-2 items-center">
+                    <CardTitle>Hashtags</CardTitle>
+                    <EditHashtagsDialog storyId={item._id} />
+                  </CardHeader>
+                  <CardContent className="p-2">
+                    <ScrollArea className="h-[100px]">
+                      {item.hashtags}
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
               </div>
             )}
-          {!status && (
-            <div className="col-span-full">
-              <DeleteStoryAlert storyId={story._id} />
-            </div>
+            {item.data?.map((item, idx) => (
+              <SectionCard item={item} key={idx} storyId={item._id} />
+            ))}
+            {item.contentPerStory && item.type === "USER_GENERATE" && (
+              <UserGeneratedContentForm
+                storyId={item._id}
+                fileLength={item.contentPerStory}
+              />
+            )}
+            {item.type === "SYSTEM_GENERATE" &&
+              item.contentPerStory !== null && (
+                <div className="col-span-full">
+                  <GenerateContentButton storyId={item._id} />
+                </div>
+              )}
+            {!status && (
+              <div className="col-span-full">
+                <DeleteStoryAlert storyId={item._id} />
+              </div>
+            )}
+          </div>
+          {idx !== story.length - 1 && (
+            <Separator orientation="horizontal" className="w-full h-1" />
           )}
-        </div>
+        </Fragment>
       ))}
-    </TabsContent>
+    </>
   );
 };
 

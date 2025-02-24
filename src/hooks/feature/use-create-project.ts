@@ -27,7 +27,9 @@ export const useCreateProject = () => {
     },
     onError(err) {
       if (err instanceof AxiosError)
-        return toast.error(err.response?.data.message || err.response?.data);
+        return toast.error(
+          err.response?.data.message || err.message || err.response?.data
+        );
       toast.error("Something went wrong!");
     },
   });

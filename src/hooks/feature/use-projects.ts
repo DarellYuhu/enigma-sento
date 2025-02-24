@@ -29,6 +29,9 @@ export type GetProjectsResponse = {
     status: boolean;
     id: string;
     workgroupUserId: number;
+    allocationType: "GENERIC" | "SPECIFIC";
+    captions: string[] | null;
+    hashtags: string | null;
     Story: Story[];
   }[];
 };

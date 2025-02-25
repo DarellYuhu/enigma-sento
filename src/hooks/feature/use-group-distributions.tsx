@@ -1,11 +1,13 @@
 import { SentoClient } from "@/lib/sento-client";
 import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 import { useParams, useSearchParams } from "next/navigation";
 
 export const useGroupDistributions = () => {
   const searchParams = useSearchParams();
   const params = useParams();
   const workgroupId = searchParams.get("workgroupId");
+  const { data: session } = useSession();
 
   return useQuery({
     queryKey: [
@@ -16,7 +18,10 @@ export const useGroupDistributions = () => {
     queryFn: async () => {
       const id = params.workgroupId ?? workgroupId;
       const { data } = await SentoClient.get<GetGroupDistributionsResponse>(
-        `/workgroups/${id}/group-distributions`
+        `/workgroups/${id}/group-distributions`,
+        {
+          headers: { Authorization: `Bearer ${session?.user?.token}` },
+        }
       );
       return data;
     },

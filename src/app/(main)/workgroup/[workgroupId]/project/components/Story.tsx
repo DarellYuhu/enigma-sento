@@ -86,12 +86,11 @@ export const Story = ({
                 fileLength={item.contentPerStory}
               />
             )}
-            {item.type === "SYSTEM_GENERATE" &&
-              item.contentPerStory !== null && (
-                <div className="col-span-full">
-                  <GenerateContentButton storyId={item._id} />
-                </div>
-              )}
+            {status && item.type === "SYSTEM_GENERATE" && (
+              <div className="col-span-full">
+                <GenerateContentButton storyId={item._id} />
+              </div>
+            )}
             {!status && (
               <div className="col-span-full">
                 <DeleteStoryAlert storyId={item._id} />

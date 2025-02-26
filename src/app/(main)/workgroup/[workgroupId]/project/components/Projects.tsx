@@ -65,7 +65,7 @@ export const Projects = () => {
             </div>
           )}
           <Story
-            story={item.Story}
+            stories={item.Story}
             status={item.status}
             allocationType={item.allocationType}
           />

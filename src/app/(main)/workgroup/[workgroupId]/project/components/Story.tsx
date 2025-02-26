@@ -26,28 +26,28 @@ import { SectionCard } from "./SectionCard";
 import { Separator } from "@/components/ui/separator";
 
 export const Story = ({
-  story,
+  stories,
   status,
   allocationType,
 }: {
-  story: TStory[];
+  stories: TStory[];
   status: boolean;
   allocationType: "GENERIC" | "SPECIFIC";
 }) => {
   return (
     <>
-      {story.map((item, idx) => (
+      {stories.map((story, idx) => (
         <Fragment key={idx}>
           <div className="grid grid-cols-4 gap-3 p-4">
             <div className="col-span-4 flex flex-row justify-between">
               <p className="font-semibold">Story {idx + 1}</p>
               <div className="space-x-3">
-                <GeneratorBadge status={item.generatorStatus} />
+                <GeneratorBadge status={story.generatorStatus} />
                 <Badge variant={"secondary"}>
-                  {storyType[item.type as keyof typeof storyType]}
+                  {storyType[story.type as keyof typeof storyType]}
                 </Badge>
                 <Badge variant={"secondary"}>
-                  Generated Contents: {item.contentPerStory ?? "-"}
+                  Generated Contents: {story.contentPerStory ?? "-"}
                 </Badge>
               </div>
             </div>
@@ -56,48 +56,48 @@ export const Story = ({
                 <Card>
                   <CardHeader className="flex flex-row justify-between border-b-2 items-center">
                     <CardTitle>Captions</CardTitle>
-                    <EditCaptionsDialog storyId={item._id} />
+                    <EditCaptionsDialog storyId={story._id} />
                   </CardHeader>
                   <CardContent className="p-2">
                     <ScrollArea className="h-[100px]">
-                      <p>{item.captions.join("\n")}</p>
+                      <p>{story.captions.join("\n")}</p>
                     </ScrollArea>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="flex flex-row justify-between border-b-2 items-center">
                     <CardTitle>Hashtags</CardTitle>
-                    <EditHashtagsDialog storyId={item._id} />
+                    <EditHashtagsDialog storyId={story._id} />
                   </CardHeader>
                   <CardContent className="p-2">
                     <ScrollArea className="h-[100px]">
-                      {item.hashtags}
+                      {story.hashtags}
                     </ScrollArea>
                   </CardContent>
                 </Card>
               </div>
             )}
-            {item.data?.map((item, idx) => (
-              <SectionCard item={item} key={idx} storyId={item._id} />
+            {story.data?.map((item, idx) => (
+              <SectionCard item={item} key={idx} storyId={story._id} />
             ))}
-            {item.contentPerStory && item.type === "USER_GENERATE" && (
+            {story.contentPerStory && story.type === "USER_GENERATE" && (
               <UserGeneratedContentForm
-                storyId={item._id}
-                fileLength={item.contentPerStory}
+                storyId={story._id}
+                fileLength={story.contentPerStory}
               />
             )}
-            {status && item.type === "SYSTEM_GENERATE" && (
+            {status && story.type === "SYSTEM_GENERATE" && (
               <div className="col-span-full">
-                <GenerateContentButton storyId={item._id} />
+                <GenerateContentButton storyId={story._id} />
               </div>
             )}
             {!status && (
               <div className="col-span-full">
-                <DeleteStoryAlert storyId={item._id} />
+                <DeleteStoryAlert storyId={story._id} />
               </div>
             )}
           </div>
-          {idx !== story.length - 1 && (
+          {idx !== stories.length - 1 && (
             <Separator orientation="horizontal" className="w-full h-1" />
           )}
         </Fragment>

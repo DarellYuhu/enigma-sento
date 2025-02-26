@@ -3,6 +3,7 @@
 import { Datatable } from "@/components/datatable";
 import { Font, useFonts } from "@/hooks/feature/use-fonts";
 import { ColumnDef } from "@tanstack/react-table";
+import { DeleteFontAllert } from "./delete-font-alert";
 
 export const FontList = () => {
   const { data } = useFonts();
@@ -23,5 +24,11 @@ const columns: ColumnDef<Font>[] = [
   {
     accessorKey: "name",
     header: "Font Name",
+  },
+  {
+    id: "actions",
+    cell({ row }) {
+      return <DeleteFontAllert id={row.original._id} />;
+    },
   },
 ];

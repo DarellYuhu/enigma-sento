@@ -7,9 +7,13 @@ import { toast } from "sonner";
 export const useExportTaskDistribution = () => {
   return useMutation({
     mutationFn: async (taskId: string) => {
-      const response = await SentoClient.post(`/task/${taskId}/export`, null, {
-        responseType: "blob",
-      });
+      const response = await SentoClient.post(
+        `/tasks/${taskId}/export`,
+        {},
+        {
+          responseType: "blob",
+        }
+      );
       getDownloadableResponse(response);
     },
     onSuccess() {
@@ -17,7 +21,7 @@ export const useExportTaskDistribution = () => {
     },
     onError(err) {
       if (err instanceof AxiosError)
-        return toast.error(err.response?.data.message || err.response?.data);
+        return toast.error(err.response?.data.message || err.message);
       toast.error("Something went wrong!");
     },
   });

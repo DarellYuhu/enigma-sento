@@ -4,6 +4,7 @@ import {
   useGroupDistributions,
 } from "@/hooks/feature/use-group-distributions";
 import { ColumnDef } from "@tanstack/react-table";
+import { DeleteGroupDistributionAlert } from "./DeleteGroupDistributionAlert";
 
 export const GroupDistributionDatatable = () => {
   const { data } = useGroupDistributions();
@@ -23,5 +24,11 @@ const columns: ColumnDef<GroupDistribution>[] = [
   {
     accessorKey: "amontOfTroops",
     header: "Amount of troops",
+  },
+  {
+    id: "actions",
+    cell({ row }) {
+      return <DeleteGroupDistributionAlert id={row.original.id} />;
+    },
   },
 ];

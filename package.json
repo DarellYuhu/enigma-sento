@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3002",
+    "dev": "next dev -p 3003",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "docker:build:staging": "docker build -t enigma-sento-staging:latest -f docker/staging/Dockerfile .",
-    "docker:save:staging": "docker image save enigma-sento-staging:latest | gzip > enigma-sento-staging.tar.gz"
+    "docker:build:staging": "docker build -t darellyuhu/sento-frontend-staging:latest -f docker/staging/Dockerfile .",
+    "docker:save:staging": "docker image save sento-frontend-staging:latest | gzip > sento-frontend-staging.tar.gz"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

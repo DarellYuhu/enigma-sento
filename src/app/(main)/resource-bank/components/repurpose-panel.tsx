@@ -1,4 +1,5 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { RepurposeImagesPanel } from "./repurpose-images-panel";
 
 export const RepurposePanel = () => {
   return (
@@ -19,10 +20,8 @@ export const RepurposePanel = () => {
         ))}
       </TabsList>
       <div className="grow rounded-lg border border-border text-start">
-        <TabsContent value="tab-1">
-          <p className="px-4 py-1.5 text-xs text-muted-foreground">
-            Under Construction
-          </p>
+        <TabsContent value="tab-1" className="px-4 pb-4 pt-2">
+          <RepurposeImagesPanel />
         </TabsContent>
         <TabsContent value="tab-2">
           <p className="px-4 py-1.5 text-xs text-muted-foreground">

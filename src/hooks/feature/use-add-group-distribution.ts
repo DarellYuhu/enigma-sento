@@ -15,7 +15,7 @@ export const useAddGroupDistribution = () => {
   return useMutation({
     mutationFn: async (payload: CreateGroupDistribution) => {
       const { data } = await SentoClient.post(
-        `/workgroup/${id}/group-distribution`,
+        `/workgroups/${id}/group-distributions`,
         payload,
         {
           headers: {

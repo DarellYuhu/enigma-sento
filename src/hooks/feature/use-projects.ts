@@ -11,7 +11,7 @@ export const useProjects = () => {
     queryKey: ["projects", workgroupId],
     queryFn: async () => {
       const { data } = await SentoClient.get<GetProjectsResponse>(
-        `/workgroups/${workgroupId}/projects`,
+        `/projects?workgroupId=${workgroupId}`,
         {
           headers: { Authorization: `Bearer ${session?.user?.token}` },
         }

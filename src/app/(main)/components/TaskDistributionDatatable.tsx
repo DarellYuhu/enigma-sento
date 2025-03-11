@@ -26,7 +26,14 @@ export const TaskDistributionDatatable = () => {
 
   useEffect(() => {
     if (data) {
-      setIndex(Object.keys(data.data)[0]);
+      setIndex(
+        Object.values(data.data)
+          .sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          )[0]
+          ?.id.toString()
+      );
     }
   }, [data]);
 
@@ -39,11 +46,17 @@ export const TaskDistributionDatatable = () => {
           </SelectTrigger>
           <SelectContent>
             {data &&
-              Object.values(data.data).map((item) => (
-                <SelectItem value={item.id.toString()} key={item.id}>
-                  {format(item.createdAt, "dd MMMM yyyy")}
-                </SelectItem>
-              ))}
+              Object.values(data.data)
+                .sort(
+                  (a, b) =>
+                    new Date(b.createdAt).getTime() -
+                    new Date(a.createdAt).getTime()
+                )
+                .map((item) => (
+                  <SelectItem value={item.id.toString()} key={item.id}>
+                    {format(item.createdAt, "dd MMMM yyyy HH:mm")}
+                  </SelectItem>
+                ))}
           </SelectContent>
         </Select>
         <Button disabled={isPending} onClick={() => mutate(index)}>

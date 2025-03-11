@@ -15,8 +15,8 @@ export const useGenerateContent = () => {
       storyId: string;
       withMusic: boolean;
     }) => {
-      const { data } = await SentoClient.patch(
-        `/stories/${storyId}/contents?withMusic=${withMusic}`
+      const { data } = await SentoClient.post(
+        `/stories/${storyId}/generate?withMusic=${withMusic}`
       );
       return data;
     },

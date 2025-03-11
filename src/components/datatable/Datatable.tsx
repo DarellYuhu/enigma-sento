@@ -41,6 +41,7 @@ export function Datatable<TData, TValue>({
   enableMultiRowSelection,
   onRowSelect,
 }: DataTableProps<TData, TValue>) {
+  const [selected, setSelected] = useState<TData[]>([]);
   const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
@@ -61,12 +62,16 @@ export function Datatable<TData, TValue>({
   });
 
   useEffect(() => {
+    setSelected(
+      table.getFilteredSelectedRowModel().rows.map((row) => row.original)
+    );
+  }, [rowSelection, table]);
+  useEffect(() => {
     if (onRowSelect) {
-      onRowSelect(
-        table.getFilteredSelectedRowModel().rows.map((row) => row.original)
-      );
+      onRowSelect(selected);
     }
-  }, [rowSelection, onRowSelect, table]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected]);
 
   return (
     <div className={cn("space-y-4", className)}>

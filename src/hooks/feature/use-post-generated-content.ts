@@ -22,8 +22,8 @@ export const usePostGeneratedContent = () => {
       );
 
       const { data } = await SentoClient.post(
-        `/stories/${payload.storyId}/content-distribution`,
-        { storyId: payload.storyId, files }
+        `/stories/${payload.storyId}/generated-content`,
+        { files }
       );
       return data;
     },

@@ -1,16 +1,25 @@
 import { SentoClient } from "@/lib/sento-client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 
 export const useGenerateContentDist = () => {
   const params = useParams();
   const queryClient = useQueryClient();
+  const { data: session } = useSession();
+
   return useMutation({
     mutationFn: async (projectId: string) => {
       const { data } = await SentoClient.post(
-        `/project/${projectId}/content-distribution`
+        `/projects/${projectId}/content-distributions`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${session?.user?.token}`,
+          },
+        }
       );
       return data;
     },

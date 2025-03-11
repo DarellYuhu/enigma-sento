@@ -13,9 +13,12 @@ export const useGenerateTask = () => {
 
   return useMutation({
     mutationFn: async () => {
-      const { data } = await SentoClient.get(
-        `/workgroup/${id}/generate-distribution`,
-        { headers: { Authorization: `Bearer ${session?.user?.token}` } }
+      const { data } = await SentoClient.post(
+        `/workgroups/${id}/user-tasks`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${session?.user?.token}` },
+        }
       );
       return data;
     },

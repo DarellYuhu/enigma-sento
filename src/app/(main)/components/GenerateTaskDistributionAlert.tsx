@@ -14,10 +14,15 @@ import { useGenerateTask } from "@/hooks/feature/use-generate-task";
 import { useState } from "react";
 
 export const GenerateTaskDistributionAlert = () => {
-  const { mutateAsync, isPending } = useGenerateTask();
+  const { mutate, isPending } = useGenerateTask();
   const [open, setOpen] = useState(false);
 
-  const handleGenerate = () => mutateAsync().then(() => setOpen(false));
+  const handleGenerate = () =>
+    mutate(undefined, {
+      onSuccess() {
+        setOpen(false);
+      },
+    });
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>

@@ -14,9 +14,13 @@ export const useDeleteGroupDistribution = () => {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      const { data } = await SentoClient.delete(`/group-distributions/${id}`, {
-        headers: { Authorization: `Bearer ${session?.user?.token}` },
-      });
+      const wgId = params.workgroupId ?? workgroupId;
+      const { data } = await SentoClient.delete(
+        `/workgroups/${wgId}/group-distributions/${id}`,
+        {
+          headers: { Authorization: `Bearer ${session?.user?.token}` },
+        }
+      );
       return data;
     },
     onSuccess: () => {

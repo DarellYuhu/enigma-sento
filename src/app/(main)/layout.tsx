@@ -17,7 +17,13 @@ import {
 } from "@/components/ui/breadcrumb";
 import { AppSidebar } from "../components/AppSidebar";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 export default function MainLayout({
   children,

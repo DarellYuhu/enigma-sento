@@ -1,10 +1,12 @@
 import { SentoClient } from "@/lib/sento-client";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { useParams } from "next/navigation";
 import { toast } from "sonner";
 
-export const useDownloadContent = () =>
-  useMutation({
+export const useDownloadContent = () => {
+  const params = useParams();
+  return useMutation({
     mutationFn: async ({
       groupDistributionId,
       projectIds,
@@ -13,7 +15,7 @@ export const useDownloadContent = () =>
       projectIds: string[];
     }) => {
       const { data, status } = await SentoClient.post<{ data: string }>(
-        `/group-distributions/${groupDistributionId}/contents`,
+        `/workgroups/${params.workgroupId}/group-distributions/${groupDistributionId}/download`,
         { projectIds }
       );
       if (status === 404) return toast.error("Content not found!");
@@ -32,3 +34,4 @@ export const useDownloadContent = () =>
       toast.error("Something went wrong!");
     },
   });
+};

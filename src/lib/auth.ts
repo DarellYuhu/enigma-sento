@@ -47,7 +47,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           );
           const user = { ...data.user, token: data.token };
           return user;
-        } catch (_error) {
+        } catch {
           return null;
         }
       },

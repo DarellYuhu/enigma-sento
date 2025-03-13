@@ -15,7 +15,7 @@ import {
   createWorkgroup,
   CreateWorkgroup,
   useCreateWorkgroup,
-} from "@/hooks/feature/use-create-workgroup";
+} from "@/hooks/feature/workgroup/use-create-workgroup";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";

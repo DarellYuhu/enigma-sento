@@ -22,7 +22,7 @@ import {
   updateStoryBody,
   UpdateStoryBody,
   useEditStory,
-} from "@/hooks/feature/use-edit-story";
+} from "@/hooks/feature/project/use-edit-story";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil } from "lucide-react";
 import { useEffect, useRef } from "react";

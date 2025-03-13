@@ -6,7 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useGroupDistributions } from "@/hooks/feature/use-group-distributions";
+import { useGroupDistributions } from "@/hooks/feature/workgroup/use-group-distributions";
 import { ProjectList } from "./ProjectList";
 
 export const GroupDistributionList = () => {

@@ -1,7 +1,10 @@
 "use client";
 
 import { Datatable } from "@/components/datatable";
-import { useWorkgroups, Workgroup } from "@/hooks/feature/use-workgroups";
+import {
+  useWorkgroups,
+  Workgroup,
+} from "@/hooks/feature/workgroup/use-workgroups";
 import { ColumnDef } from "@tanstack/react-table";
 import { ManageUserDialog } from "./ManageUserDialog";
 import { ManageGroupDistributionDialog } from "./ManageGroupDistributionDialog";

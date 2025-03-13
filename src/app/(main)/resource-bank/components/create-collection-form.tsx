@@ -30,7 +30,7 @@ import {
   collectionFormSchema,
   CollectionFormSchema,
   useCreateCollection,
-} from "@/hooks/feature/use-create-collection";
+} from "@/hooks/feature/asset/use-create-collection";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Folders } from "lucide-react";

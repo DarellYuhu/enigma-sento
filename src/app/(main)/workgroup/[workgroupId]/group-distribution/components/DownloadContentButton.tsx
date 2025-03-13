@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useDownloadContent } from "@/hooks/feature/use-download-content";
+import { useDownloadContent } from "@/hooks/feature/workgroup/use-download-content";
 import { Download, LoaderCircle } from "lucide-react";
 
 export const DownloadContentButton = ({

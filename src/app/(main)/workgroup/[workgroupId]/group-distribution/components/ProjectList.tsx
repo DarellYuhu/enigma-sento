@@ -4,7 +4,7 @@ import { useState } from "react";
 import {
   GroupDistribution,
   Projects,
-} from "@/hooks/feature/use-group-distributions";
+} from "@/hooks/feature/workgroup/use-group-distributions";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 

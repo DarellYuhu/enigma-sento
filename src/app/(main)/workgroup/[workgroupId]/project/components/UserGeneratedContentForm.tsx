@@ -12,7 +12,7 @@ import {
   postGeneratedContentBody,
   PostGeneratedContentBody,
   usePostGeneratedContent,
-} from "@/hooks/feature/use-post-generated-content";
+} from "@/hooks/feature/project/use-post-generated-content";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle } from "lucide-react";
 import { useEffect } from "react";

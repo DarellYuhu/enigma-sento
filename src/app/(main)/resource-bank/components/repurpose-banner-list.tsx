@@ -1,7 +1,7 @@
 "use client";
 
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useRepurposeBanners } from "@/hooks/feature/use-repurpose-banners";
+import { useRepurposeBanners } from "@/hooks/feature/asset/use-repurpose-banners";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 

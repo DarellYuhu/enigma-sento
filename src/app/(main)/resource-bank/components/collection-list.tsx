@@ -1,7 +1,7 @@
 "use client";
 
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useCollections } from "@/hooks/feature/use-collections";
+import { useCollections } from "@/hooks/feature/asset/use-collections";
 import { useState } from "react";
 
 export const CollectionList = ({ type }: { type: CollectionType }) => {

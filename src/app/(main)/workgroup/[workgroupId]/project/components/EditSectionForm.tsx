@@ -29,12 +29,12 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
-import { StoryData } from "@/hooks/feature/use-projects";
+import { StoryData } from "@/hooks/feature/project/use-projects";
 import {
   updateSectionSchema,
   UpdateSectionSchema,
   useUpdateSection,
-} from "@/hooks/feature/use-update-section";
+} from "@/hooks/feature/workgroup/use-update-section";
 import { getDirtyFields } from "@/utils/getDirtyFields";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { differenceBy } from "lodash";

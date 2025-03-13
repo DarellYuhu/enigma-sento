@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   useTaskDistribution,
   WorkgroupUserTasks,
-} from "@/hooks/feature/use-task-distribution";
+} from "@/hooks/feature/workgroup/use-task-distribution";
 import { ColumnDef } from "@tanstack/react-table";
 import {
   Select,
@@ -16,7 +16,7 @@ import { useEffect, useId, useState } from "react";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { FileDown, LoaderCircle } from "lucide-react";
-import { useExportTaskDistribution } from "@/hooks/feature/use-export-task-distribution";
+import { useExportTaskDistribution } from "@/hooks/feature/workgroup/use-export-task-distribution";
 
 export const TaskDistributionDatatable = () => {
   const id = useId();

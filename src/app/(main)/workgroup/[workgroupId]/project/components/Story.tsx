@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { CircleAlert, LoaderCircle, Trash2 } from "lucide-react";
-import { Story as TStory } from "@/hooks/feature/use-projects";
+import { Story as TStory } from "@/hooks/feature/project/use-projects";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,7 +20,7 @@ import { EditHashtagsDialog } from "./EditHashtagsDialog";
 import { UserGeneratedContentForm } from "./UserGeneratedContentForm";
 import { GenerateContentButton } from "./GenerateContentButton";
 import { Check } from "lucide-react";
-import { useDeleteStory } from "@/hooks/feature/use-delete-story";
+import { useDeleteStory } from "@/hooks/feature/project/use-delete-story";
 import { Fragment, useState } from "react";
 import { SectionCard } from "./SectionCard";
 import { Separator } from "@/components/ui/separator";

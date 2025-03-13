@@ -1,20 +1,30 @@
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ALargeSmall, Cog, LucideIcon, Music, Palette } from "lucide-react";
+import {
+  ALargeSmall,
+  Cog,
+  Image,
+  LucideIcon,
+  Music,
+  Palette,
+} from "lucide-react";
 import { MusicPanel } from "./components/music-panel";
 import { FontPanel } from "./components/font-panel";
 import { ColorPanel } from "./components/color-panel";
 import { RepurposePanel } from "./components/repurpose-panel";
 import { CreateCollectionForm } from "./components/create-collection-form";
+import { ImagePanel } from "./components/image-panel";
+import { AddPeopleForm } from "./components/add-people-form";
 
 export default function ResourceBankPage() {
   return (
     <div className="space-y-4">
-      <div className="flex flex-col items-end">
+      <div className="flex flex-row gap-2 justify-end">
+        <AddPeopleForm />
         <CreateCollectionForm />
       </div>
       <div className="relative">
-        <Tabs defaultValue="music">
+        <Tabs defaultValue="image">
           <ScrollArea>
             <TabsList className="relative mb-3 h-auto w-full gap-0.5 bg-transparent p-0 before:absolute before:inset-x-0 before:bottom-0 before:h-px before:bg-border">
               {tabMenu.map((item) => (
@@ -23,6 +33,9 @@ export default function ResourceBankPage() {
             </TabsList>
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
+          <TabsContent value="image">
+            <ImagePanel />
+          </TabsContent>
           <TabsContent value="music">
             <MusicPanel />
           </TabsContent>
@@ -64,6 +77,11 @@ const Trigger = ({ value, label, ...props }: Props) => {
 };
 
 const tabMenu: Props[] = [
+  {
+    icon: Image,
+    label: "Image",
+    value: "image",
+  },
   {
     icon: Music,
     label: "Music",

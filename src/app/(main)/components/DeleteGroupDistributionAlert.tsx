@@ -9,7 +9,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
-import { useDeleteGroupDistribution } from "@/hooks/feature/use-del-group-distribution";
+import { useDeleteGroupDistribution } from "@/hooks/feature/workgroup/use-del-group-distribution";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 

@@ -9,7 +9,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
-import { useDeleteFont } from "@/hooks/feature/use-delete-font";
+import { useDeleteFont } from "@/hooks/feature/asset/use-delete-font";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 

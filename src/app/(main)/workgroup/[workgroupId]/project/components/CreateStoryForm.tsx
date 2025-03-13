@@ -24,7 +24,7 @@ import {
   createStorySchema,
   CreateStorySchema,
   useCreateStory,
-} from "@/hooks/feature/use-create-story";
+} from "@/hooks/feature/project/use-create-story";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Trash2 } from "lucide-react";
 import { useRef } from "react";

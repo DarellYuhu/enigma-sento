@@ -18,7 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useAddRepurposeVideos } from "@/hooks/feature/use-add-repurpose-videos";
+import { useAddRepurposeVideos } from "@/hooks/feature/asset/use-add-repurpose-videos";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";

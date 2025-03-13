@@ -2,7 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useColors } from "@/hooks/feature/use-colors";
+import { useColors } from "@/hooks/feature/asset/use-colors";
 import { useEffect, useState } from "react";
 
 export const ColorList = ({

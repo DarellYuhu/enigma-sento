@@ -1,7 +1,7 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useProjects } from "@/hooks/feature/use-projects";
+import { useProjects } from "@/hooks/feature/project/use-projects";
 import { Story } from "./Story";
 import { Badge } from "@/components/ui/badge";
 import { GenerateContentDistributionAlert } from "./GenerateContentDistributionAlert";

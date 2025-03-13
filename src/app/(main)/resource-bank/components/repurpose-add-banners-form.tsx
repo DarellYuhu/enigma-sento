@@ -18,7 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useAddRepurposeBanners } from "@/hooks/feature/use-add-repurpose-banners";
+import { useAddRepurposeBanners } from "@/hooks/feature/asset/use-add-repurpose-banners";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";

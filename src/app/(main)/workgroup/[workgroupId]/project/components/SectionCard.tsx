@@ -7,7 +7,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { StoryData } from "@/hooks/feature/use-projects";
+import { StoryData } from "@/hooks/feature/project/use-projects";
 import Image from "next/image";
 import { EditSectionForm } from "./EditSectionForm";
 

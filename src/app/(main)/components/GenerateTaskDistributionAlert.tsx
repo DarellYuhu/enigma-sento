@@ -10,7 +10,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
-import { useGenerateTask } from "@/hooks/feature/use-generate-task";
+import { useGenerateTask } from "@/hooks/feature/workgroup/use-generate-task";
 import { useState } from "react";
 
 export const GenerateTaskDistributionAlert = () => {

@@ -2,7 +2,7 @@
 
 import { Datatable } from "@/components/datatable";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useMusics } from "@/hooks/feature/use-musics";
+import { useMusics } from "@/hooks/feature/asset/use-musics";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 

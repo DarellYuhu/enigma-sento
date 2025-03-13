@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { useGenerateContent } from "@/hooks/feature/use-generate-content";
+import { useGenerateContent } from "@/hooks/feature/project/use-generate-content";
 import { useId, useState } from "react";
 
 export const GenerateContentButton = ({ storyId }: { storyId: string }) => {

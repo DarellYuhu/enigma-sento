@@ -2,7 +2,7 @@ import { Datatable } from "@/components/datatable";
 import {
   GroupDistribution,
   useGroupDistributions,
-} from "@/hooks/feature/use-group-distributions";
+} from "@/hooks/feature/workgroup/use-group-distributions";
 import { ColumnDef } from "@tanstack/react-table";
 import { DeleteGroupDistributionAlert } from "./DeleteGroupDistributionAlert";
 

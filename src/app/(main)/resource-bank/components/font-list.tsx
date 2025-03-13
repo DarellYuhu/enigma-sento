@@ -1,7 +1,7 @@
 "use client";
 
 import { Datatable } from "@/components/datatable";
-import { Font, useFonts } from "@/hooks/feature/use-fonts";
+import { Font, useFonts } from "@/hooks/feature/asset/use-fonts";
 import { ColumnDef } from "@tanstack/react-table";
 import { DeleteFontAllert } from "./delete-font-alert";
 import { Checkbox } from "@/components/ui/checkbox";

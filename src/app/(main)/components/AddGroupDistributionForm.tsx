@@ -13,7 +13,7 @@ import {
   createGroupDistribution,
   CreateGroupDistribution,
   useAddGroupDistribution,
-} from "@/hooks/feature/use-add-group-distribution";
+} from "@/hooks/feature/workgroup/use-add-group-distribution";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
 import { useForm } from "react-hook-form";

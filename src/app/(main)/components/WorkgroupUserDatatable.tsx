@@ -11,11 +11,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { useDeleteWorkgroupUser } from "@/hooks/feature/use-delete-workgroup-user";
+import { useDeleteWorkgroupUser } from "@/hooks/feature/workgroup/use-delete-workgroup-user";
 import {
   useWorkgroupUser,
   WorkgroupUser,
-} from "@/hooks/feature/use-workgroup-user";
+} from "@/hooks/feature/workgroup/use-workgroup-user";
 import { ColumnDef } from "@tanstack/react-table";
 import { CircleAlert, Trash2 } from "lucide-react";
 import { useState } from "react";

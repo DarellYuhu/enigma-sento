@@ -10,7 +10,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
-import { useGenerateContentDist } from "@/hooks/feature/use-generate-content-dist";
+import { useGenerateContentDist } from "@/hooks/feature/project/use-generate-content-dist";
 import { useRef } from "react";
 
 export const GenerateContentDistributionAlert = ({

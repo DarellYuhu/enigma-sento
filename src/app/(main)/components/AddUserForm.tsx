@@ -8,7 +8,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import MultipleSelector from "@/components/ui/multipleselector";
-import { useAddWorkgroupUsers } from "@/hooks/feature/use-add-workgroup-users";
+import { useAddWorkgroupUsers } from "@/hooks/feature/workgroup/use-add-workgroup-users";
 import { useUsers } from "@/hooks/feature/use-users";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMemo } from "react";

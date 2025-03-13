@@ -10,7 +10,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
-import { useCreateStory } from "@/hooks/feature/use-create-story";
+import { useCreateStory } from "@/hooks/feature/project/use-create-story";
 
 export const CreateDraftOnlyAlert = ({ projectId }: { projectId: string }) => {
   const { mutate } = useCreateStory();

@@ -38,19 +38,19 @@ const formSchema = z.object({
     z.object({
       description: z.string().trim().min(1, "Required"),
       tags: z.string().trim().min(1, "Required"),
-      people: z
-        .array(
-          z.object({
-            label: z.string(),
-            value: z.string(),
-          })
-        )
-        .min(1, "Required"),
-      location: z.object({
-        name: z.string(),
-        latitude: z.string().transform((value) => parseFloat(value)),
-        longitude: z.string().transform((value) => parseFloat(value)),
-      }),
+      people: z.array(
+        z.object({
+          label: z.string(),
+          value: z.string(),
+        })
+      ),
+      location: z
+        .object({
+          name: z.string(),
+          latitude: z.string().transform((value) => parseFloat(value)),
+          longitude: z.string().transform((value) => parseFloat(value)),
+        })
+        .optional(),
     })
   ),
 });
@@ -76,12 +76,14 @@ export const AddImageForm = () => {
   const onSubmit = ({ files, metadatas }: FormSchema) => {
     const data = metadatas.map((item) => ({
       ...item,
-      location: {
-        name: item.location.name,
-        geoJson: {
-          coordinates: [item.location.longitude, item.location.latitude],
-        },
-      },
+      location: item.location
+        ? {
+            name: item.location.name,
+            geoJson: {
+              coordinates: [item.location.longitude, item.location.latitude],
+            },
+          }
+        : undefined,
       people: item.people.map((person) => person.value),
       tags: item.tags.split(/\s*,\s*|\s+/),
     }));
@@ -102,7 +104,7 @@ export const AddImageForm = () => {
         data.data.map((item) => ({ label: item.name, value: item._id }))
       );
     }
-  }, [data?.data]);
+  }, [data]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

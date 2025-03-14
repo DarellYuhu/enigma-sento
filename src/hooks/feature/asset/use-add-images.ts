@@ -43,7 +43,7 @@ type Payload = {
     description: string;
     tags: string[];
     people: string[];
-    location: {
+    location?: {
       name: string;
       geoJson: {
         coordinates: number[];

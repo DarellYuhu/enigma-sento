@@ -74,6 +74,11 @@ export const AddImageForm = () => {
   });
 
   const onSubmit = ({ files, metadatas }: FormSchema) => {
+    const newFiles = files.map((file, index) => {
+      const randomNumber = Math.floor(Math.random() * 1000);
+      const newName = `${Date.now()}_${randomNumber}_${file.name}`;
+      return new File([file], newName, { type: file.type });
+    });
     const data = metadatas.map((item) => ({
       ...item,
       location: item.location
@@ -85,10 +90,10 @@ export const AddImageForm = () => {
           }
         : undefined,
       people: item.people.map((person) => person.value),
-      tags: item.tags.split(/\s*,\s*|\s+/),
+      tags: item.tags.split(/\s*,\s*/),
     }));
     mutate(
-      { data, files },
+      { data, files: newFiles },
       {
         onSuccess() {
           form.reset();

@@ -1,4 +1,5 @@
 type CollectionType =
+  | "IMAGE"
   | "MUSIC"
   | "COLOR"
   | "FONT"

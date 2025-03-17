@@ -8,13 +8,15 @@ import { useState } from "react";
 export const Search = () => {
   const router = useRouter();
   const [value, setValue] = useState("");
+  const searchParams = new URLSearchParams(window.location.search);
 
   const handleSearch = () => {
     if (value !== "") {
-      router.push(`?search=${encodeURIComponent(value)}`);
+      searchParams.set("search", encodeURIComponent(value));
     } else {
-      router.push("/resource-bank"); // Reset search if empty
+      searchParams.delete("search");
     }
+    router.push(`?${searchParams.toString()}`);
   };
 
   return (

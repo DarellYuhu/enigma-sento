@@ -5,12 +5,13 @@ import { useSearchParams } from "next/navigation";
 export const useImages = () => {
   const searchParams = useSearchParams();
   const search = searchParams.get("search");
+  const collectionId = searchParams.get("collectionId");
 
   return useQuery({
-    queryKey: ["collections", "images", search ?? ""],
+    queryKey: ["collections", "images", { search, collectionId }],
     queryFn: async () => {
       const { data } = await SentoClient.get<Data>("/assets/images", {
-        params: { search },
+        params: { search, collectionId },
       });
       return data;
     },

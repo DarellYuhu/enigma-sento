@@ -1,5 +1,3 @@
-"use client";
-
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useRepurposeVideos } from "@/hooks/feature/asset/use-repurpose-videos";
 import { useEffect, useState } from "react";

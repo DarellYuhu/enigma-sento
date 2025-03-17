@@ -1,5 +1,3 @@
-"use client";
-
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useRepurposeImages } from "@/hooks/feature/asset/use-repurpose-images";
 import Image from "next/image";

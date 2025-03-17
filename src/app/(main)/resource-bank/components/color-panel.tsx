@@ -1,6 +1,6 @@
 import { AddColorsForm } from "./add-colors-form";
-import { CollectionList } from "./collection-list";
 import { ColorList } from "./color-list";
+import { CollectionList } from "./collection-list";
 
 export const ColorPanel = () => {
   return (

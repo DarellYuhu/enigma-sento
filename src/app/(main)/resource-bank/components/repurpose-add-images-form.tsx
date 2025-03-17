@@ -1,5 +1,3 @@
-"use client";
-
 import { AlertDialogHeader } from "@/components/ui/alert-dialog";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {

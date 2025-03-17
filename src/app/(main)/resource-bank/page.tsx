@@ -1,3 +1,5 @@
+"use client";
+
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -15,8 +17,9 @@ import { RepurposePanel } from "./components/repurpose-panel";
 import { CreateCollectionForm } from "./components/create-collection-form";
 import { ImagePanel } from "./components/image-panel";
 import { AddPeopleForm } from "./components/add-people-form";
+import dynamic from "next/dynamic";
 
-export default function ResourceBankPage() {
+function ResourceBankPage() {
   return (
     <div className="space-y-4">
       <div className="flex flex-row gap-2 justify-end">
@@ -53,6 +56,8 @@ export default function ResourceBankPage() {
     </div>
   );
 }
+
+export default dynamic(() => Promise.resolve(ResourceBankPage), { ssr: false });
 
 type Props = {
   label: string;

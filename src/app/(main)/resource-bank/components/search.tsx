@@ -1,5 +1,3 @@
-"use client";
-
 import { Input } from "@/components/ui/input";
 import { ArrowRightIcon, SearchIcon } from "lucide-react";
 import { useRouter } from "next/navigation";

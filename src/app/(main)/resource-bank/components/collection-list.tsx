@@ -1,5 +1,3 @@
-"use client";
-
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useCollections } from "@/hooks/feature/asset/use-collections";
 import { useRouter } from "next/navigation";

@@ -1,5 +1,3 @@
-"use client";
-
 import { Datatable } from "@/components/datatable";
 import { Font, useFonts } from "@/hooks/feature/asset/use-fonts";
 import { ColumnDef } from "@tanstack/react-table";

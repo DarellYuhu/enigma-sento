@@ -1,5 +1,3 @@
-"use client";
-
 import { Datatable } from "@/components/datatable";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useMusics } from "@/hooks/feature/asset/use-musics";

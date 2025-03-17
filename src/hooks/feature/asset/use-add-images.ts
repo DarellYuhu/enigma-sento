@@ -1,9 +1,14 @@
 import { SentoClient } from "@/lib/sento-client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
 export const useAddImages = () => {
+  const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
+  const search = searchParams.get("search");
+
   return useMutation({
     mutationFn: async (payload: Payload) => {
       const randomNumber = Math.floor(Math.random() * 1000);
@@ -27,6 +32,9 @@ export const useAddImages = () => {
       return data;
     },
     onSuccess() {
+      queryClient.invalidateQueries({
+        queryKey: ["collections", "images", search ?? ""],
+      });
       toast.success("Images added!");
     },
     onError(err) {

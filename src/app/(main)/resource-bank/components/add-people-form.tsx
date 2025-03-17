@@ -26,7 +26,7 @@ import { useState } from "react";
 import { z } from "zod";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { SentoClient } from "@/lib/sento-client";
 import { AxiosError } from "axios";
 
@@ -37,6 +37,7 @@ type FormSchema = z.infer<typeof formSchema>;
 
 export const AddPeopleForm = () => {
   const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -45,10 +46,13 @@ export const AddPeopleForm = () => {
   });
   const { mutate, isPending } = useMutation({
     mutationFn: async (payload: { name: string }[]) => {
-      const { data } = await SentoClient.post("/collections/peoples", payload);
+      const { data } = await SentoClient.post("/collections/peoples", {
+        data: payload,
+      });
       return data;
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["collections", "people"] });
       toast.success("Peoples added!");
       setOpen(false);
     },
@@ -63,7 +67,7 @@ export const AddPeopleForm = () => {
 
   const onSubmit = (values: FormSchema) => {
     const payload = values.people
-      .split(/\s*,\s*|\s+/)
+      .split(/\s*,\s*/)
       .filter(Boolean)
       .map((name) => ({ name }));
     mutate(payload);

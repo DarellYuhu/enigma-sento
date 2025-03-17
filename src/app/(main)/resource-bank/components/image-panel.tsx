@@ -1,10 +1,10 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { AddImageForm } from "./add-image-form";
 import { Search } from "./search";
 
 const ImageList = dynamic(() => import("./image-list"), { ssr: false });
+const AddImageForm = dynamic(() => import("./add-image-form"), { ssr: false });
 
 export const ImagePanel = () => {
   return (

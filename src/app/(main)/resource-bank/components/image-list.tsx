@@ -1,8 +1,7 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useImages } from "@/hooks/feature/asset/use-images";
 import { format } from "date-fns";
 import { Calendar, MapPin, Tags, Users } from "lucide-react";

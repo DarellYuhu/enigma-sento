@@ -56,7 +56,7 @@ const formSchema = z.object({
 });
 type FormSchema = z.infer<typeof formSchema>;
 
-export const AddImageForm = () => {
+const AddImageForm = () => {
   const [open, setOpen] = useState(false);
   const { mutate, isPending } = useAddImages();
   const [option, setOption] = useState<{ label: string; value: string }[]>([]);
@@ -74,7 +74,7 @@ export const AddImageForm = () => {
   });
 
   const onSubmit = ({ files, metadatas }: FormSchema) => {
-    const newFiles = files.map((file, index) => {
+    const newFiles = files.map((file) => {
       const randomNumber = Math.floor(Math.random() * 1000);
       const newName = `${Date.now()}_${randomNumber}_${file.name}`;
       return new File([file], newName, { type: file.type });
@@ -300,3 +300,5 @@ export const AddImageForm = () => {
     </Dialog>
   );
 };
+
+export default AddImageForm;

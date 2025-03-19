@@ -15,24 +15,28 @@ import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useCollections } from "@/hooks/feature/asset/use-collections";
 import {
   createStorySchema,
   CreateStorySchema,
   useCreateStory,
 } from "@/hooks/feature/project/use-create-story";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Trash2 } from "lucide-react";
+import { Folders, Trash2, Upload } from "lucide-react";
 import { useRef } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 
 export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
   const closeBtnRef = useRef<HTMLButtonElement>(null);
-  const { mutate } = useCreateStory();
+  const { mutate, isPending } = useCreateStory();
+  const { data } = useCollections({ type: "IMAGE" });
   const form = useForm<CreateStorySchema>({
     resolver: zodResolver(createStorySchema),
     defaultValues: {
@@ -47,6 +51,7 @@ export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
           textBgColor: "#000000",
           textStroke: "#000000",
           textPosition: "random",
+          imageType: "Upload",
         },
       ],
     },
@@ -183,17 +188,79 @@ export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
               />
               <FormField
                 control={form.control}
+                name={`data.${index}.imageType`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <ToggleGroup
+                        type="single"
+                        className="p-2 place-self-start"
+                        value={field.value}
+                        onValueChange={(value) => {
+                          if (value === "Upload")
+                            form.setValue(`data.${index}.images`, []);
+                          else {
+                            form.setValue(`data.${index}.images`, "");
+                          }
+                          field.onChange(value);
+                        }}
+                      >
+                        <ToggleGroupItem
+                          value="Upload"
+                          variant={"outline"}
+                          onClick={() => field.onChange("Upload")}
+                        >
+                          <Upload className="h-4 w-4" /> Upload
+                        </ToggleGroupItem>
+                        <ToggleGroupItem
+                          value="Collection"
+                          variant={"outline"}
+                          onClick={() => field.onChange("Collection")}
+                        >
+                          <Folders className="h-4 w-4" /> Collection
+                        </ToggleGroupItem>
+                      </ToggleGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name={`data.${index}.images`}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Images</FormLabel>
                     <FormControl>
-                      <FileUploader
-                        maxSize={Infinity}
-                        maxFileCount={Infinity}
-                        multiple={true}
-                        onValueChange={field.onChange}
-                      />
+                      {form.watch(`data.${index}.imageType`) === "Upload" ? (
+                        <FileUploader
+                          maxSize={Infinity}
+                          maxFileCount={Infinity}
+                          multiple={true}
+                          onValueChange={field.onChange}
+                        />
+                      ) : (
+                        <Select
+                          value={field.value as string}
+                          onValueChange={field.onChange}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a collection" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {data?.data
+                              .filter((c) => c.assets.length > 0)
+                              .map((collection) => (
+                                <SelectItem
+                                  value={collection._id}
+                                  key={collection._id}
+                                >
+                                  {collection.name}
+                                </SelectItem>
+                              ))}
+                          </SelectContent>
+                        </Select>
+                      )}
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -212,13 +279,16 @@ export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
               textBgColor: "#000000",
               textColor: "#ffffff",
               textStroke: "#000000",
+              imageType: "Upload",
             })
           }
         >
           Add Section
         </Button>
         <DialogFooter>
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={isPending}>
+            Submit
+          </Button>
           <DialogClose
             className={buttonVariants({ variant: "outline" })}
             ref={closeBtnRef}

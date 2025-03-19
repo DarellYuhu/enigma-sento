@@ -20,19 +20,7 @@ export const useCreateStory = () => {
         sectionPayload = await Promise.all(
           sections.map(async ({ images, ...sectionProps }, sectionIdx) => ({
             ...sectionProps,
-            images: await Promise.all(
-              images.map(async (image) => {
-                const path = `stories/section-${sectionIdx}/${image.name}`;
-                const { data } = await SentoClient.get<{ data: string }>(
-                  "/storage/upload",
-                  {
-                    params: { path },
-                  }
-                );
-                await axios.put(data.data, image);
-                return { path, name: image.name };
-              })
-            ),
+            images: await getImages(images, sectionIdx),
           }))
         );
       }
@@ -41,7 +29,6 @@ export const useCreateStory = () => {
         ...rest,
         data: sectionPayload,
       });
-
       return data;
     },
     onSuccess() {
@@ -56,6 +43,34 @@ export const useCreateStory = () => {
       toast.error("Something went wrong!");
     },
   });
+};
+
+const getImages = async (
+  images: string | File[],
+  sectionIdx: number
+): Promise<{ name: string; path: string }[]> => {
+  if (typeof images === "string") {
+    const { data } = await SentoClient.get<{
+      data: { path: string; name: string }[];
+    }>("/assets/images", { params: { collectionId: images } });
+    return data.data.map((item) => ({
+      ...item,
+      path: item.path.replace("assets/", ""),
+    }));
+  }
+  return await Promise.all(
+    images.map(async (image) => {
+      const path = `stories/section-${sectionIdx}/${image.name}`;
+      const { data } = await SentoClient.get<{ data: string }>(
+        "/storage/upload",
+        {
+          params: { path },
+        }
+      );
+      await axios.put(data.data, image);
+      return { path, name: image.name };
+    })
+  );
 };
 
 export const createStorySchema = z
@@ -75,16 +90,20 @@ export const createStorySchema = z
           textBgColor: z.string(),
           textStroke: z.string(),
           textPosition: z.enum(["random", "middle", "bottom"]),
-          images: z
-            .array(
-              z
-                .instanceof(File)
-                .refine(
-                  (file) =>
-                    file.type === "image/jpeg" || file.type === "image/png"
-                )
-            )
-            .min(1),
+          imageType: z.enum(["Upload", "Collection"]),
+          images: z.union([
+            z.string(),
+            z
+              .array(
+                z
+                  .instanceof(File)
+                  .refine(
+                    (file) =>
+                      file.type === "image/jpeg" || file.type === "image/png"
+                  )
+              )
+              .min(1),
+          ]),
         })
       )
       .optional(),

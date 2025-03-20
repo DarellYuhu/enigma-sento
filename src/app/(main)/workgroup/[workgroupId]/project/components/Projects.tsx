@@ -7,19 +7,24 @@ import { Badge } from "@/components/ui/badge";
 import { GenerateContentDistributionAlert } from "./GenerateContentDistributionAlert";
 import { CreateStoryDialog } from "./CreateStoryDialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 export const Projects = () => {
   const { data } = useProjects();
   return (
     <Tabs>
-      <TabsList>
-        {data?.data.map((item) => (
-          <TabsTrigger value={item.id} key={item.id}>
-            {item.name}
-          </TabsTrigger>
-        ))}
-      </TabsList>
+      <div className="flex">
+        <ScrollArea className="w-1 flex-1 pb-4">
+          <TabsList>
+            {data?.data.map((item) => (
+              <TabsTrigger value={item.id} key={item.id}>
+                {item.name}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      </div>
       {data?.data.map((item, idx) => (
         <TabsContent
           key={idx}

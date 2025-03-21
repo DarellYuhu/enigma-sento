@@ -10,7 +10,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { HardDrive, Home, User } from "lucide-react";
+import { FileText, HardDrive, Home, User } from "lucide-react";
 import { SignOut } from "../(main)/components/SignOut";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -72,5 +72,10 @@ const menus = [
     title: "Resource Bank",
     icon: HardDrive,
     href: "/resource-bank",
+  },
+  {
+    title: "Proposal",
+    icon: FileText,
+    href: "/proposal",
   },
 ];

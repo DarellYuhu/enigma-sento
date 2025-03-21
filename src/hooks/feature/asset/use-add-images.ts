@@ -11,10 +11,9 @@ export const useAddImages = () => {
 
   return useMutation({
     mutationFn: async (payload: Payload) => {
-      const randomNumber = Math.floor(Math.random() * 1000);
       const uploadPayload = await Promise.all(
         payload.files.map(async (file, idx) => {
-          const path = `all/images/${randomNumber}/${file.name}`;
+          const path = `all/images/${file.name}`;
           const presignUrl = await SentoClient.get(
             `/storage/upload?path=${path}`
           );

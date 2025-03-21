@@ -23,6 +23,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { useAddImages } from "@/hooks/feature/asset/use-add-images";
 import { usePeopleCollection } from "@/hooks/feature/asset/use-people-collection";
+import { getNewFileName } from "@/utils/getNewFileName";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -73,9 +74,7 @@ const AddImageForm = () => {
 
   const onSubmit = ({ files, metadatas }: FormSchema) => {
     const newFiles = files.map((file) => {
-      const randomNumber = Math.floor(Math.random() * 1000);
-      const newName = `${Date.now()}_${randomNumber}_${file.name}`;
-      return new File([file], newName, { type: file.type });
+      return getNewFileName(file);
     });
     const data = metadatas.map((item) => ({
       ...item,

@@ -21,9 +21,13 @@ import {
   Users,
 } from "lucide-react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const ImageList = () => {
+  const searchParams = useSearchParams();
+  const collectionId = searchParams.get("collectionId");
   const [selected, setSelected] = useState<string[]>([]);
   const { data } = useImages();
   const { data: collections } = useCollections({ type: "IMAGE" });
@@ -33,33 +37,49 @@ const ImageList = () => {
     mutate({ id, data: { newAssets: selected } });
   };
 
+  const handleRemoveFromCollection = () => {
+    if (!collectionId) return toast.error("Please select a collection");
+    mutate({ id: collectionId, data: { deletedAssets: selected } });
+  };
+
   return (
     <div className="space-y-4">
-      {selected.length > 0 && (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild className="place-self-end flex">
-            <Button variant="outline">
-              <SquarePlus /> Add to collection
-              <ChevronDownIcon
-                className="-me-1 opacity-60"
-                size={16}
-                aria-hidden="true"
-              />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            {collections?.data.map((item) => (
-              <DropdownMenuItem
-                key={item._id}
-                onClick={() => handleAddToCollection(item._id)}
-                disabled={isPending}
-              >
-                {item.name}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )}
+      <div className="flex items-center justify-end gap-2">
+        {selected.length > 0 && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild className="place-self-end flex">
+              <Button variant="outline">
+                <SquarePlus /> Add to collection
+                <ChevronDownIcon
+                  className="-me-1 opacity-60"
+                  size={16}
+                  aria-hidden="true"
+                />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {collections?.data.map((item) => (
+                <DropdownMenuItem
+                  key={item._id}
+                  onClick={() => handleAddToCollection(item._id)}
+                  disabled={isPending}
+                >
+                  {item.name}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
+        {collectionId && selected.length > 0 && (
+          <Button
+            variant={"destructive"}
+            disabled={isPending}
+            onClick={() => handleRemoveFromCollection()}
+          >
+            Drop from Collection
+          </Button>
+        )}
+      </div>
       <ToggleGroup
         className="grid grid-cols-4 gap-4"
         type="multiple"
@@ -71,13 +91,13 @@ const ImageList = () => {
             value={item._id}
             key={item._id}
             asChild
-            className="size-auto p-0"
+            className="w-full h-full p-0"
           >
             <Card
               key={idx}
               className="overflow-hidden text-left flex-col data-[state=on]:shadow-md data-[state=on]:shadow-green-400 transition-all duration-300 cursor-pointer"
             >
-              <CardHeader className="h-64 p-0 pb-4">
+              <CardHeader className="h-60 p-0 pb-4">
                 <Image
                   src={item.url}
                   alt={item.name}
@@ -86,7 +106,7 @@ const ImageList = () => {
                   className="w-full h-full object-cover"
                 />
               </CardHeader>
-              <CardContent className="h-full w-full">
+              <CardContent className="flex flex-1 flex-col w-full">
                 <ScrollArea className="h-12">
                   <p className="text-xs text-muted-foreground">
                     {item.description}

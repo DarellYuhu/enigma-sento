@@ -1,14 +1,17 @@
 import { SentoClient } from "@/lib/sento-client";
+import { StatusEnum } from "@/types/enums";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
+import { useParams } from "next/navigation";
 
 export const useProposal = () => {
+  const params = useParams();
   const { data: session } = useSession();
 
   return useQuery({
-    queryKey: ["proposals"],
+    queryKey: ["proposals", params.id],
     queryFn: async () => {
-      const { data } = await SentoClient.get<Data>("/proposals", {
+      const { data } = await SentoClient.get<Data>(`/proposals/${params.id}`, {
         headers: { Authorization: `Bearer ${session?.user?.token}` },
       });
       return data;
@@ -18,32 +21,20 @@ export const useProposal = () => {
 
 type Data = {
   message: string;
-  data: Proposal[];
+  data: {
+    id: string;
+    title: string;
+    status: StatusEnum;
+    Feedback: {
+      message: string;
+      uri?: string;
+      User: { id: string; displayName: string };
+      createdAt: string;
+    }[];
+    Submission: { id: string; uri: string; createdAt: string }[];
+    Author: {
+      id: string;
+      displayName: string;
+    };
+  };
 };
-
-type Author = {
-  displayName: string;
-  id: string;
-};
-
-export type Proposal = {
-  id: string;
-  title: string;
-  status: StatusEnum;
-  authorId: string;
-  approverId: string;
-  projectId: string | null;
-  submissionId: number;
-  createdAt: string;
-  updatedAt: string;
-  approvedAt: string;
-  Author: Author;
-  Approver: Author | null;
-};
-
-enum StatusEnum {
-  ACCEPTED = "ACCEPTED",
-  REJECTED = "REJECTED",
-  REVISIED = "REVISIED",
-  WAITING = "WAITING",
-}

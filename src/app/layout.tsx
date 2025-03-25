@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import "react-h5-audio-player/lib/styles.css";
+import "@cyntler/react-doc-viewer/dist/index.css";
 
 const inter = Inter({
   variable: "--font-inter",

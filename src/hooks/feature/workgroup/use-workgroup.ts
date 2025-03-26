@@ -10,11 +10,19 @@ export const useWorkgroup = () => {
   return useQuery({
     queryKey: ["workgroup", params.workgroupId],
     queryFn: async () => {
-      const { data } = await SentoClient.get(
+      const { data } = await SentoClient.get<Data>(
         `/workgroups/${params.workgroupId}`,
         { headers: { Authorization: `Bearer ${session?.user?.token}` } }
       );
       return data;
     },
   });
+};
+
+type Data = {
+  message: string;
+  data: {
+    id: string;
+    withTicket: boolean;
+  };
 };

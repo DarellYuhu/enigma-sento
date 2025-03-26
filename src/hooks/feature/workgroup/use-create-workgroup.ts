@@ -37,6 +37,7 @@ export const createWorkgroup = z
       (num) => parseInt(z.string().parse(num), 10),
       z.number().positive()
     ),
+    withTicket: z.boolean(),
   })
   .refine((data) => data.projectStoryPerUser >= data.session, {
     message: "Project story per user must be greater than or equal to session",

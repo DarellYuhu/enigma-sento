@@ -25,5 +25,6 @@ export type Workgroup = {
     managerId: string;
     createdAt: string;
     updatedAt: string;
+    withTicket: boolean;
   }[];
 };

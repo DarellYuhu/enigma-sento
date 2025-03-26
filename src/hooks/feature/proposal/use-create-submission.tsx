@@ -1,6 +1,6 @@
 import { SentoClient } from "@/lib/sento-client";
 import { getNewFileName } from "@/utils/getNewFileName";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
@@ -9,6 +9,7 @@ import { toast } from "sonner";
 export const useCreateSubmission = () => {
   const params = useParams();
   const { data: session } = useSession();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (payload: { file: File }) => {
@@ -30,6 +31,7 @@ export const useCreateSubmission = () => {
       return data;
     },
     onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ["proposals", params.id] });
       toast.success("Submission created!");
     },
     onError(err) {

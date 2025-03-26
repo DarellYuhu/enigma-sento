@@ -25,6 +25,7 @@ export const useCreateProposal = () => {
           title: payload.title,
           fileName: file.name,
           filePath: path,
+          workgroupId: payload.workgroupId,
         },
         { headers: { Authorization: `Bearer ${session?.user?.token}` } }
       );
@@ -44,6 +45,7 @@ export const useCreateProposal = () => {
 
 export const createProposalSchema = z.object({
   title: z.string().trim().min(1, "Required"),
+  workgroupId: z.string().trim().min(1, "Required"),
   file: z.array(z.instanceof(File)).min(1, "Required"),
 });
 

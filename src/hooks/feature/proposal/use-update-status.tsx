@@ -1,7 +1,7 @@
 import { SentoClient } from "@/lib/sento-client";
 import { StatusEnum } from "@/types/enums";
 import { getNewFileName } from "@/utils/getNewFileName";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
@@ -10,6 +10,7 @@ import { toast } from "sonner";
 export const useUpdateStatus = () => {
   const { id } = useParams();
   const { data: session } = useSession();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (payload: Payload) => {
@@ -38,6 +39,7 @@ export const useUpdateStatus = () => {
       return data;
     },
     onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ["proposals", id] });
       toast.success("Status updated!");
     },
     onError(error) {

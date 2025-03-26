@@ -8,6 +8,7 @@ import { GenerateContentDistributionAlert } from "./GenerateContentDistributionA
 import { CreateStoryDialog } from "./CreateStoryDialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { EditNameDialog } from "./edit-name-dialog";
 
 export const Projects = () => {
   const { data } = useProjects();
@@ -43,6 +44,7 @@ export const Projects = () => {
                 <>
                   <GenerateContentDistributionAlert projectId={item.id} />
                   <CreateStoryDialog projectId={item.id} />
+                  <EditNameDialog projectId={item.id} />
                 </>
               )}
             </div>

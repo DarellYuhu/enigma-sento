@@ -20,6 +20,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -29,7 +30,10 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateProject } from "@/hooks/feature/project/use-create-project";
+import { useProposals } from "@/hooks/feature/proposal/use-proposals";
+import { useWorkgroup } from "@/hooks/feature/workgroup/use-workgroup";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { InfoIcon } from "lucide-react";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -47,6 +51,7 @@ const formSchema = z
     allocationType: z.string().trim().min(1, "Required"),
     captions: z.string().optional(),
     hashtags: z.string().optional(),
+    proposalId: z.string().optional(),
   })
   .superRefine(({ allocationType, captions, hashtags }, ctx) => {
     if (allocationType === "GENERIC") {
@@ -71,6 +76,8 @@ type FormSchema = z.infer<typeof formSchema>;
 export const CreateProjectDialog = () => {
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const { mutate } = useCreateProject();
+  const { data: workgroup } = useWorkgroup();
+  const { data: proposals } = useProposals();
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: { name: "", allocationType: "GENERIC", captions: "" },
@@ -97,71 +104,117 @@ export const CreateProjectDialog = () => {
               Please fill all the fields below to create a new project
             </DialogDescription>
           </DialogHeader>
+          {workgroup?.data.withTicket && (
+            <div className="rounded-md border px-4 py-3">
+              <p className="text-sm">
+                <InfoIcon
+                  className="me-3 -mt-0.5 inline-flex text-blue-500"
+                  size={16}
+                  aria-hidden="true"
+                />
+                This workgroup need a ticket! please select the proposal
+              </p>
+            </div>
+          )}
           <Form {...form}>
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="allocationType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Type</FormLabel>
-                  <FormControl>
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select an option" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="SPECIFIC">Specific</SelectItem>
-                        <SelectItem value="GENERIC">Generic</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {form.watch("allocationType") === "GENERIC" && (
-              <>
+            <ScrollArea className="h-[420px]">
+              {workgroup?.data.withTicket && (
                 <FormField
                   control={form.control}
-                  name="captions"
+                  name="proposalId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Captions</FormLabel>
+                      <FormLabel>Proposal</FormLabel>
                       <FormControl>
-                        <Textarea {...field} rows={4} />
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a proposal" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {proposals?.data.map((proposal) => (
+                              <SelectItem key={proposal.id} value={proposal.id}>
+                                {proposal.title}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="hashtags"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Hashtags</FormLabel>
-                      <FormControl>
-                        <Textarea {...field} rows={4} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </>
-            )}
+              )}
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="allocationType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Type</FormLabel>
+                    <FormControl>
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select an option" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="SPECIFIC">Specific</SelectItem>
+                          <SelectItem value="GENERIC">Generic</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {form.watch("allocationType") === "GENERIC" && (
+                <>
+                  <FormField
+                    control={form.control}
+                    name="captions"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Captions</FormLabel>
+                        <FormControl>
+                          <Textarea {...field} rows={4} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="hashtags"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Hashtags</FormLabel>
+                        <FormControl>
+                          <Textarea {...field} rows={4} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </>
+              )}
+            </ScrollArea>
           </Form>
           <DialogFooter>
             <Button type="submit">Submit</Button>

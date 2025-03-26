@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Toggle } from "@/components/ui/toggle";
 import {
   createWorkgroup,
   CreateWorkgroup,
@@ -30,6 +31,7 @@ export const CreateWorkgroupForm = () => {
       name: "",
       projectStoryPerUser: 0,
       session: 0,
+      withTicket: false,
     },
   });
 
@@ -41,6 +43,8 @@ export const CreateWorkgroupForm = () => {
       },
     });
   };
+
+  console.log(form.watch("withTicket"));
 
   return (
     <Form {...form}>
@@ -56,6 +60,26 @@ export const CreateWorkgroupForm = () => {
               <FormLabel>Workgroup name</FormLabel>
               <FormControl>
                 <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="withTicket"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Toggle
+                  aria-label="Toggle italic"
+                  variant={"outline"}
+                  className="data-[state=on]:bg-green-200"
+                  pressed={field.value}
+                  onPressedChange={field.onChange}
+                >
+                  With ticket
+                </Toggle>
               </FormControl>
               <FormMessage />
             </FormItem>

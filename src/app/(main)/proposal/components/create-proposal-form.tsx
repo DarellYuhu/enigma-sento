@@ -22,10 +22,18 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   createProposalSchema,
   CreateProposalSchema,
   useCreateProposal,
 } from "@/hooks/feature/proposal/use-create-proposal";
+import { useWorkgroups } from "@/hooks/feature/workgroup/use-workgroups";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircleIcon } from "lucide-react";
 import { useRef } from "react";
@@ -34,11 +42,13 @@ import { useForm } from "react-hook-form";
 export const CreateProposalForm = () => {
   const closeRef = useRef<HTMLButtonElement>(null);
   const { mutate, isPending } = useCreateProposal();
+  const { data: workgroup } = useWorkgroups();
   const form = useForm<CreateProposalSchema>({
     resolver: zodResolver(createProposalSchema),
     defaultValues: {
       file: [],
       title: "",
+      workgroupId: "",
     },
   });
 
@@ -73,6 +83,32 @@ export const CreateProposalForm = () => {
                   <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input placeholder="Proposal Name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="workgroupId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Workgroup</FormLabel>
+                  <FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Workgroup" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {workgroup?.data
+                          .filter((item) => item.withTicket)
+                          .map((item) => (
+                            <SelectItem value={item.id} key={item.id}>
+                              {item.name}
+                            </SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

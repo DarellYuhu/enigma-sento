@@ -2,15 +2,22 @@ import { SentoClient } from "@/lib/sento-client";
 import { StatusEnum } from "@/types/enums";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
+import { useParams } from "next/navigation";
 
 export const useProposals = () => {
   const { data: session } = useSession();
+  const { workgroupId } = useParams();
 
   return useQuery({
-    queryKey: ["proposals"],
+    queryKey: ["proposals", workgroupId ?? ""],
     queryFn: async () => {
+      let params = {};
+      if (workgroupId) {
+        params = { available: true };
+      }
       const { data } = await SentoClient.get<Data>("/proposals", {
         headers: { Authorization: `Bearer ${session?.user?.token}` },
+        params,
       });
       return data;
     },

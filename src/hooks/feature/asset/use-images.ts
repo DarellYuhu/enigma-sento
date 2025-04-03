@@ -6,12 +6,13 @@ export const useImages = () => {
   const searchParams = useSearchParams();
   const search = searchParams.get("search");
   const collectionId = searchParams.get("collectionId");
+  const fullText = searchParams.get("fullText");
 
   return useQuery({
-    queryKey: ["collections", "images", { search, collectionId }],
+    queryKey: ["collections", "images", { search, collectionId, fullText }],
     queryFn: async () => {
       const { data } = await SentoClient.get<Data>("/assets/images", {
-        params: { search, collectionId },
+        params: { search, collectionId, fullText },
       });
       return data;
     },

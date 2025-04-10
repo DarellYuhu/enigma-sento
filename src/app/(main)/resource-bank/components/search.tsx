@@ -1,32 +1,34 @@
 import { Input } from "@/components/ui/input";
-import { Toggle } from "@/components/ui/toggle";
-import { ArrowRightIcon, SearchIcon } from "lucide-react";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { ArrowRightIcon, SearchIcon, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { PiVectorThree } from "react-icons/pi";
+import { LuTextSearch } from "react-icons/lu";
 
 export const Search = () => {
   const router = useRouter();
   const [value, setValue] = useState("");
-  const [isFullText, setIsFullText] = useState(false);
+  const [searchType, setSearchType] = useState("semantic");
   const searchParams = new URLSearchParams(window.location.search);
 
   const handleSearch = () => {
     if (value !== "") {
-      searchParams.set("search", encodeURIComponent(value));
+      searchParams.set("search", value);
     } else {
       searchParams.delete("search");
     }
 
-    if (isFullText) {
-      searchParams.set("fullText", encodeURIComponent(isFullText));
+    if (searchType) {
+      searchParams.set("searchType", searchType);
     } else {
-      searchParams.delete("fullText");
+      searchParams.delete("searchType");
     }
     router.push(`?${searchParams.toString()}`);
   };
 
   return (
-    <div className="flex flex-row justify-between gap-2">
+    <div className="flex flex-row gap-2">
       <div className="relative w-full">
         <Input
           className="peer ps-9 pe-9"
@@ -46,14 +48,26 @@ export const Search = () => {
           <ArrowRightIcon size={16} aria-hidden="true" />
         </button>
       </div>
-      <Toggle
-        variant={"outline"}
-        className="text-nowrap"
-        onPressedChange={setIsFullText}
-        pressed={isFullText}
+      {/* <TooltipProvider> */}
+      <ToggleGroup
+        type="single"
+        variant="outline"
+        value={searchType}
+        onValueChange={(value) => {
+          if (value) setSearchType(value);
+        }}
+        className="w-full"
       >
-        Full-text
-      </Toggle>
+        <ToggleGroupItem className="flex-1 text-nowrap" value="semantic">
+          <PiVectorThree /> Semantic search
+        </ToggleGroupItem>
+        <ToggleGroupItem className="flex-1 text-nowrap" value="full-text">
+          <LuTextSearch /> Text search
+        </ToggleGroupItem>
+        <ToggleGroupItem className="flex-1 text-nowrap" value="people">
+          <User /> People search
+        </ToggleGroupItem>
+      </ToggleGroup>
     </div>
   );
 };

@@ -80,7 +80,12 @@ export const CreateProjectDialog = () => {
   const { data: proposals } = useProposals();
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
-    defaultValues: { name: "", allocationType: "GENERIC", captions: "" },
+    defaultValues: {
+      name: "",
+      allocationType: "GENERIC",
+      captions: undefined,
+      hashtags: undefined,
+    },
   });
 
   const handleSubmit = (value: FormSchema) => {
@@ -169,7 +174,13 @@ export const CreateProjectDialog = () => {
                     <FormControl>
                       <Select
                         value={field.value}
-                        onValueChange={field.onChange}
+                        onValueChange={(val) => {
+                          field.onChange(val);
+                          if (val === "SPECIFIC") {
+                            form.setValue("captions", undefined);
+                            form.setValue("hashtags", undefined);
+                          }
+                        }}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Select an option" />

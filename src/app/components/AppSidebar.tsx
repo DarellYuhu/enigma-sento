@@ -10,7 +10,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { FileText, HardDrive, Home, User } from "lucide-react";
+import { FileText, HardDrive, Home, PencilRuler, User } from "lucide-react";
 import { SignOut } from "../(main)/components/SignOut";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -77,5 +77,10 @@ const menus = [
     title: "Proposal",
     icon: FileText,
     href: "/proposal",
+  },
+  {
+    title: "Layout Editor",
+    icon: PencilRuler,
+    href: "/layout-editor",
   },
 ];

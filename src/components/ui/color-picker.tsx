@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 
 interface ColorPickerProps {
-  value: string;
+  value?: string;
   onChange: (value: string) => void;
   onBlur?: () => void;
 }

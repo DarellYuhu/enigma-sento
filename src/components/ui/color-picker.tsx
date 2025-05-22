@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 
 interface ColorPickerProps {
   value?: string;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
   onBlur?: () => void;
 }
 
@@ -58,7 +58,7 @@ const ColorPicker = forwardRef<
           <Input
             maxLength={7}
             onChange={(e) => {
-              onChange(e?.currentTarget?.value);
+              if (onChange) onChange(e?.currentTarget?.value);
             }}
             ref={ref}
             value={parsedValue}

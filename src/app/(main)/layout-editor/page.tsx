@@ -3,13 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { ColorPicker } from "@/components/ui/color-picker";
 import Konva from "konva";
-import {
-  Circle as LucideCircle,
-  Image as LucideImage,
-  Square,
-  Triangle,
-  Type,
-} from "lucide-react";
+import { Circle as LucideCircle, Square, Triangle, Type } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import {
   Layer,
@@ -17,8 +11,8 @@ import {
   Stage,
   Transformer,
   Circle,
-  Shape,
   RegularPolygon,
+  Text,
 } from "react-konva";
 import { v4 as uuidv4 } from "uuid";
 import useImage from "use-image";
@@ -31,11 +25,21 @@ export default function LayoutEditorPage() {
     "https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U",
     "anonymous"
   );
+  const [dummyImage2] = useImage(
+    "https://fastly.picsum.photos/id/969/200/300.jpg?grayscale&hmac=tJeH80nlcd-FSvljrVcDuolm-Lsv4qkz8xNdB-j_DCw",
+    "anonymous"
+  );
+  const [dummyImage3] = useImage(
+    "https://fastly.picsum.photos/id/969/200/300.jpg?grayscale&hmac=tJeH80nlcd-FSvljrVcDuolm-Lsv4qkz8xNdB-j_DCw",
+    "anonymous"
+  );
   const transformerRef = useRef<Konva.Transformer | null>(null);
   const selectionStart = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const shapeRefs = useRef<Map<string, any>>(new Map());
-  const [shapes, setShapes] = useState<Konva.ShapeConfig[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [shapes, setShapes] = useState<
+    (Konva.ShapeConfig | Konva.RegularPolygonConfig)[]
+  >([]);
   const [selectionBox, setSelectionBox] = useState<{
     visible: boolean;
     x: number;
@@ -90,39 +94,76 @@ export default function LayoutEditorPage() {
   };
 
   const handleAddShape = (type: ShapeType) => {
-    const newShape: Konva.ShapeConfig = {
+    const scale =
+      dummyImage && Math.max(100 / dummyImage.width, 100 / dummyImage.height);
+
+    const newShape: (typeof shapes)[0] = {
       id: uuidv4(),
       type,
       draggable: true,
+      x: 100,
+      y: 100,
+      stroke: "black",
+      strokeWidth: 1,
+      fillPatternScale: scale ? { x: scale, y: scale } : undefined,
     };
+
     switch (type) {
       case "rect":
-        newShape.fillPatternImage = dummyImage;
-        newShape.x = 100;
-        newShape.y = 100;
-        newShape.width = 100;
-        newShape.height = 100;
-        newShape.stroke = "black";
-        newShape.strokeWidth = 1;
+        Object.assign(newShape, {
+          fillPatternImage: dummyImage,
+          width: 100,
+          height: 100,
+        });
         break;
       case "circle":
-        newShape.x = 100;
-        newShape.y = 100;
-        newShape.radius = 50;
-        newShape.fill = "green";
-        newShape.stroke = "black";
-        newShape.strokeWidth = 1;
+        Object.assign(newShape, {
+          fillPatternImage: dummyImage2,
+          fillPatternOffset: { x: 100, y: 100 },
+          fillPatternRepeat: "no-repeat",
+          radius: 50,
+        });
         break;
       case "triangle":
-        newShape.x = 100;
-        newShape.y = 100;
-        newShape.points = [0, 50, 50, 0, 100, 50];
-        newShape.fill = "red";
-        newShape.stroke = "black";
-        newShape.strokeWidth = 1;
+        Object.assign(newShape, {
+          fillPatternImage: dummyImage3,
+          fillPatternOffset: { x: 100, y: 100 },
+          fillPatternRepeat: "no-repeat",
+          points: [0, 50, 50, 0, 100, 50],
+          sides: 3,
+          radius: 50,
+        });
         break;
+      case "text":
+        Object.assign(newShape, {
+          text: "Hello Konva",
+        });
     }
+
     setShapes([...shapes, newShape]);
+  };
+
+  const handleTransform = (node: Konva.Shape) => {
+    const image = node.fillPatternImage();
+    console.log(image.width, image.height);
+    console.log(node.width() * node.scaleX(), node.height() * node.scaleY());
+    const scale = Math.max(
+      node.width() / image.width,
+      node.height() / image.height
+    );
+    node.fillPatternScale({ x: scale, y: scale });
+  };
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (
+      (e.key === "Delete" || e.key === "Backspace") &&
+      selectedIds.length > 0
+    ) {
+      setShapes((prev) =>
+        prev.filter((shape) => !selectedIds.includes(shape.id!))
+      );
+      setSelectedIds([]);
+    }
   };
 
   useEffect(() => {
@@ -133,6 +174,10 @@ export default function LayoutEditorPage() {
       transformerRef.current.nodes(nodes);
       transformerRef.current.getLayer()?.batchDraw();
     }
+
+    addEventListener("keydown", handleKeyDown);
+
+    return () => removeEventListener("keydown", handleKeyDown);
   }, [selectedIds]);
 
   return (
@@ -146,7 +191,7 @@ export default function LayoutEditorPage() {
           onMouseUp={handleMouseUp}
         >
           <Layer>
-            {shapes.map((shape, idx) => {
+            {shapes.map((shape) => {
               switch (shape.type) {
                 case "rect":
                   return (
@@ -170,7 +215,19 @@ export default function LayoutEditorPage() {
                   );
                 case "triangle":
                   return (
-                    <Shape
+                    <RegularPolygon
+                      key={shape.id}
+                      {...shape}
+                      sides={shape.sides}
+                      radius={shape.radius}
+                      ref={(node) => {
+                        if (node) shapeRefs.current.set(shape.id!, node);
+                      }}
+                    />
+                  );
+                case "text":
+                  return (
+                    <Text
                       key={shape.id}
                       {...shape}
                       ref={(node) => {
@@ -228,11 +285,8 @@ export default function LayoutEditorPage() {
           <Button size={"icon"} onClick={() => handleAddShape("triangle")}>
             <Triangle className="size-10" />
           </Button>
-          <Button size={"icon"}>
+          <Button size={"icon"} onClick={() => handleAddShape("text")}>
             <Type className="size-10" />
-          </Button>
-          <Button size={"icon"}>
-            <LucideImage className="size-10" />
           </Button>
         </div>
         <p>Color Settings</p>

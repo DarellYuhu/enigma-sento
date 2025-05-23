@@ -129,7 +129,7 @@ export default function LayoutEditorPage() {
     });
 
     canvas.add(rect);
-    canvas.on("mouse:down", (e) => {
+    canvas.on("mouse:down", () => {
       const activeObject = canvas.getActiveObject();
       if (activeObject) selectedObjectRef.current = activeObject;
     });

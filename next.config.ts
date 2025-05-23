@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
   // typescript: {
   //   ignoreBuildErrors: true,
   // },
+  webpack: (config) => {
+    config.externals = [...config.externals, { canvas: "canvas" }]; // required to make Konva & react-konva work
+    return config;
+  },
   images: {
     // formats: ["image/avif", "image/webp"],
     remotePatterns: [

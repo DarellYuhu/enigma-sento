@@ -44,8 +44,6 @@ export const CreateWorkgroupForm = () => {
     });
   };
 
-  console.log(form.watch("withTicket"));
-
   return (
     <Form {...form}>
       <form

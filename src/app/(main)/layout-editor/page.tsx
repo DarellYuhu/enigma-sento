@@ -78,7 +78,6 @@ export default function LayoutEditorPage() {
     const box = selectionBox;
     const selected = shapes.filter((shape) => {
       const node = shapeRefs.current.get(shape.id!);
-      console.log(node);
       return Konva.Util.haveIntersection(
         {
           x: box.x,
@@ -145,8 +144,6 @@ export default function LayoutEditorPage() {
 
   const handleTransform = (node: Konva.Shape) => {
     const image = node.fillPatternImage();
-    console.log(image.width, image.height);
-    console.log(node.width() * node.scaleX(), node.height() * node.scaleY());
     const scale = Math.max(
       node.width() / image.width,
       node.height() / image.height

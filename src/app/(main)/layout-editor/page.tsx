@@ -1,16 +1,18 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import VanillaCanvas from "./components/VanillaCanvas";
 
-const Canvas = dynamic(
-  async () => (await import("./components/Canvas")).Canvas,
-  { ssr: false }
-);
+// import dynamic from "next/dynamic";
+
+// const Canvas = dynamic(
+//   async () => (await import("./components/Canvas")).Canvas,
+//   { ssr: false }
+// );
 
 export default function LayoutEditorPage() {
   return (
     <div>
-      <Canvas />
+      <VanillaCanvas />
     </div>
   );
 }

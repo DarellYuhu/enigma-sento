@@ -1,18 +1,16 @@
-"use client";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import Link from "next/link";
 
-import VanillaCanvas from "./components/VanillaCanvas";
-
-// import dynamic from "next/dynamic";
-
-// const Canvas = dynamic(
-//   async () => (await import("./components/Canvas")).Canvas,
-//   { ssr: false }
-// );
-
-export default function LayoutEditorPage() {
+export default function LayoutListPage() {
   return (
     <div>
-      <VanillaCanvas />
+      <Link href={"/layout-editor/create-new"}>
+        <Button size={"sm"}>
+          <Plus />
+          New
+        </Button>
+      </Link>
     </div>
   );
 }

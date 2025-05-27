@@ -1,35 +1,31 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Circle, Square, Triangle, Type } from "lucide-react";
+import { useUpsertLayout } from "@/hooks/feature/layout/use-upsert-layout";
+import { Circle, Save, Square, Triangle, Type } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
 import { AiOutlineColumnHeight, AiOutlineColumnWidth } from "react-icons/ai";
 
-type Shape = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  key: string;
-  align: "left" | "center" | "right" | "justify";
-  rotation: number;
-  image?: HTMLImageElement;
-  type: "rectangle" | "triangle" | "circle" | "text";
-  value?: string;
-};
-
 export default function VanillaCanvas() {
+  const { mutate, isPending } = useUpsertLayout();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [canvasDimensions, setCanvasDimensions] = useState({
-    width: 800,
-    height: 600,
-  });
   const [text, _setText] = useState("");
+  const [name, setName] = useState("");
   const [template, setTemplate] = useState<Shape[]>([]);
   const [selectedBox, setSelectedBox] = useState<Shape | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [canvasDimensions, setCanvasDimensions] = useState({
+    width: 800,
+    height: 600,
+  });
 
   const resizeHandleSize = 8;
 
@@ -173,16 +169,21 @@ export default function VanillaCanvas() {
   }
 
   function saveTemplate() {
-    const serializableTemplate = template.map((box) => ({
-      ...box,
-      image: undefined, // Do not save image object
-    }));
-    const json = JSON.stringify(serializableTemplate);
-    const blob = new Blob([json], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "template.json";
-    a.click();
+    // const serializableTemplate = template.map((box) => ({
+    //   ...box,
+    //   image: undefined, // Do not save image object
+    // }));
+    // const json = JSON.stringify(serializableTemplate);
+    // const blob = new Blob([json], { type: "application/json" });
+    // const a = document.createElement("a");
+    // a.href = URL.createObjectURL(blob);
+    // a.download = "template.json";
+    // a.click();
+
+    mutate({
+      template: { dimensions: canvasDimensions, shapes: template },
+      name,
+    });
   }
 
   const drawTemplate = (data?: string[]) => {
@@ -425,11 +426,17 @@ export default function VanillaCanvas() {
           onMouseUp={handleMouseUp}
           onKeyDown={handleKeyDown}
         />
-        <Card className="w-full">
+        <Card className="w-full h-fit">
           <CardHeader>
             <CardTitle>Controller</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
+            <Input
+              placeholder="Layout name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+
             {/* ========= LAYOUT ========= */}
             <div className="space-y-2">
               <p className="font-semibold text-sm text-muted-foreground">
@@ -512,27 +519,13 @@ export default function VanillaCanvas() {
 
             {/* ========= ITEM-CONTROL ========= */}
           </CardContent>
+          <CardFooter>
+            <Button onClick={saveTemplate} disabled={isPending}>
+              <Save />
+              Save
+            </Button>
+          </CardFooter>
         </Card>
-        {/* <Input
-        value={canvasDimensions.width}
-        onChange={(e) =>
-          setCanvasDimensions({ ...canvasDimensions, width: +e.target.value })
-        }
-        type="number"
-      />
-      <Input
-        value={canvasDimensions.height}
-        onChange={(e) =>
-          setCanvasDimensions({ ...canvasDimensions, height: +e.target.value })
-        }
-        type="number"
-      />
-      <textarea
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        className="w-full h-20 mt-2"
-        placeholder="Data bulk (pisahkan dengan koma, baris per baris)..."
-      /> */}
       </div>
     </>
   );

@@ -5,7 +5,7 @@ import VanillaCanvas from "../components/VanillaCanvas";
 export default function LayoutEditorPage() {
   return (
     <div>
-      <VanillaCanvas />
+      <VanillaCanvas mode="EDITOR" />
     </div>
   );
 }

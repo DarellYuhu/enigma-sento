@@ -1,55 +1,83 @@
+export const toLocalCoords = (
+  box: {
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+    rotation: number;
+  },
+  x: number,
+  y: number
+) => {
+  const cx = box.x + box.width / 2;
+  const cy = box.y + box.height / 2;
+  const angle = (-(box.rotation || 0) * Math.PI) / 180;
+  const dx = x - cx;
+  const dy = y - cy;
+  const rx = dx * Math.cos(angle) - dy * Math.sin(angle);
+  const ry = dx * Math.sin(angle) + dy * Math.cos(angle);
+  return {
+    x: rx + box.width / 2,
+    y: ry + box.height / 2,
+  };
+};
+
 export function wrapText(
   text: string,
   maxWidth: number,
   ctx: CanvasRenderingContext2D
-): string[] {
+) {
   const words = text.split(" ");
+  const lines = [];
   let line = "";
-  const lines: string[] = [];
 
   for (let i = 0; i < words.length; i++) {
-    const testLine = line + words[i] + " ";
+    const testLine = line + (line ? " " : "") + words[i];
     const metrics = ctx.measureText(testLine);
     const testWidth = metrics.width;
 
-    if (testWidth > maxWidth && i > 0) {
-      lines.push(line.trim());
-      line = words[i] + " ";
+    if (testWidth > maxWidth && line) {
+      lines.push(line);
+      line = words[i];
     } else {
       line = testLine;
     }
   }
-  lines.push(line.trim());
+  if (line) lines.push(line);
   return lines;
 }
 
-export function fitTextToBox(
+export function drawJustifiedText(
+  ctx: CanvasRenderingContext2D,
   text: string,
-  box: { width: number; height: number },
-  align: "left" | "center" | "right"
+  x: number,
+  y: number,
+  maxWidth: number
 ) {
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d")!;
-  const padding = 1;
-  const maxWidth = box.width - padding * 2;
-  const maxHeight = box.height - padding * 2;
+  const words = text.split(" ");
+  const spaceWidth = ctx.measureText(" ").width;
 
-  let fontSize = 30;
-  let lines: string[] = [];
+  // Measure total text width
+  const wordsWidth = words.reduce(
+    (acc, word) => acc + ctx.measureText(word).width,
+    0
+  );
+  const totalSpaces = words.length - 1;
+  const extraSpace = maxWidth - wordsWidth;
 
-  while (fontSize > 5) {
-    ctx.font = `${fontSize}px sans-serif`;
-    lines = wrapText(text, maxWidth, ctx);
-    const totalHeight = lines.length * fontSize;
-
-    if (totalHeight <= maxHeight) break;
-    fontSize--;
+  // If there's only one word or the line is too short, just draw normally
+  if (totalSpaces === 0 || extraSpace < 0) {
+    ctx.fillText(text, x, y);
+    return;
   }
 
-  return {
-    text: lines.join("\n"),
-    fontSize,
-    padding,
-    align,
-  };
+  const spacing = spaceWidth + extraSpace / totalSpaces;
+  let currentX = x;
+
+  for (let i = 0; i < words.length; i++) {
+    ctx.fillText(words[i], currentX, y);
+    if (i < words.length - 1) {
+      currentX += ctx.measureText(words[i]).width + spacing;
+    }
+  }
 }

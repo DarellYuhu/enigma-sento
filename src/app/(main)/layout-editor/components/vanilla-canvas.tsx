@@ -16,6 +16,7 @@ export default function VanillaCanvas({
   const setMode = useCanvasStore((state) => state.setMode);
   const setTemplate = useCanvasStore((state) => state.setTemplate);
   const setSelectedBox = useCanvasStore((state) => state.setSelectedBox);
+  const resetStore = useCanvasStore((state) => state.resetStore);
   const setCanvasDimensions = useCanvasStore(
     (state) => state.setCanvasDimensions
   );
@@ -31,25 +32,27 @@ export default function VanillaCanvas({
 
   useEffect(() => {
     if (value) {
-      loadTemplate(value);
       value.template.shapes.map((item) => {
         {
-          if (!item.imageUrl) return;
-          const oldTag = document.getElementById(`image-${item.key}`);
-          if (oldTag) oldTag.remove();
-          const img = new Image();
-          img.src = item.imageUrl;
-          img.id = `image-${item.key}`;
-          img.alt = `image-${item.key}`;
-          img.className = "hidden";
-          document.body.appendChild(img);
+          if (item.imageUrl) {
+            const oldTag = document.getElementById(`image-${item.key}`);
+            if (oldTag) oldTag.remove();
+            const img = new Image();
+            img.src = item.imageUrl;
+            img.id = `image-${item.key}`;
+            img.alt = `image-${item.key}`;
+            img.className = "hidden";
+            document.body.appendChild(img);
+          }
         }
       });
+      loadTemplate(value);
     }
   }, [value]);
 
   useEffect(() => {
     setMode(mode);
+    if (mode === "EDITOR") resetStore();
   }, [mode]);
 
   return (
@@ -58,7 +61,9 @@ export default function VanillaCanvas({
       <div className="space-y-4">
         {mode === "EDITOR" && <EditingPanel />}
 
-        {mode === "CREATOR" && <CreativePanel />}
+        {mode === "CREATOR" && value && (
+          <CreativePanel value={structuredClone(value)} />
+        )}
       </div>
     </div>
   );

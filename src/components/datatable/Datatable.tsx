@@ -70,7 +70,6 @@ export function Datatable<TData, TValue>({
     if (onRowSelect) {
       onRowSelect(selected);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
   return (

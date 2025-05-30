@@ -14,7 +14,6 @@ export const RepurposeVideoList = ({
 
   useEffect(() => {
     if (onVideSelect) onVideSelect(values);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values]);
 
   return (

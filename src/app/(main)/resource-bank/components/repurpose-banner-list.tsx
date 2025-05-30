@@ -13,7 +13,6 @@ export const RepurposeBannerList = ({
 
   useEffect(() => {
     if (onBannerSelect) onBannerSelect(values);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values]);
 
   return (

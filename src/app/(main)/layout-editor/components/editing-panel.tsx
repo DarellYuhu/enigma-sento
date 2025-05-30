@@ -36,7 +36,7 @@ export const EditingPanel = () => {
           width: canvasDimensions.width,
           height: canvasDimensions.height,
         },
-        shapes: template,
+        shapes: structuredClone(template),
       },
       name,
     };

@@ -1,7 +1,7 @@
 import { SentoClient } from "@/lib/sento-client";
 import { useQuery } from "@tanstack/react-query";
 
-export const useFonts = (fontId?: string[]) => {
+export const useFonts = () => {
   return useQuery({
     queryKey: ["fonts"],
     queryFn: async () => {

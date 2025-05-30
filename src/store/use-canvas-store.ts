@@ -43,7 +43,8 @@ const initialStates: States = {
 export const useCanvasStore = create<States & Actions>((set) => ({
   ...initialStates,
   resetStore() {
-    set(initialStates);
+    const { canvasRef: _, ...rest } = initialStates;
+    set(rest);
   },
   setMode(mode) {
     set({ mode });

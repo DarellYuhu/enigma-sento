@@ -13,37 +13,17 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useFonts } from "@/hooks/feature/asset/use-fonts";
 import { useCanvasStore } from "@/store/use-canvas-store";
 import { AlignCenterIcon, AlignLeftIcon, AlignRightIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
+import { useLoadFonts } from "../utils/use-load-fonts";
 
 export const TextConfiguration = () => {
-  const selectContainerRef = useRef<HTMLDivElement>(null);
-  const [isFontLoad, setIsFontLoad] = useState(false);
   const { data: fonts } = useFonts();
+  const selectContainerRef = useRef<HTMLDivElement>(null);
   const selectedBox = useCanvasStore((state) => state.selectedBox);
   const setTemplate = useCanvasStore((state) => state.setTemplate);
   const setSelectedBox = useCanvasStore((state) => state.setSelectedBox);
   const template = useCanvasStore((state) => state.template);
-
-  //   @ts-ignore
-  async function loadFontFace(fontFace: FontFace[]) {
-    await Promise.all(
-      fontFace.map(async (font) => {
-        const loadedFont = await font.load();
-        document.fonts.add(loadedFont);
-      })
-    );
-  }
-
-  useEffect(() => {
-    if (fonts) {
-      setIsFontLoad(true);
-      const fontFaces = fonts.data.map(
-        (font, index) =>
-          new FontFace(`font-${index}`, `url(${font.url}) format('truetype')`)
-      );
-      loadFontFace(fontFaces).finally(() => setIsFontLoad(false));
-    }
-  }, [fonts]);
+  const { isFontLoad } = useLoadFonts(fonts?.data);
 
   if (!selectedBox) return null;
   if (isFontLoad) return <div>Loading fonts...</div>;

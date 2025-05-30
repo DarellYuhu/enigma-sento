@@ -13,7 +13,6 @@ export const RepurposeImageList = ({
 
   useEffect(() => {
     if (onImageSelect) onImageSelect(values);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values]);
 
   return (

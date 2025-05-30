@@ -207,13 +207,10 @@ export const useDrawTemplate = () => {
     ctx: CanvasRenderingContext2D
   ) => {
     const img = document.getElementById(`image-${box.key}`) as HTMLImageElement;
-    console.log("pendo", img);
     if (img.complete) {
-      console.log("complete");
       ctx.drawImage(img, 0, 0, box.width, box.height);
     } else {
       img.onload = () => {
-        console.log("onload");
         ctx.drawImage(img, box.x, box.y, box.width, box.height);
       };
     }

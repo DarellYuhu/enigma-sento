@@ -1,6 +1,6 @@
 "use client";
 
-import VanillaCanvas from "../components/VanillaCanvas";
+import VanillaCanvas from "../components/vanilla-canvas";
 
 export default function LayoutEditorPage() {
   return (

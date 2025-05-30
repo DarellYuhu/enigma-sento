@@ -1,5 +1,5 @@
 import { getLayoutById } from "@/api/layout/fetch";
-import VanillaCanvas from "../components/VanillaCanvas";
+import VanillaCanvas from "../components/vanilla-canvas";
 
 export default async function LayoutDetailPage({
   params,

@@ -7,7 +7,7 @@ type Shape = {
   align: "left" | "center" | "right" | "justify";
   rotation: number;
   type: "rectangle" | "triangle" | "circle" | "text";
-  image?: File | boolean;
+  image?: File;
   imagePath?: string;
   value?: string;
   fill?: string;

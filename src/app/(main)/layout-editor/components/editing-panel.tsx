@@ -18,16 +18,16 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const EditingPanel = () => {
   const { mutate, isPending } = useUpsertLayout();
-  const {
-    name,
-    template,
-    selectedBox,
-    canvasDimensions,
-    setName,
-    setTemplate,
-    setSelectedBox,
-    setCanvasDimensions,
-  } = useCanvasStore();
+  const name = useCanvasStore((state) => state.name);
+  const template = useCanvasStore((state) => state.template);
+  const selectedBox = useCanvasStore((state) => state.selectedBox);
+  const canvasDimensions = useCanvasStore((state) => state.canvasDimensions);
+  const setName = useCanvasStore((state) => state.setName);
+  const setTemplate = useCanvasStore((state) => state.setTemplate);
+  const setSelectedBox = useCanvasStore((state) => state.setSelectedBox);
+  const setCanvasDimensions = useCanvasStore(
+    (state) => state.setCanvasDimensions
+  );
 
   function saveTemplate() {
     const payload = {

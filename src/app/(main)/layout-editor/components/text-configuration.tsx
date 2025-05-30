@@ -19,8 +19,10 @@ export const TextConfiguration = () => {
   const selectContainerRef = useRef<HTMLDivElement>(null);
   const [isFontLoad, setIsFontLoad] = useState(false);
   const { data: fonts } = useFonts();
-  const { selectedBox, setTemplate, setSelectedBox, template } =
-    useCanvasStore();
+  const selectedBox = useCanvasStore((state) => state.selectedBox);
+  const setTemplate = useCanvasStore((state) => state.setTemplate);
+  const setSelectedBox = useCanvasStore((state) => state.setSelectedBox);
+  const template = useCanvasStore((state) => state.template);
 
   //   @ts-ignore
   async function loadFontFace(fontFace: FontFace[]) {

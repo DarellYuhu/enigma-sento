@@ -13,6 +13,7 @@ type States = {
 };
 
 type Actions = {
+  resetStore: () => void;
   setMode: (mode: EditingMode) => void;
   setName: (name: string) => void;
   setTemplate: (template: CanvasShape[]) => void;
@@ -27,7 +28,7 @@ type Actions = {
   }) => void;
 };
 
-export const useCanvasStore = create<States & Actions>((set) => ({
+const initialStates: States = {
   mode: "EDITOR",
   canvasRef: null,
   name: "",
@@ -37,6 +38,13 @@ export const useCanvasStore = create<States & Actions>((set) => ({
   isResizing: false,
   dragOffset: { x: 0, y: 0 },
   canvasDimensions: { width: 800, height: 600 },
+};
+
+export const useCanvasStore = create<States & Actions>((set) => ({
+  ...initialStates,
+  resetStore() {
+    set(initialStates);
+  },
   setMode(mode) {
     set({ mode });
   },

@@ -3,21 +3,20 @@ import { toLocalCoords, wrapText } from ".";
 import { useCanvasStore } from "@/store/use-canvas-store";
 
 export const useDrawTemplate = () => {
-  const {
-    mode,
-    canvasRef,
-    canvasDimensions,
-    template,
-    selectedBox,
-    isDragging,
-    isResizing,
-    dragOffset,
-    setTemplate,
-    setSelectedBox,
-    setIsDragging,
-    setDragOffset,
-    setIsResizing,
-  } = useCanvasStore();
+  const mode = useCanvasStore((state) => state.mode);
+  const canvasRef = useCanvasStore((state) => state.canvasRef);
+  const canvasDimensions = useCanvasStore((state) => state.canvasDimensions);
+  const template = useCanvasStore((state) => state.template);
+  const selectedBox = useCanvasStore((state) => state.selectedBox);
+  const isDragging = useCanvasStore((state) => state.isDragging);
+  const isResizing = useCanvasStore((state) => state.isResizing);
+  const dragOffset = useCanvasStore((state) => state.dragOffset);
+  const setTemplate = useCanvasStore((state) => state.setTemplate);
+  const setSelectedBox = useCanvasStore((state) => state.setSelectedBox);
+  const setIsDragging = useCanvasStore((state) => state.setIsDragging);
+  const setDragOffset = useCanvasStore((state) => state.setDragOffset);
+  const setIsResizing = useCanvasStore((state) => state.setIsResizing);
+
   const resizeHandleSize = 8;
 
   function drawTextFit(box: Shape, text: string) {
@@ -111,12 +110,7 @@ export const useDrawTemplate = () => {
         case "rectangle":
           ctx.strokeRect(0, 0, box.width, box.height);
           ctx.fillRect(0, 0, box.width, box.height);
-          if (box.image) {
-            const image = document.getElementById(
-              `image-${box.key}`
-            ) as HTMLImageElement;
-            if (image) ctx.drawImage(image, 0, 0, box.width, box.height);
-          }
+          if (box.imageUrl) handleImageRender(box, ctx);
           break;
         case "circle":
           ctx.beginPath();
@@ -206,6 +200,23 @@ export const useDrawTemplate = () => {
     return (
       x >= box.width - resizeHandleSize && y >= box.height - resizeHandleSize
     );
+  };
+
+  const handleImageRender = (
+    box: CanvasShape,
+    ctx: CanvasRenderingContext2D
+  ) => {
+    const img = document.getElementById(`image-${box.key}`) as HTMLImageElement;
+    console.log("pendo", img);
+    if (img.complete) {
+      console.log("complete");
+      ctx.drawImage(img, 0, 0, box.width, box.height);
+    } else {
+      img.onload = () => {
+        console.log("onload");
+        ctx.drawImage(img, box.x, box.y, box.width, box.height);
+      };
+    }
   };
 
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {

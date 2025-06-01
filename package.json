@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "docker:build:staging": "docker build -t darellyuhu/sento-frontend-staging:latest -f docker/staging/Dockerfile .",
-    "docker:save:staging": "docker image save sento-frontend-staging:latest | gzip > sento-frontend-staging.tar.gz"
+    "docker:build:staging": "docker build -t darellyuhu/sento-frontend-staging-2:latest -f docker/staging/Dockerfile ."
   },
   "dependencies": {
     "@cyntler/react-doc-viewer": "^1.17.0",

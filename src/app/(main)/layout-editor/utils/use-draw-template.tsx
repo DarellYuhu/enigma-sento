@@ -99,7 +99,6 @@ export const useDrawTemplate = () => {
       ctx.translate(-box.width / 2, -box.height / 2);
       ctx.strokeStyle = box === selectedBox ? "red" : "blue";
       ctx.fillStyle = box.fill || "transparent";
-      // ctx.fillRect(0, 0, box.width, box.height);
       switch (box.type) {
         case "text":
           ctx.strokeRect(0, 0, box.width, box.height);
@@ -125,13 +124,10 @@ export const useDrawTemplate = () => {
           );
           ctx.stroke();
           ctx.fill();
-          if (box.image) {
+          if (box.imageUrl) {
             ctx.save();
             ctx.clip();
-            const image = document.getElementById(
-              `image-${box.key}`
-            ) as HTMLImageElement;
-            if (image) ctx.drawImage(image, 0, 0, box.width, box.height);
+            handleImageRender(box, ctx);
             ctx.restore();
           }
           break;
@@ -143,7 +139,7 @@ export const useDrawTemplate = () => {
           ctx.closePath();
           ctx.stroke();
           ctx.fill();
-          if (box.image) {
+          if (box.imageUrl) {
             ctx.save();
             ctx.clip();
             ctx.beginPath();
@@ -152,10 +148,7 @@ export const useDrawTemplate = () => {
             ctx.lineTo(box.width, box.height);
             ctx.closePath();
             ctx.clip();
-            const image = document.getElementById(
-              `image-${box.key}`
-            ) as HTMLImageElement;
-            if (image) ctx.drawImage(image, 0, 0, box.width, box.height);
+            handleImageRender(box, ctx);
             ctx.restore();
           }
           break;
@@ -207,13 +200,8 @@ export const useDrawTemplate = () => {
     ctx: CanvasRenderingContext2D
   ) => {
     const img = document.getElementById(`image-${box.key}`) as HTMLImageElement;
-    if (img.complete) {
-      ctx.drawImage(img, 0, 0, box.width, box.height);
-    } else {
-      img.onload = () => {
-        ctx.drawImage(img, box.x, box.y, box.width, box.height);
-      };
-    }
+    ctx.drawImage(img, 0, 0, box.width, box.height); // draw at local 0,0 inside clipped region
+    img.onload = () => drawTemplate();
   };
 
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {

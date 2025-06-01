@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 export default async function LayoutListPage() {
   const data = (await getLayouts()).data;
 
@@ -14,7 +16,7 @@ export default async function LayoutListPage() {
           New
         </Button>
       </Link>
-      <div className="flex flex-row flex-wrap">
+      <div className="flex flex-row flex-wrap gap-2">
         {data.map((item) => (
           <Link href={`/layout-editor/${item.id}`} key={item.id}>
             <div className="border p-2 rounded-md shadow-md">

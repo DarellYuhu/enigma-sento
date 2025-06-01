@@ -12,7 +12,7 @@ type Payload = {
   name: string;
   template: {
     dimensions: { width: number; height: number };
-    shapes: Shape[];
+    shapes: CanvasShape[];
   };
 };
 
@@ -26,11 +26,13 @@ export const useUpsertLayout = () => {
       await Promise.all(
         payload.template.shapes.map(async ({ image, fontId }, idx) => {
           if (image) {
-            const path = `/layout/${(image as File)?.name}`;
+            const fileName = `${Date.now()}-${image.name}`;
+            const path = `/layout/${fileName}`;
             const { data } = await getUploadUrl(path);
-            await uploadFile(data.data, (image as File)!);
+            await uploadFile(data.data, image);
             payload.template.shapes[idx].imagePath = path;
             payload.template.shapes[idx].image = undefined;
+            payload.template.shapes[idx].imageUrl = undefined;
           }
           if (fontId) {
             const font = fonts?.data[+fontId.split("-")[1]];

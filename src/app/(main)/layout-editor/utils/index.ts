@@ -81,3 +81,14 @@ export function drawJustifiedText(
     }
   }
 }
+
+export const createImgTag = (boxKey: string, url: string) => {
+  const oldTag = document.getElementById(`image-${boxKey}`);
+  if (oldTag) oldTag.remove();
+  const img = new Image();
+  img.src = url;
+  img.id = `image-${boxKey}`;
+  img.alt = `image-${boxKey}`;
+  img.className = "hidden";
+  document.body.appendChild(img);
+};

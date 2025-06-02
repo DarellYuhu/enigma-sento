@@ -58,7 +58,7 @@ export default function VanillaCanvas({
   return (
     <div className="flex flex-row gap-4">
       <CanvasLayout />
-      <div className="space-y-4">
+      <div className="space-y-4 flex-1">
         {mode === "EDITOR" && <EditingPanel />}
 
         {mode === "CREATOR" && value && (

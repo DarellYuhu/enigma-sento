@@ -6,6 +6,8 @@ import { useCanvasStore } from "@/store/use-canvas-store";
 import { FileUploader } from "@/components/ui/file-uploader";
 import { TextConfiguration } from "./text-configuration";
 import { Circle, Save, Square, Triangle, Type } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Card,
   CardContent,
@@ -13,8 +15,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const EditingPanel = () => {
   const { mutate, isPending } = useUpsertLayout();

@@ -200,6 +200,7 @@ export const useDrawTemplate = () => {
     ctx: CanvasRenderingContext2D
   ) => {
     const img = document.getElementById(`image-${box.key}`) as HTMLImageElement;
+    if (!img) return;
     ctx.drawImage(img, 0, 0, box.width, box.height); // draw at local 0,0 inside clipped region
     img.onload = () => drawTemplate();
   };

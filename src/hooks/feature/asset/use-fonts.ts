@@ -11,14 +11,7 @@ export const useFonts = () => {
   });
 };
 
-export type Font = {
-  _id: string;
-  name: string;
-  path: string;
-  url: string;
-};
-
 type Data = {
   message: string;
-  data: Font[];
+  data: FontAsset[];
 };

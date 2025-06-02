@@ -28,6 +28,13 @@ type ImageAsset = {
   };
 };
 
+type FontAsset = {
+  _id: string;
+  name: string;
+  path: string;
+  url: string;
+};
+
 type Shape = {
   x: number;
   y: number;

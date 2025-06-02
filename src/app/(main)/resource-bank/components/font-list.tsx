@@ -1,5 +1,5 @@
 import { Datatable } from "@/components/datatable";
-import { Font, useFonts } from "@/hooks/feature/asset/use-fonts";
+import { useFonts } from "@/hooks/feature/asset/use-fonts";
 import { ColumnDef } from "@tanstack/react-table";
 import { DeleteFontAllert } from "./delete-font-alert";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -7,7 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 export const FontList = ({
   onRowSelect,
 }: {
-  onRowSelect?: (values: Font[]) => void;
+  onRowSelect?: (values: FontAsset[]) => void;
 }) => {
   const { data } = useFonts();
 
@@ -23,7 +23,7 @@ export const FontList = ({
   );
 };
 
-const columns: ColumnDef<Font>[] = [
+const columns: ColumnDef<FontAsset>[] = [
   {
     id: "select",
     header: ({ table }) => (

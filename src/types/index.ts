@@ -28,6 +28,8 @@ type ImageAsset = {
   };
 };
 
+type ColorAsset = { _id: string; primary: string; secondary: string };
+
 type FontAsset = {
   _id: string;
   name: string;

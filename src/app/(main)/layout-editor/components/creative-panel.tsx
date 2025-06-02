@@ -16,6 +16,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useColor } from "@/hooks/feature/asset/use-color";
+import { useFont } from "@/hooks/feature/asset/use-font";
 
 export const CreativePanel = ({ value }: { value: Layout }) => {
   const fontId = value.template.shapes
@@ -52,7 +54,12 @@ export const CreativePanel = ({ value }: { value: Layout }) => {
               {shape.type === "text" && !shape.value && (
                 <TextInput box={shape} />
               )}
-              {/* {shape.type === "text" && !shape.fill && <ColorDialogSelection />} */}
+              {shape.type === "text" && !shape.fontId && (
+                <FontSelection box={shape} />
+              )}
+              {shape.type === "text" && !shape.fill && (
+                <ColorSelection box={shape} />
+              )}
               {shape.type !== "text" && !shape.imageUrl && !shape.fill && (
                 <ImageSelection box={shape} />
               )}
@@ -106,6 +113,96 @@ const ImageSelection = ({ box }: { box: CanvasShape }) => {
     <Select onValueChange={handleValueChange}>
       <SelectTrigger>
         <SelectValue placeholder="Select an image collection" />
+      </SelectTrigger>
+      <SelectContent>
+        {collections?.data.map((collection, idx) => (
+          <SelectItem key={idx} value={collection._id}>
+            {collection.name}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+};
+
+const ColorSelection = ({ box }: { box: CanvasShape }) => {
+  const [selectedId, setSelectedId] = useState<string>();
+  const [selectedColor, setSelectedColor] = useState<string>();
+  const { data: collections } = useCollections({ type: "COLOR" });
+  const { data: color } = useColor(selectedColor);
+  const template = useCanvasStore((state) => state.template);
+  const setTemplate = useCanvasStore((state) => state.setTemplate);
+
+  useEffect(() => {
+    if (selectedId) {
+      const collection = collections?.data.find((c) => c._id === selectedId)
+        ?.assets?.[0];
+      setSelectedColor(collection);
+    }
+  }, [selectedId]);
+
+  useEffect(() => {
+    if (color) {
+      const newShapes = template.map((shape) =>
+        box.key === shape.key ? { ...shape, fill: color.data.primary } : shape
+      );
+      setTemplate(newShapes);
+    }
+  }, [color]);
+
+  return (
+    <Select value={selectedId} onValueChange={setSelectedId}>
+      <SelectTrigger>
+        <SelectValue placeholder="Select a color collection" />
+      </SelectTrigger>
+      <SelectContent>
+        {collections?.data.map((collection, idx) => (
+          <SelectItem key={idx} value={collection._id}>
+            {collection.name}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+};
+
+const FontSelection = ({ box }: { box: CanvasShape }) => {
+  const [selectedId, setSelectedId] = useState<string>();
+  const [selectedFont, setSelectedFont] = useState<string>();
+  const { data: collections } = useCollections({ type: "FONT" });
+  const { data: font } = useFont(selectedFont);
+  const template = useCanvasStore((state) => state.template);
+  const setTemplate = useCanvasStore((state) => state.setTemplate);
+
+  const loadFont = async (font: FontAsset) => {
+    const fontFace = new FontFace(`font-${box.key}`, `url(${font.url})`);
+    const loadedFont = await fontFace.load();
+    document.fonts.add(loadedFont);
+  };
+
+  useEffect(() => {
+    if (selectedId) {
+      const collection = collections?.data.find((c) => c._id === selectedId)
+        ?.assets?.[0];
+      setSelectedFont(collection);
+    }
+  }, [selectedId]);
+
+  useEffect(() => {
+    if (font) {
+      const newShapes = template.map((shape) =>
+        box.key === shape.key
+          ? { ...shape, fontId: `font-${shape.key}` }
+          : shape
+      );
+      loadFont(font.data).then(() => setTemplate(newShapes));
+    }
+  }, [font]);
+
+  return (
+    <Select value={selectedId} onValueChange={setSelectedId}>
+      <SelectTrigger>
+        <SelectValue placeholder="Select a font collection" />
       </SelectTrigger>
       <SelectContent>
         {collections?.data.map((collection, idx) => (

@@ -12,7 +12,7 @@ export const ColorPanel = () => {
       <CollectionList type="COLOR" />
       <div className="flex flex-row justify-between">
         <AddColorsForm />
-        <AddToCollection selected={selected} />
+        <AddToCollection selected={selected} type="COLOR" />
       </div>
       <ColorList onColorSelect={setSelected} />
     </div>

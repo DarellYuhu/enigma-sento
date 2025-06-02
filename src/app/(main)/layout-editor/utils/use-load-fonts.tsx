@@ -1,8 +1,7 @@
-import { Font } from "@/hooks/feature/asset/use-fonts";
 import { useCanvasStore } from "@/store/use-canvas-store";
 import { useEffect, useState } from "react";
 
-export const useLoadFonts = (fonts?: Font[]) => {
+export const useLoadFonts = (fonts?: FontAsset[]) => {
   const [mapFonts, setMapFonts] = useState(new Map());
   const [isFontLoad, setIsFontLoad] = useState(false);
   const setTemplate = useCanvasStore((state) => state.setTemplate);

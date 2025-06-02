@@ -1,14 +1,15 @@
 import { SentoClient } from "@/lib/sento-client";
 import { useQuery } from "@tanstack/react-query";
 
-export const useColors = () => {
+export const useColor = (id?: string) => {
   return useQuery({
-    queryKey: ["colors"],
+    queryKey: ["colors", id],
     queryFn: async () => {
-      const { data } = await SentoClient.get<ClientRes<ColorAsset[]>>(
-        "/assets/colors"
+      const { data } = await SentoClient.get<ClientRes<ColorAsset>>(
+        `/assets/colors/${id}`
       );
       return data;
     },
+    enabled: !!id,
   });
 };

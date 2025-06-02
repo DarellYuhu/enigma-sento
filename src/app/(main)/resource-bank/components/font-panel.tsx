@@ -12,7 +12,10 @@ export const FontPanel = () => {
       <CollectionList type="FONT" />
       <div className="flex flex-row justify-between">
         <AddFontsForm />
-        <AddToCollection selected={selected.map((select) => select._id)} />
+        <AddToCollection
+          selected={selected.map((select) => select._id)}
+          type="FONT"
+        />
       </div>
       <FontList onRowSelect={setSelected} />
     </div>

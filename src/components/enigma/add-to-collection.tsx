@@ -9,8 +9,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export const AddToCollection = ({ selected }: { selected: string[] }) => {
-  const { data: fonts } = useCollections({ type: "FONT" });
+export const AddToCollection = ({
+  selected,
+  type,
+}: {
+  selected: string[];
+  type: CollectionType;
+}) => {
+  const { data: collections } = useCollections({ type });
   const { mutate, isPending } = useUpdateCollection();
 
   const handleAddToCollection = (id: string) => {
@@ -34,7 +40,7 @@ export const AddToCollection = ({ selected }: { selected: string[] }) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        {fonts?.data.map((item) => (
+        {collections?.data.map((item) => (
           <DropdownMenuItem
             key={item._id}
             onClick={() => handleAddToCollection(item._id)}

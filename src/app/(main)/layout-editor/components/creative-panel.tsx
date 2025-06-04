@@ -9,6 +9,8 @@ import { useImage } from "@/hooks/feature/asset/use-image";
 import { createImgTag } from "../utils";
 import { useCanvasStore } from "@/store/use-canvas-store";
 import { Textarea } from "@/components/ui/textarea";
+import { useColor } from "@/hooks/feature/asset/use-color";
+import { useFont } from "@/hooks/feature/asset/use-font";
 import {
   Select,
   SelectContent,
@@ -16,8 +18,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useColor } from "@/hooks/feature/asset/use-color";
-import { useFont } from "@/hooks/feature/asset/use-font";
 
 export const CreativePanel = ({ value }: { value: Layout }) => {
   const fontId = value.template.shapes
@@ -76,7 +76,7 @@ const TextInput = ({ box }: { box: CanvasShape }) => {
   const template = useCanvasStore((state) => state.template);
 
   const handleValueChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    const value = e.target.value.split(/; ?/)[0];
+    const value = e.target.value.split(/\n/)[0];
     const newShapes = template.map((shape) =>
       box.key === shape.key ? { ...shape, value } : shape
     );

@@ -75,4 +75,23 @@ type Layout = {
   updatedAt: string;
 };
 
+type LayoutGroup = {
+  id: number;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  layoutCount: 3;
+};
+
+type VariableField = {
+  id: string;
+  key: string;
+  property:
+    | "value"
+    | "fontCollectionId"
+    | "colorCollectionId"
+    | "imageCollectionId";
+};
+
 type EditingMode = "EDITOR" | "CREATOR";

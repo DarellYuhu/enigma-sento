@@ -1,7 +1,7 @@
 import { SentoClient } from "@/lib/sento-client";
 import { useQuery } from "@tanstack/react-query";
 
-export const useCollections = ({ type }: { type: CollectionType }) => {
+export const useCollections = ({ type }: { type?: CollectionType }) => {
   return useQuery({
     queryKey: ["collections", type],
     queryFn: async () => {
@@ -10,6 +10,7 @@ export const useCollections = ({ type }: { type: CollectionType }) => {
       });
       return data;
     },
+    enabled: !!type,
   });
 };
 

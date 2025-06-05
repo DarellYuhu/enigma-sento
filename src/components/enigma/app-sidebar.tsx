@@ -10,10 +10,11 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { FileText, HardDrive, Home, PencilRuler, User } from "lucide-react";
-import { SignOut } from "../(main)/components/SignOut";
+import { FileText, HardDrive, PencilRuler, User } from "lucide-react";
+import { SignOut } from "../../app/(main)/components/SignOut";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { MdContentPasteGo } from "react-icons/md";
 
 export const AppSidebar = ({
   ...props
@@ -64,8 +65,8 @@ export const AppSidebar = ({
 
 const menus = [
   {
-    title: "Home",
-    icon: Home,
+    title: "Content Distribution",
+    icon: MdContentPasteGo,
     href: "/",
   },
   {

@@ -1,5 +1,5 @@
 import { getLayouts } from "@/api/layout/fetch";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { ItemList } from "./components/item-list";
@@ -19,7 +19,15 @@ export default async function LayoutListPage() {
             New
           </Button>
         </Link>
-        <GroupLayoutDialog layouts={data} />
+        <div>
+          <GroupLayoutDialog layouts={data} />
+          <Link
+            className={buttonVariants({ size: "sm", className: "ml-2" })}
+            href="/layout-editor/groups"
+          >
+            Layout Group
+          </Link>
+        </div>
       </div>
       <ItemList data={data} />
     </div>

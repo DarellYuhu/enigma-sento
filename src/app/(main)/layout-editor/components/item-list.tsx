@@ -22,7 +22,6 @@ export const useSelectionStore = create<State & Action>((set) => ({
 export const ItemList = ({ data }: { data: Layout[] }) => {
   const { selected, setSelected } = useSelectionStore();
 
-  console.log(selected);
   return (
     <div className="grid grid-cols-5 flex-wrap gap-2">
       {data.map((item) => (

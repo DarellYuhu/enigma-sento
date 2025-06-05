@@ -15,7 +15,7 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
 } from "@/components/ui/breadcrumb";
-import { AppSidebar } from "../components/AppSidebar";
+import { AppSidebar } from "@/components/enigma/app-sidebar";
 
 const queryClient = new QueryClient({
   defaultOptions: {

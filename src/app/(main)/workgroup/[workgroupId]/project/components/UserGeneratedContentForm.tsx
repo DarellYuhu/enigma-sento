@@ -32,7 +32,7 @@ export const UserGeneratedContentForm = (params: Params) => {
   };
 
   useEffect(() => {
-    if (params.storyId) form.reset({ storyId: params.storyId });
+    if (params.storyId) form.setValue("storyId", params.storyId);
   }, [params.storyId, form]);
 
   return (

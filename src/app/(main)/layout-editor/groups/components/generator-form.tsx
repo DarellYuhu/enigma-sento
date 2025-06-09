@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,7 +8,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { FileUploader } from "@/components/ui/file-uploader";
 import {
   Form,
   FormControl,
@@ -17,8 +15,6 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -26,11 +22,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { FileUploader } from "@/components/ui/file-uploader";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 import { useCollections } from "@/hooks/feature/asset/use-collections";
 import { SentoClient } from "@/lib/sento-client";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { Save } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -77,10 +80,31 @@ export const GeneratorForm = () => {
       const { data } = await SentoClient.get<VariableField[]>(
         `layout-groups/${id}/variable-fields`
       );
-      return data;
+      const grouped = Object.groupBy(data, (item) => item.key);
+      return grouped;
     },
     enabled: !!id,
   });
+
+  const handleSave = () => {
+    if (id) {
+      const values = form.getValues();
+      const filtered = Object.fromEntries(
+        Object.entries(values).filter(([key]) => !key.includes("value"))
+      );
+      localStorage.setItem(`form-groups-${id}`, JSON.stringify(filtered));
+      toast.success("Saved!");
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      const data = localStorage.getItem(`form-groups-${id}`);
+      if (data) {
+        form.reset(JSON.parse(data));
+      } else form.reset();
+    }
+  }, [id]);
 
   return (
     <Dialog
@@ -94,61 +118,84 @@ export const GeneratorForm = () => {
             Please fill all the field bellow
           </DialogDescription>
         </DialogHeader>
-        <Form {...form}>
-          <div className="grid grid-cols-2 items-center">
-            <Label>Total Generated Content</Label>
-            <Input
-              value={count}
-              onChange={(e) => setCount(e.target.value)}
-              type="number"
-              placeholder="10 by default"
-            />
-          </div>
-          <form
-            className="space-y-2"
-            id="generator-form"
-            onSubmit={form.handleSubmit((val) => mutate(val))}
-          >
-            {data?.map((item, idx) => (
-              <FormField
-                key={idx}
-                name={item.key + item.property}
-                control={form.control}
-                render={({ field }) => {
-                  return (
-                    <FormItem className="grid grid-cols-2 items-center space-y-0">
-                      <FormLabel className="mt-0">{field.name}</FormLabel>
-                      <FormControl>
-                        {item.property === "value" ? (
-                          <FileUploader
-                            value={field.value ? [field.value] : undefined}
-                            onValueChange={(val) => field.onChange(val[0])}
-                            maxSize={1024 * 1024 * 10}
-                            maxFileCount={1}
-                            accept={{
-                              "text/*": [],
-                            }}
-                          />
-                        ) : (
-                          <Select
-                            onValueChange={field.onChange}
-                            value={field.value}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a value" />
-                            </SelectTrigger>
-                            <SelectContentCustom type={item.property} />
-                          </Select>
-                        )}
-                      </FormControl>
-                    </FormItem>
-                  );
-                }}
+        <ScrollArea className="h-[500px]">
+          <Form {...form}>
+            <div className="grid grid-cols-2 items-center mb-2">
+              <Label>Total Generated Content</Label>
+              <Input
+                value={count}
+                onChange={(e) => setCount(e.target.value)}
+                type="number"
+                placeholder="10 by default"
               />
-            ))}
-          </form>
-        </Form>
+            </div>
+            <form
+              className="space-y-2"
+              id="generator-form"
+              onSubmit={form.handleSubmit((val) => mutate(val))}
+            >
+              {data &&
+                Object.values(data).map((field, idx) => (
+                  <div className="border p-2 rounded-md" key={idx}>
+                    <p>{field?.[0].key}</p>
+                    <Separator className="w-full my-2" />
+                    <div className="space-y-2">
+                      {field?.map((item, idx) => (
+                        <FormField
+                          key={idx}
+                          name={item.key + item.property}
+                          control={form.control}
+                          render={({ field }) => {
+                            return (
+                              <FormItem className="items-center space-y-0">
+                                <FormLabel className="mt-0">
+                                  {getLabel(item.property)}
+                                </FormLabel>
+                                <FormControl>
+                                  {item.property === "value" ? (
+                                    <FileUploader
+                                      value={
+                                        field.value ? [field.value] : undefined
+                                      }
+                                      onValueChange={(val) =>
+                                        field.onChange(val[0])
+                                      }
+                                      maxSize={1024 * 1024 * 10}
+                                      maxFileCount={1}
+                                      accept={{
+                                        "text/*": [],
+                                      }}
+                                    />
+                                  ) : (
+                                    <Select
+                                      onValueChange={field.onChange}
+                                      value={field.value}
+                                    >
+                                      <SelectTrigger>
+                                        <SelectValue placeholder="Select a value" />
+                                      </SelectTrigger>
+                                      <SelectContentCustom
+                                        type={item.property}
+                                      />
+                                    </Select>
+                                  )}
+                                </FormControl>
+                              </FormItem>
+                            );
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+            </form>
+          </Form>
+        </ScrollArea>
         <DialogFooter>
+          <Button size={"sm"} variant={"outline"} onClick={handleSave}>
+            <Save />
+            Save
+          </Button>
           <Button
             size={"sm"}
             type="submit"
@@ -161,6 +208,19 @@ export const GeneratorForm = () => {
       </DialogContent>
     </Dialog>
   );
+};
+
+const getLabel = (type: VariableField["property"]) => {
+  switch (type) {
+    case "colorCollectionId":
+      return "Color Collection";
+    case "fontCollectionId":
+      return "Font Collection";
+    case "imageCollectionId":
+      return "Image Collection";
+    case "value":
+      return "Text File";
+  }
 };
 
 const SelectContentCustom = ({ type }: { type: VariableField["property"] }) => {

@@ -199,6 +199,20 @@ const AddImageForm = () => {
                                 placeholder="Select people"
                                 hideClearAllButton
                                 hidePlaceholderWhenSelected
+                                onSearch={async (value) => {
+                                  if (value !== "" && data)
+                                    return data.data
+                                      .filter((user) =>
+                                        user.name
+                                          .toLowerCase()
+                                          .includes(value.toLowerCase())
+                                      )
+                                      .map((user) => ({
+                                        label: user.name,
+                                        value: user._id,
+                                      }));
+                                  return option ?? [];
+                                }}
                                 emptyIndicator={
                                   <p className="text-center text-sm">
                                     No results found

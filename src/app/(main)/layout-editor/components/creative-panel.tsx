@@ -42,7 +42,7 @@ export const CreativePanel = ({ value }: { value: Layout }) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Creative Panel</CardTitle>
+        <CardTitle>Preview Panel</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         {value.template.shapes.map((shape, idx) => (

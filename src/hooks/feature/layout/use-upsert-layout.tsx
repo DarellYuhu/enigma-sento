@@ -47,7 +47,7 @@ export const useUpsertLayout = () => {
       return data;
     },
     onSuccess: () => {
-      router.refresh();
+      router.push("/layout-editor");
       toast.success("Layout saved!");
     },
     onError: (err) => {

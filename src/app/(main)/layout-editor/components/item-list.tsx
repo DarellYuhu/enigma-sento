@@ -1,10 +1,20 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import Link from "next/link";
-import { PiEyeBold } from "react-icons/pi";
 import { create } from "zustand";
+import { EllipsisVertical } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { PiEyeBold } from "react-icons/pi";
+import Link from "next/link";
+import { DeleteLayoutAlert } from "./delete-layout-alert";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 
 type State = {
   selected: number[];
@@ -41,7 +51,28 @@ export const ItemList = ({ data }: { data: Layout[] }) => {
             <p className="font-semibold text-base">{item.name}</p>
             <p className="text-xs">{item.creator.displayName}</p>
           </div>
-          <Button
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                size={"icon"}
+                variant={"outline"}
+                className="size-6 ml-auto group-hover:visible invisible transition-all duration-100 opacity-0 group-hover:opacity-100"
+              >
+                <EllipsisVertical />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent onClick={(e) => e.stopPropagation()}>
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <Link href={`/layout-editor/${item.id}`}>
+                <DropdownMenuItem>
+                  <PiEyeBold /> View
+                </DropdownMenuItem>
+              </Link>
+              <DeleteLayoutAlert id={item.id} />
+            </DropdownMenuContent>
+          </DropdownMenu>
+          {/* <Button
             size={"icon"}
             className="size-7 ml-auto group-hover:visible invisible transition-all duration-100 opacity-0 group-hover:opacity-100"
             asChild
@@ -52,7 +83,7 @@ export const ItemList = ({ data }: { data: Layout[] }) => {
             >
               <PiEyeBold size={1} />
             </Link>
-          </Button>
+          </Button> */}
         </div>
       ))}
     </div>

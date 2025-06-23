@@ -16,7 +16,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export const EditingPanel = () => {
+export const EditingPanel = ({ id }: { id?: number }) => {
   const { mutate, isPending } = useUpsertLayout();
   const name = useCanvasStore((state) => state.name);
   const template = useCanvasStore((state) => state.template);

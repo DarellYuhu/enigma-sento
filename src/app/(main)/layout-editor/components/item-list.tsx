@@ -2,7 +2,7 @@
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { create } from "zustand";
-import { EllipsisVertical } from "lucide-react";
+import { EllipsisVertical, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PiEyeBold } from "react-icons/pi";
 import Link from "next/link";
@@ -69,21 +69,14 @@ export const ItemList = ({ data }: { data: Layout[] }) => {
                   <PiEyeBold /> View
                 </DropdownMenuItem>
               </Link>
+              <Link href={`/layout-editor/${item.id}/edit`}>
+                <DropdownMenuItem>
+                  <Pencil /> Edit
+                </DropdownMenuItem>
+              </Link>
               <DeleteLayoutAlert id={item.id} />
             </DropdownMenuContent>
           </DropdownMenu>
-          {/* <Button
-            size={"icon"}
-            className="size-7 ml-auto group-hover:visible invisible transition-all duration-100 opacity-0 group-hover:opacity-100"
-            asChild
-          >
-            <Link
-              href={`/layout-editor/${item.id}`}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <PiEyeBold size={1} />
-            </Link>
-          </Button> */}
         </div>
       ))}
     </div>

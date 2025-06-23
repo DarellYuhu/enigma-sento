@@ -9,14 +9,16 @@ import { CanvasLayout } from "./canvas-layout";
 export default function VanillaCanvas({
   value,
   mode,
+  name,
 }: {
   value?: Layout;
+  name?: string;
+  id?: number;
   mode: "EDITOR" | "CREATOR";
 }) {
-  const setMode = useCanvasStore((state) => state.setMode);
   const setTemplate = useCanvasStore((state) => state.setTemplate);
   const setSelectedBox = useCanvasStore((state) => state.setSelectedBox);
-  const resetStore = useCanvasStore((state) => state.resetStore);
+  const setName = useCanvasStore((state) => state.setName);
   const setCanvasDimensions = useCanvasStore(
     (state) => state.setCanvasDimensions
   );
@@ -48,18 +50,14 @@ export default function VanillaCanvas({
       });
       loadTemplate(value);
     }
-  }, [value]);
-
-  useEffect(() => {
-    setMode(mode);
-    if (mode === "EDITOR") resetStore();
-  }, [mode]);
+    if (name) setName(name);
+  }, [value, name]);
 
   return (
     <div className="flex flex-row gap-4">
-      <CanvasLayout />
+      <CanvasLayout mode={mode} />
       <div className="space-y-4 flex-1">
-        {mode === "EDITOR" && <EditingPanel />}
+        {mode === "EDITOR" && <EditingPanel id={value?.id} />}
 
         {mode === "CREATOR" && value && (
           <CreativePanel value={structuredClone(value)} />

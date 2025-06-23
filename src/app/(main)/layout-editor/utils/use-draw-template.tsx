@@ -2,8 +2,7 @@ import { useEffect } from "react";
 import { toLocalCoords, wrapText } from ".";
 import { useCanvasStore } from "@/store/use-canvas-store";
 
-export const useDrawTemplate = () => {
-  const mode = useCanvasStore((state) => state.mode);
+export const useDrawTemplate = (mode: "EDITOR" | "CREATOR") => {
   const canvasRef = useCanvasStore((state) => state.canvasRef);
   const canvasDimensions = useCanvasStore((state) => state.canvasDimensions);
   const template = useCanvasStore((state) => state.template);
@@ -270,7 +269,7 @@ export const useDrawTemplate = () => {
 
   useEffect(() => {
     drawTemplate();
-  }, [template, selectedBox, canvasDimensions]);
+  }, [template, canvasRef, selectedBox, canvasDimensions, mode]);
 
   return {
     drawTemplate,

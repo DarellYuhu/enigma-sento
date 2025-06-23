@@ -2,12 +2,12 @@ import { useCanvasStore } from "@/store/use-canvas-store";
 import { useEffect, useRef } from "react";
 import { useDrawTemplate } from "../utils/use-draw-template";
 
-export const CanvasLayout = () => {
+export const CanvasLayout = ({ mode }: { mode: "EDITOR" | "CREATOR" }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const setCanvasRef = useCanvasStore((state) => state.setCanvasRef);
   const canvasDimensions = useCanvasStore((state) => state.canvasDimensions);
   const { handleKeyDown, handleMouseDown, handleMouseMove, handleMouseUp } =
-    useDrawTemplate();
+    useDrawTemplate(mode);
 
   useEffect(() => {
     if (canvasRef) {

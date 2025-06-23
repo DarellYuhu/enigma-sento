@@ -5,6 +5,7 @@ import { CreativePanel } from "./creative-panel";
 import { useCanvasStore } from "@/store/use-canvas-store";
 import { EditingPanel } from "./editing-panel";
 import { CanvasLayout } from "./canvas-layout";
+import { useRouter } from "next/navigation";
 
 export default function VanillaCanvas({
   value,
@@ -16,6 +17,8 @@ export default function VanillaCanvas({
   id?: number;
   mode: "EDITOR" | "CREATOR";
 }) {
+  const router = useRouter();
+  const resetStore = useCanvasStore((state) => state.resetStore);
   const setTemplate = useCanvasStore((state) => state.setTemplate);
   const setSelectedBox = useCanvasStore((state) => state.setSelectedBox);
   const setName = useCanvasStore((state) => state.setName);
@@ -52,6 +55,11 @@ export default function VanillaCanvas({
     }
     if (name) setName(name);
   }, [value, name]);
+
+  useEffect(() => {
+    resetStore();
+    router.refresh();
+  }, []);
 
   return (
     <div className="flex flex-row gap-4">

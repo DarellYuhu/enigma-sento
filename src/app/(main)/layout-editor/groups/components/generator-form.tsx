@@ -23,7 +23,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { FileUploader } from "@/components/ui/file-uploader";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -36,6 +35,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { Textarea } from "@/components/ui/textarea";
 
 export const GeneratorForm = () => {
   const [count, setCount] = useState("");
@@ -51,9 +51,8 @@ export const GeneratorForm = () => {
         payload,
         {
           params: count && { total: count },
-          headers: { "Content-Type": "multipart/form-data" },
           responseType: "blob",
-        }
+        },
       );
       const contentDisposition = res.headers["content-disposition"];
       const match = contentDisposition?.match(/filename="?(.+)"?/);
@@ -78,7 +77,7 @@ export const GeneratorForm = () => {
     queryKey: ["variable-fields", id],
     queryFn: async () => {
       const { data } = await SentoClient.get<VariableField[]>(
-        `layout-groups/${id}/variable-fields`
+        `layout-groups/${id}/variable-fields`,
       );
       const grouped = Object.groupBy(data, (item) => item.key);
       return grouped;
@@ -90,7 +89,7 @@ export const GeneratorForm = () => {
     if (id) {
       const values = form.getValues();
       const filtered = Object.fromEntries(
-        Object.entries(values).filter(([key]) => !key.includes("value"))
+        Object.entries(values).filter(([key]) => !key.includes("value")),
       );
       localStorage.setItem(`form-groups-${id}`, JSON.stringify(filtered));
       toast.success("Saved!");
@@ -153,18 +152,17 @@ export const GeneratorForm = () => {
                                 </FormLabel>
                                 <FormControl>
                                   {item.property === "value" ? (
-                                    <FileUploader
+                                    <Textarea
+                                      rows={6}
                                       value={
-                                        field.value ? [field.value] : undefined
+                                        field.value &&
+                                        (field.value as string[]).join("\n")
                                       }
-                                      onValueChange={(val) =>
-                                        field.onChange(val[0])
+                                      onChange={(e) =>
+                                        field.onChange(
+                                          e.currentTarget.value.split("\n"),
+                                        )
                                       }
-                                      maxSize={1024 * 1024 * 10}
-                                      maxFileCount={1}
-                                      accept={{
-                                        "text/*": [],
-                                      }}
                                     />
                                   ) : (
                                     <Select
@@ -219,7 +217,7 @@ const getLabel = (type: VariableField["property"]) => {
     case "imageCollectionId":
       return "Image Collection";
     case "value":
-      return "Text File";
+      return "Text";
   }
 };
 

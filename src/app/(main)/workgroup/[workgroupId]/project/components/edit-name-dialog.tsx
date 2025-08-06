@@ -26,6 +26,7 @@ import {
   useUpdateProject,
 } from "@/hooks/feature/project/use-update-project";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Pencil } from "lucide-react";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 
@@ -44,14 +45,16 @@ export const EditNameDialog = ({ projectId }: { projectId: string }) => {
         onSuccess() {
           closeRef.current?.click();
         },
-      }
+      },
     );
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Change Project Name</Button>
+        <Button variant={"outline"}>
+          <Pencil /> Change name
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

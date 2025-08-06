@@ -30,7 +30,7 @@ export const CreativePanel = ({ value }: { value: Layout }) => {
         "/assets/fonts",
         {
           params: { fontId },
-        }
+        },
       );
       return data;
     },
@@ -78,7 +78,7 @@ const TextInput = ({ box }: { box: CanvasShape }) => {
   const handleValueChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value.split(/\n/)[0];
     const newShapes = template.map((shape) =>
-      box.key === shape.key ? { ...shape, value } : shape
+      box.key === shape.key ? { ...shape, value } : shape,
     );
     setTemplate(newShapes);
   };
@@ -103,7 +103,7 @@ const ImageSelection = ({ box }: { box: CanvasShape }) => {
     if (image) {
       createImgTag(box.key, image.data.url);
       const newShapes = template.map((shape) =>
-        box.key === shape.key ? { ...shape, imageUrl: image.data.url } : shape
+        box.key === shape.key ? { ...shape, imageUrl: image.data.url } : shape,
       );
       setTemplate(newShapes);
     }
@@ -144,7 +144,7 @@ const ColorSelection = ({ box }: { box: CanvasShape }) => {
   useEffect(() => {
     if (color) {
       const newShapes = template.map((shape) =>
-        box.key === shape.key ? { ...shape, fill: color.data.primary } : shape
+        box.key === shape.key ? { ...shape, fill: color.data.primary } : shape,
       );
       setTemplate(newShapes);
     }
@@ -193,7 +193,7 @@ const FontSelection = ({ box }: { box: CanvasShape }) => {
       const newShapes = template.map((shape) =>
         box.key === shape.key
           ? { ...shape, fontId: `font-${shape.key}` }
-          : shape
+          : shape,
       );
       loadFont(font.data).then(() => setTemplate(newShapes));
     }

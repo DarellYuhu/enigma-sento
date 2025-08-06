@@ -23,7 +23,7 @@ export const CollectionList = ({ type }: { type: CollectionType }) => {
     <ToggleGroup
       type="single"
       variant="outline"
-      className="flex flex-row flex-wrap"
+      className="grid grid-cols-5"
       value={value}
       onValueChange={setValue}
     >

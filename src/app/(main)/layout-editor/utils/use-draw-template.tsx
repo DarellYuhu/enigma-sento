@@ -82,7 +82,7 @@ export const useDrawTemplate = (mode: "EDITOR" | "CREATOR") => {
       box.x + box.width - resizeHandleSize,
       box.y + box.height - resizeHandleSize,
       resizeHandleSize,
-      resizeHandleSize
+      resizeHandleSize,
     );
   }
 
@@ -119,7 +119,7 @@ export const useDrawTemplate = (mode: "EDITOR" | "CREATOR") => {
             box.height / 2,
             0,
             0,
-            Math.PI * 2
+            Math.PI * 2,
           );
           ctx.stroke();
           ctx.fill();
@@ -196,12 +196,51 @@ export const useDrawTemplate = (mode: "EDITOR" | "CREATOR") => {
 
   const handleImageRender = (
     box: CanvasShape,
-    ctx: CanvasRenderingContext2D
+    ctx: CanvasRenderingContext2D,
   ) => {
     const img = document.getElementById(`image-${box.key}`) as HTMLImageElement;
     if (!img) return;
-    ctx.drawImage(img, 0, 0, box.width, box.height); // draw at local 0,0 inside clipped region
-    img.onload = () => drawTemplate();
+    const boxRatio = box.width / box.height;
+    const imgRatio = img.width / img.height;
+
+    let sx = 0,
+      sy = 0,
+      sWidth = img.width,
+      sHeight = img.height;
+
+    // Crop to cover: determine source crop area from image
+    if (imgRatio > boxRatio) {
+      // Image is wider than box – crop left/right
+      sWidth = img.height * boxRatio;
+      sx = (img.width - sWidth) / 2;
+    } else {
+      // Image is taller than box – crop top/bottom
+      sHeight = img.width / boxRatio;
+      sy = (img.height - sHeight) / 2;
+    }
+
+    ctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, box.width, box.height);
+
+    img.onload = () => drawTemplate(); // optional redraw trigger
+    // const hBoxRatio = box.width / img.width;
+    // const vBoxRatio = box.height / img.height;
+    // const ratio = Math.min(hBoxRatio, vBoxRatio);
+    //
+    // const centerShift_x = (box.width - img.width * ratio) / 2;
+    // const centerShift_y = (box.height - img.height * ratio) / 2;
+    //
+    // ctx.drawImage(
+    //   img,
+    //   0,
+    //   0,
+    //   img.width,
+    //   img.height,
+    //   centerShift_x,
+    //   centerShift_y,
+    //   img.width * ratio,
+    //   img.height * ratio,
+    // ); // draw at local 0,0 inside clipped region
+    // img.onload = () => drawTemplate();
   };
 
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {

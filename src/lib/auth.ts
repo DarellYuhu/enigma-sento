@@ -42,8 +42,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             "/auth/sign-in",
             credentials,
             {
-              baseURL: process.env.NEXT_PUBLIC_BASE_URL_API_AUTH,
-            }
+              baseURL: process.env.NEXT_PUBLIC_BASE_URL_API,
+            },
           );
           const user = { ...data.user, token: data.token };
           return user;

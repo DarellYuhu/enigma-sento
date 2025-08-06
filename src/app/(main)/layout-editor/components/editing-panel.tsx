@@ -27,7 +27,7 @@ export const EditingPanel = ({ id }: { id?: number }) => {
   const setSelectedBox = useCanvasStore((state) => state.setSelectedBox);
   const resetStore = useCanvasStore((state) => state.resetStore);
   const setCanvasDimensions = useCanvasStore(
-    (state) => state.setCanvasDimensions
+    (state) => state.setCanvasDimensions,
   );
 
   function saveTemplate() {
@@ -155,6 +155,56 @@ export const EditingPanel = ({ id }: { id?: number }) => {
 
             <Separator className="w-full" />
 
+            {selectedBox && (
+              <div>
+                <p className="text-sm text-muted-foreground">Size</p>
+                <div className="flex flex-row gap-2">
+                  <div className="relative">
+                    <Input
+                      className="peer pe-9"
+                      placeholder="Width"
+                      type="number"
+                      value={selectedBox.width}
+                      onChange={(e) => {
+                        const newBox = {
+                          ...selectedBox,
+                          width: +e.target.value,
+                        };
+                        setTemplate(
+                          template.map((b) => (b === selectedBox ? newBox : b)),
+                        );
+                        setSelectedBox(newBox);
+                      }}
+                    />
+                    <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 peer-disabled:opacity-50">
+                      <AiOutlineColumnWidth size={16} aria-hidden="true" />
+                    </div>
+                  </div>
+                  <div className="relative">
+                    <Input
+                      className="peer pe-9"
+                      placeholder="Height"
+                      type="number"
+                      value={selectedBox.height}
+                      onChange={(e) => {
+                        const newBox = {
+                          ...selectedBox,
+                          height: +e.target.value,
+                        };
+                        setTemplate(
+                          template.map((b) => (b === selectedBox ? newBox : b)),
+                        );
+                        setSelectedBox(newBox);
+                      }}
+                    />
+                    <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 peer-disabled:opacity-50">
+                      <AiOutlineColumnHeight size={16} aria-hidden="true" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* ========= ITEM-CONTROL ========= */}
             <div className="space-y-1">
               <TextConfiguration />
@@ -180,7 +230,7 @@ export const EditingPanel = ({ id }: { id?: number }) => {
                             : undefined,
                         };
                         const newTemplate = template.map((b) =>
-                          b === selectedBox ? newBox : b
+                          b === selectedBox ? newBox : b,
                         );
                         setTemplate(newTemplate);
                         setSelectedBox(newBox);

@@ -2,7 +2,6 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SessionProvider } from "next-auth/react";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
   SidebarInset,
   SidebarProvider,
@@ -16,6 +15,7 @@ import {
   BreadcrumbList,
 } from "@/components/ui/breadcrumb";
 import { AppSidebar } from "@/components/enigma/app-sidebar";
+import { useEffect } from "react";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,12 +24,23 @@ const queryClient = new QueryClient({
     },
   },
 });
+// This code is only for TypeScript
+declare global {
+  interface Window {
+    __TANSTACK_QUERY_CLIENT__: import("@tanstack/query-core").QueryClient;
+  }
+}
+
+// This code is for all users
 
 export default function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  useEffect(() => {
+    window.__TANSTACK_QUERY_CLIENT__ = queryClient;
+  }, []);
   return (
     <main>
       <SessionProvider>
@@ -55,7 +66,6 @@ export default function MainLayout({
               </div>
             </SidebarInset>
           </SidebarProvider>
-          <ReactQueryDevtools initialIsOpen={false} position="right" />
         </QueryClientProvider>
       </SessionProvider>
     </main>

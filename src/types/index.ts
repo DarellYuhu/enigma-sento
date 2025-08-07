@@ -95,3 +95,9 @@ type VariableField = {
 };
 
 type EditingMode = "EDITOR" | "CREATOR";
+
+type Folder = {
+  id: string;
+  name: string;
+  slug: string;
+};

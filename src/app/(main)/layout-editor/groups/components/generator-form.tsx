@@ -39,6 +39,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 export const GeneratorForm = () => {
   const [count, setCount] = useState("");
+  const [link, setLink] = useState("");
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -50,24 +51,26 @@ export const GeneratorForm = () => {
         `/layout-groups/${id}/generate-contents`,
         payload,
         {
-          params: count && { total: count },
+          params: { total: count || undefined, link: link || undefined },
           responseType: "blob",
         },
       );
-      const contentDisposition = res.headers["content-disposition"];
-      const match = contentDisposition?.match(/filename="?(.+)"?/);
-      const filename = match?.[1] || "downloaded-file";
-      const url = URL.createObjectURL(res.data);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      URL.revokeObjectURL(url);
-      document.body.removeChild(link);
+      if (res.data.size !== 0) {
+        const contentDisposition = res.headers["content-disposition"];
+        const match = contentDisposition?.match(/filename="?(.+)"?/);
+        const filename = match?.[1] || "downloaded-file";
+        const url = URL.createObjectURL(res.data);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        URL.revokeObjectURL(url);
+        document.body.removeChild(link);
+      }
     },
     onSuccess() {
-      toast.success("Layout group created!");
+      toast.success("Content generated successfully 🎉");
     },
     onError() {
       toast.error("Something went wrong!");
@@ -118,6 +121,11 @@ export const GeneratorForm = () => {
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="h-[500px]">
+          <Input
+            placeholder="Folder link"
+            onChange={(e) => setLink(e.target.value)}
+            className="mb-2"
+          />
           <Form {...form}>
             <div className="grid grid-cols-2 items-center mb-2">
               <Label>Total Generated Content</Label>

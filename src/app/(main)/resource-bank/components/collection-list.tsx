@@ -28,8 +28,8 @@ export const CollectionList = ({ type }: { type: CollectionType }) => {
       onValueChange={setValue}
     >
       {data?.data.map((item) => (
-        <ToggleGroupItem value={item._id} key={item._id}>
-          {item.name}
+        <ToggleGroupItem value={item._id} key={item._id} className="h-fit p-2">
+          <p className="line-clamp-1 hover:line-clamp-none">{item.name}</p>
         </ToggleGroupItem>
       ))}
     </ToggleGroup>

@@ -101,3 +101,19 @@ type Folder = {
   name: string;
   slug: string;
 };
+
+type FileType = {
+  id: string;
+  name: string;
+  bucket: string;
+  path: string;
+  fullPath: string;
+  url: string;
+};
+
+type Bundle = {
+  id: string;
+  name: string;
+  createdAt: string;
+  bundleFile: FileType[];
+};

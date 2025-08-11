@@ -19,7 +19,7 @@ export const useDrawTemplate = (mode: "EDITOR" | "CREATOR") => {
   const resizeHandleSize = 8;
 
   function drawTextFit(box: Shape, text: string) {
-    let fontSize = 30;
+    let fontSize = 500;
     const padding = 5;
     const maxWidth = box.width - padding * 2;
     const maxHeight = box.height - padding * 2;

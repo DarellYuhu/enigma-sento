@@ -116,4 +116,5 @@ type Bundle = {
   name: string;
   createdAt: string;
   bundleFile: FileType[];
+  notes?: string;
 };

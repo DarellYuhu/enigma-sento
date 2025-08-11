@@ -24,7 +24,6 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useCollections } from "@/hooks/feature/asset/use-collections";
@@ -40,6 +39,7 @@ import { Textarea } from "@/components/ui/textarea";
 export const GeneratorForm = () => {
   const [count, setCount] = useState("");
   const [link, setLink] = useState("");
+  const [captions, setCaptions] = useState("");
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -49,7 +49,7 @@ export const GeneratorForm = () => {
     mutationFn: async (payload: Record<string, string | File[]>) => {
       const res = await SentoClient.post(
         `/layout-groups/${id}/generate-contents`,
-        payload,
+        { ...payload, ...(captions && { captions: captions.split("\n") }) },
         {
           params: { total: count || undefined, link: link || undefined },
           responseType: "blob",
@@ -127,13 +127,19 @@ export const GeneratorForm = () => {
             className="mb-2"
           />
           <Form {...form}>
-            <div className="grid grid-cols-2 items-center mb-2">
-              <Label>Total Generated Content</Label>
+            <div className="items-center mb-2">
+              <Textarea
+                placeholder="Captions"
+                rows={5}
+                value={captions}
+                onChange={(e) => setCaptions(e.target.value)}
+              />
               <Input
                 value={count}
                 onChange={(e) => setCount(e.target.value)}
                 type="number"
-                placeholder="10 by default"
+                placeholder="Total generated content (10 by default)"
+                className="mt-2"
               />
             </div>
             <form

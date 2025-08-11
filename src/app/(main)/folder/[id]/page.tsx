@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Tooltip,
   TooltipContent,
@@ -27,7 +28,14 @@ import { getDownloadableResponse } from "@/utils/getDownloadableResponse";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { format } from "date-fns";
-import { Calendar, CheckIcon, CopyIcon, Download, Eye } from "lucide-react";
+import {
+  Calendar,
+  CheckIcon,
+  CopyIcon,
+  Download,
+  Eye,
+  NotepadText,
+} from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useId, useRef, useState } from "react";
@@ -156,6 +164,21 @@ const ViewDialog = ({ bundleId }: { bundleId: string }) => {
       return data;
     },
   });
+  const [notes, setNotes] = useState(data?.notes ?? "");
+
+  const { mutate } = useMutation({
+    mutationFn: async () => {
+      await SentoClient.patch(`/bundles/${bundleId}`, { notes });
+    },
+    onSuccess() {
+      toast.success("Data updated successfully 🎉");
+    },
+    onError(error) {
+      if (error instanceof AxiosError)
+        return toast.error(error.response?.data?.message);
+      toast.error("Something went wrong!");
+    },
+  });
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -167,6 +190,16 @@ const ViewDialog = ({ bundleId }: { bundleId: string }) => {
         <DialogHeader>
           <DialogTitle>Images</DialogTitle>
         </DialogHeader>
+        {/* <div> */}
+        {/*   <Textarea */}
+        {/*     value={notes} */}
+        {/*     onChange={(e) => setNotes(e.target.value)} */}
+        {/*     rows={4} */}
+        {/*   /> */}
+        {/*   <Button className="flex place-self-end mt-2" onClick={() => mutate()}> */}
+        {/*     <NotepadText /> Set Notes */}
+        {/*   </Button> */}
+        {/* </div> */}
         <ScrollArea className="h-[600px]">
           <div className="flex flex-row flex-wrap gap-2">
             {data?.bundleFile.map((file) => (

@@ -115,6 +115,7 @@ type Bundle = {
   id: string;
   name: string;
   createdAt: string;
-  bundleFile: FileType[];
+  bundleFile?: FileType[];
+  _count?: { bundleFile: number };
   notes?: string;
 };

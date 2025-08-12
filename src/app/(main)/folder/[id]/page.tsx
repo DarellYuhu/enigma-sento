@@ -38,7 +38,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { toast } from "sonner";
 
 export default function FolderDetailPage() {
@@ -71,21 +71,27 @@ export default function FolderDetailPage() {
         {data?.map((bundle) => (
           <div
             key={bundle.id}
-            className="border-input has-data-[state=checked]:border-primary/50 relative flex cursor-pointer flex-row gap-4 rounded-md border p-3 shadow-xs outline-none items-center"
+            className="border-input has-data-[state=checked]:border-primary/50 relative flex cursor-pointer flex-row gap-4 rounded-md border p-3 shadow-xs outline-none items-top"
           >
-            <div className="flex justify-between gap-2">
-              <Checkbox
-                id={bundle.id}
-                value={bundle.id}
-                className="order-1 after:absolute after:inset-0"
-                checked={selected.includes(bundle.id)}
-                onCheckedChange={(checked) =>
-                  toggleSelection(bundle.id, checked === true)
-                }
-              />
-            </div>
+            <Checkbox
+              id={bundle.id}
+              value={bundle.id}
+              className="order-0 after:absolute after:inset-0"
+              checked={selected.includes(bundle.id)}
+              onCheckedChange={(checked) =>
+                toggleSelection(bundle.id, checked === true)
+              }
+            />
             <Label htmlFor={bundle.id} className="flex flex-row w-full">
-              <p>{bundle.name}</p>
+              <div>
+                <p>
+                  {bundle.name}{" "}
+                  <span className="text-gray-600">
+                    ({bundle._count?.bundleFile} contents)
+                  </span>
+                </p>
+                <p className="text-gray-600 mt-2">{bundle.notes}</p>
+              </div>
               <p className="ml-auto flex flex-row items-center gap-2">
                 <Calendar size={16} />{" "}
                 {format(bundle.createdAt, "dd MMM yyyy hh:mm")}
@@ -165,7 +171,6 @@ const ViewDialog = ({ bundleId }: { bundleId: string }) => {
     },
   });
   const [notes, setNotes] = useState(data?.notes ?? "");
-
   const { mutate } = useMutation({
     mutationFn: async () => {
       await SentoClient.patch(`/bundles/${bundleId}`, { notes });
@@ -179,6 +184,9 @@ const ViewDialog = ({ bundleId }: { bundleId: string }) => {
       toast.error("Something went wrong!");
     },
   });
+  useEffect(() => {
+    if (data?.notes) setNotes(data.notes);
+  }, [data?.notes]);
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -190,19 +198,19 @@ const ViewDialog = ({ bundleId }: { bundleId: string }) => {
         <DialogHeader>
           <DialogTitle>Images</DialogTitle>
         </DialogHeader>
-        {/* <div> */}
-        {/*   <Textarea */}
-        {/*     value={notes} */}
-        {/*     onChange={(e) => setNotes(e.target.value)} */}
-        {/*     rows={4} */}
-        {/*   /> */}
-        {/*   <Button className="flex place-self-end mt-2" onClick={() => mutate()}> */}
-        {/*     <NotepadText /> Set Notes */}
-        {/*   </Button> */}
-        {/* </div> */}
+        <div>
+          <Textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            rows={4}
+          />
+          <Button className="flex place-self-end mt-2" onClick={() => mutate()}>
+            <NotepadText /> Set Notes
+          </Button>
+        </div>
         <ScrollArea className="h-[600px]">
           <div className="flex flex-row flex-wrap gap-2">
-            {data?.bundleFile.map((file) => (
+            {data?.bundleFile?.map((file) => (
               <div key={file.id}>
                 <Image
                   src={file.url}

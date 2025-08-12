@@ -9,6 +9,7 @@ import { useFonts } from "../asset/use-fonts";
 import { useRouter } from "next/navigation";
 
 type Payload = {
+  id?: number;
   name: string;
   template: {
     dimensions: { width: number; height: number };
@@ -40,11 +41,16 @@ export const useUpsertLayout = () => {
           }
         })
       );
-      const { data } = await SentoClient.post("/layouts", {
+      if (payload.id) {
+        return await SentoClient.patch(`/layouts/${payload.id}`, {
+          ...payload,
+          creatorId: session?.user?.id,
+        });
+      }
+      await SentoClient.post("/layouts", {
         ...payload,
         creatorId: session?.user?.id,
       });
-      return data;
     },
     onSuccess: () => {
       router.push("/layout-editor");

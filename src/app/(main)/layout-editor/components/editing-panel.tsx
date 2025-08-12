@@ -5,7 +5,7 @@ import { useUpsertLayout } from "@/hooks/feature/layout/use-upsert-layout";
 import { useCanvasStore } from "@/store/use-canvas-store";
 import { FileUploader } from "@/components/ui/file-uploader";
 import { TextConfiguration } from "./text-configuration";
-import { Circle, Plus, Square, Triangle, Type } from "lucide-react";
+import { Circle, Plus, Save, Square, Triangle, Type } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -41,7 +41,7 @@ export const EditingPanel = ({ id }: { id?: number }) => {
       },
       name,
     };
-    mutate(payload, { onSuccess: resetStore });
+    mutate({ ...payload, id }, { onSuccess: resetStore });
   }
 
   const handleCreateShape = (type: Shape["type"]) => {
@@ -258,8 +258,8 @@ export const EditingPanel = ({ id }: { id?: number }) => {
 
       <CardFooter>
         <Button onClick={saveTemplate} disabled={isPending}>
-          <Plus />
-          Create
+          <Save />
+          Save
         </Button>
       </CardFooter>
     </Card>

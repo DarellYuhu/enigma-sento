@@ -119,3 +119,11 @@ type Bundle = {
   _count?: { bundleFile: number };
   notes?: string;
 };
+
+type GeneratedGroup = {
+  id: string;
+  name: string;
+  groups: string[];
+  createdAt: string;
+  updatedAt: string;
+};

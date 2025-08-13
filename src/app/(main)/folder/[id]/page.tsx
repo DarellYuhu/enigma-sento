@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Tooltip,
@@ -34,12 +34,15 @@ import {
   CopyIcon,
   Download,
   Eye,
+  ListOrdered,
   NotepadText,
 } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 import { toast } from "sonner";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { FileUploader } from "@/components/file-uploader";
 
 export default function FolderDetailPage() {
   const link = typeof window !== "undefined" ? window.location.origin : "";
@@ -107,24 +110,31 @@ export default function FolderDetailPage() {
 
 const DownloadDialog = ({ selected }: { selected: string[] }) => {
   const [count, setCount] = useState(0);
+  const [file, setFile] = useState<File>();
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
       const response = await SentoClient.post(
         "bundles/download",
         {
           bundleIds: selected,
-          count,
+          count: count || undefined,
+          groupKeys: file,
         },
-        { responseType: "blob" },
+        {
+          responseType: "blob",
+          headers: { "Content-Type": "multipart/form-data" },
+        },
       );
-      getDownloadableResponse(response);
+      if (response.data?.size > 0) getDownloadableResponse(response);
     },
     onSuccess() {
       toast.success("Downloaded 🎉");
     },
-    onError(error) {
+    async onError(error) {
       if (error instanceof AxiosError)
-        return toast.error(error.response?.data?.message);
+        return toast.error(
+          JSON.parse(await (error.response?.data as Blob).text())?.message,
+        );
       toast.error("Something went wrong!");
     },
   });
@@ -139,19 +149,71 @@ const DownloadDialog = ({ selected }: { selected: string[] }) => {
         <DialogHeader>
           <DialogTitle>Download</DialogTitle>
           <DialogDescription>
-            Download and grouping selected bundle into a certain count
+            Download and grouping selected bundle into a certain count or group
+            name
           </DialogDescription>
         </DialogHeader>
-        <Label>Group Count</Label>
-        <Input
-          placeholder="Count"
-          value={count.toString()}
-          type="number"
-          onChange={(e) => setCount(+e.target.value)}
-        />
+        <Tabs
+          defaultValue="by-count"
+          onValueChange={() => {
+            setFile(undefined);
+            setCount(0);
+          }}
+        >
+          <ScrollArea>
+            <TabsList className="bg-background mb-3 h-auto -space-x-px p-0 shadow-xs rtl:space-x-reverse">
+              <TabsTrigger
+                value="by-count"
+                className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary relative overflow-hidden rounded-none border py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e"
+              >
+                <ListOrdered
+                  className="-ms-0.5 me-1.5 opacity-60"
+                  size={16}
+                  aria-hidden="true"
+                />
+                By count
+              </TabsTrigger>
+              <TabsTrigger
+                value="by-name"
+                className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary relative overflow-hidden rounded-none border py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e"
+              >
+                <ListOrdered
+                  className="-ms-0.5 me-1.5 opacity-60"
+                  size={16}
+                  aria-hidden="true"
+                />
+                By group name
+              </TabsTrigger>
+            </TabsList>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+          <TabsContent value="by-count">
+            <Label>Group Count</Label>
+            <Input
+              placeholder="Count"
+              value={count.toString()}
+              type="number"
+              onChange={(e) => setCount(+e.target.value)}
+            />
+          </TabsContent>
+          <TabsContent value="by-name">
+            <FileUploader
+              maxSize={5 * 1024 * 1024}
+              multiple={false}
+              maxFiles={1}
+              //accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              onFilesChange={(file) =>
+                file[0] ? setFile(file[0].file as File) : undefined
+              }
+            />
+          </TabsContent>
+        </Tabs>
         <DialogFooter>
-          <Button disabled={isPending || count <= 0} onClick={() => mutate()}>
-            Submmit
+          <Button
+            disabled={isPending || (count <= 0 && !file)}
+            onClick={() => mutate()}
+          >
+            Submit
           </Button>
           <DialogClose className={buttonVariants({ variant: "outline" })}>
             Cancel

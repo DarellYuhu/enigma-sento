@@ -24,6 +24,7 @@ import { useDeleteStory } from "@/hooks/feature/project/use-delete-story";
 import { Fragment, useState } from "react";
 import { SectionCard } from "./SectionCard";
 import { Separator } from "@/components/ui/separator";
+import { UserGenerateContentWithSection } from "./UserGenerateContentWithSection";
 
 export const Story = ({
   stories,
@@ -80,12 +81,20 @@ export const Story = ({
             {story.data?.map((item, idx) => (
               <SectionCard item={item} key={idx} storyId={story._id} />
             ))}
-            {story.contentPerStory && story.type === "USER_GENERATE" && (
-              <UserGeneratedContentForm
-                storyId={story._id}
-                fileLength={story.contentPerStory}
-              />
-            )}
+            {story.contentPerStory &&
+              story.type === "USER_GENERATE" &&
+              (story.section > 1 ? (
+                <UserGenerateContentWithSection
+                  storyId={story._id}
+                  contentPerStory={story.contentPerStory}
+                  section={story.section}
+                />
+              ) : (
+                <UserGeneratedContentForm
+                  storyId={story._id}
+                  fileLength={story.contentPerStory}
+                />
+              ))}
             {status && story.type === "SYSTEM_GENERATE" && (
               <div className="col-span-full">
                 <GenerateContentButton storyId={story._id} />

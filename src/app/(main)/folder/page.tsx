@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { CreateFolderForm } from "./components/CreateFolderForm";
 import { SentoClient } from "@/lib/sento-client";
 import {
@@ -8,6 +8,7 @@ import {
   EllipsisVertical,
   FolderClosed,
   PackageCheck,
+  Trash,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -18,6 +19,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
 
 export default function FolderPage() {
   const { data } = useQuery({
@@ -25,6 +28,19 @@ export default function FolderPage() {
     queryFn: async () => {
       const { data } = await SentoClient.get<Folder[]>("folders");
       return data;
+    },
+  });
+  const { mutate: handleDelete } = useMutation({
+    mutationFn: async (id: string) => {
+      await SentoClient.delete(`/folders/${id}`);
+    },
+    onSuccess() {
+      toast.success("Folder deleted successfully 🎉");
+    },
+    onError(error) {
+      if (error instanceof AxiosError)
+        return toast.error(error.response?.data?.message);
+      toast.error("Something went wrong!");
     },
   });
   return (
@@ -59,6 +75,12 @@ export default function FolderPage() {
                     <PackageCheck /> Distributed contents
                   </DropdownMenuItem>
                 </Link>
+                <DropdownMenuItem
+                  className="text-red-500 focus:text-red-600"
+                  onClick={() => handleDelete(folder.id)}
+                >
+                  <Trash /> Delete
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

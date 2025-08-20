@@ -5,7 +5,7 @@ import { useUpsertLayout } from "@/hooks/feature/layout/use-upsert-layout";
 import { useCanvasStore } from "@/store/use-canvas-store";
 import { FileUploader } from "@/components/ui/file-uploader";
 import { TextConfiguration } from "./text-configuration";
-import { Circle, Plus, Save, Square, Triangle, Type } from "lucide-react";
+import { Circle, Save, Square, Triangle, Type } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {

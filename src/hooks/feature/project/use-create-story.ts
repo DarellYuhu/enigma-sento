@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
-import { z } from "zod";
+import { z } from "zod/v3";
 
 export const useCreateStory = () => {
   const queryClient = useQueryClient();
@@ -21,7 +21,7 @@ export const useCreateStory = () => {
           sections.map(async ({ images, ...sectionProps }, sectionIdx) => ({
             ...sectionProps,
             images: await getImages(images, sectionIdx),
-          }))
+          })),
         );
       }
 
@@ -47,7 +47,7 @@ export const useCreateStory = () => {
 
 const getImages = async (
   images: string | File[],
-  sectionIdx: number
+  sectionIdx: number,
 ): Promise<{ name: string; path: string }[]> => {
   if (typeof images === "string") {
     const { data } = await SentoClient.get<{
@@ -65,27 +65,23 @@ const getImages = async (
         "/storage/upload",
         {
           params: { path },
-        }
+        },
       );
       await axios.put(data.data, image);
       return { path, name: image.name };
-    })
+    }),
   );
 };
 
 export const createStorySchema = z
   .object({
-    section: z
-      .string()
-      .regex(/^[0-9]+$/i, "Section must be a number")
-      .transform((value) => parseInt(value, 10))
-      .optional(),
+    section: z.coerce.number().optional(),
     type: z.enum(["USER_GENERATE", "SYSTEM_GENERATE"]),
     projectId: z.string().trim().min(1, "Required"),
     data: z
       .array(
         z.object({
-          texts: z.string().transform((value) => value.split("\n")),
+          texts: z.array(z.string()),
           textColor: z.string(),
           textBgColor: z.string(),
           textStroke: z.string(),
@@ -99,12 +95,12 @@ export const createStorySchema = z
                   .instanceof(File)
                   .refine(
                     (file) =>
-                      file.type === "image/jpeg" || file.type === "image/png"
-                  )
+                      file.type === "image/jpeg" || file.type === "image/png",
+                  ),
               )
               .min(1),
           ]),
-        })
+        }),
       )
       .optional(),
   })

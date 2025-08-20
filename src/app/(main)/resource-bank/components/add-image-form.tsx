@@ -41,16 +41,16 @@ const formSchema = z.object({
         z.object({
           label: z.string(),
           value: z.string(),
-        })
+        }),
       ),
       location: z
         .object({
           name: z.string(),
-          latitude: z.string().transform((value) => parseFloat(value)),
-          longitude: z.string().transform((value) => parseFloat(value)),
+          latitude: z.coerce.number(),
+          longitude: z.coerce.number(),
         })
         .optional(),
-    })
+    }),
   ),
 });
 type FormSchema = z.infer<typeof formSchema>;
@@ -96,14 +96,14 @@ const AddImageForm = () => {
           form.reset();
           setOpen(false);
         },
-      }
+      },
     );
   };
 
   useEffect(() => {
     if (data) {
       setOption(
-        data.data.map((item) => ({ label: item.name, value: item._id }))
+        data.data.map((item) => ({ label: item.name, value: item._id })),
       );
     }
   }, [data]);
@@ -146,7 +146,7 @@ const AddImageForm = () => {
                               location: { latitude: 0, longitude: 0, name: "" },
                               people: [],
                               tags: "",
-                            }))
+                            })),
                           );
                         }}
                         value={field.value}
@@ -205,7 +205,7 @@ const AddImageForm = () => {
                                       .filter((user) =>
                                         user.name
                                           .toLowerCase()
-                                          .includes(value.toLowerCase())
+                                          .includes(value.toLowerCase()),
                                       )
                                       .map((user) => ({
                                         label: user.name,

@@ -179,7 +179,13 @@ export const CreateStoryForm = ({ projectId }: { projectId: string }) => {
                   <FormItem>
                     <FormLabel>Texts</FormLabel>
                     <FormControl>
-                      <Textarea rows={4} {...field} />
+                      <Textarea
+                        rows={4}
+                        value={field.value.join("\n")}
+                        onChange={(e) =>
+                          field.onChange(e.target.value.split("\n"))
+                        }
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

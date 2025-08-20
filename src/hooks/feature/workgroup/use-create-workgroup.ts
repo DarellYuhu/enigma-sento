@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 export const useCreateWorkgroup = () => {
   const { data: session } = useSession();
@@ -29,14 +29,8 @@ export const useCreateWorkgroup = () => {
 export const createWorkgroup = z
   .object({
     name: z.string().trim().min(1, "Required"),
-    session: z.preprocess(
-      (num) => parseInt(z.string().parse(num), 10),
-      z.number().positive()
-    ),
-    projectStoryPerUser: z.preprocess(
-      (num) => parseInt(z.string().parse(num), 10),
-      z.number().positive()
-    ),
+    session: z.coerce.number<number>().positive(),
+    projectStoryPerUser: z.coerce.number<number>().positive(),
     withTicket: z.boolean(),
   })
   .refine((data) => data.projectStoryPerUser >= data.session, {

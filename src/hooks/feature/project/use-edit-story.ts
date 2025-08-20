@@ -13,7 +13,7 @@ export const useEditStory = () => {
     mutationFn: async (payload: UpdateStoryBody) => {
       const { data } = await SentoClient.patch(
         `/stories/${payload.storyId}`,
-        payload
+        payload,
       );
       return data;
     },
@@ -33,10 +33,7 @@ export const useEditStory = () => {
 
 export const updateStoryBody = z.object({
   storyId: z.string().trim().min(1, "Required"),
-  captions: z
-    .string()
-    .transform((value) => value.split("\n"))
-    .optional(),
+  captions: z.array(z.string()).optional(),
   hashtags: z.string().optional(),
 });
 

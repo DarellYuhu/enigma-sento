@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/sidebar";
 import {
   FileText,
-  Folder,
   FolderClosed,
   HardDrive,
   PencilRuler,

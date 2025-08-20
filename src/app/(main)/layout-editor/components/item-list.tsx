@@ -2,7 +2,7 @@
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { create } from "zustand";
-import { EllipsisVertical, Pencil } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PiEyeBold } from "react-icons/pi";
 import Link from "next/link";

@@ -79,7 +79,13 @@ export const EditCaptionsDialog = ({ storyId }: { storyId: string }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Textarea rows={10} {...field} />
+                    <Textarea
+                      rows={10}
+                      value={field.value?.join("\n")}
+                      onChange={(e) =>
+                        field.onChange(e.target.value.split("\n"))
+                      }
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

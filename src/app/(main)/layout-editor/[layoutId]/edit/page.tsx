@@ -11,14 +11,7 @@ export default async function Page({
 
   return (
     <div>
-      {data && (
-        <VanillaCanvas
-          value={data}
-          mode={"EDITOR"}
-          name={data.name}
-          id={data.id}
-        />
-      )}
+      {data && <VanillaCanvas value={data} mode={"EDITOR"} name={data.name} />}
     </div>
   );
 }

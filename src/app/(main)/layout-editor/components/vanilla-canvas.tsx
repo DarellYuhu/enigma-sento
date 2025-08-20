@@ -14,7 +14,6 @@ export default function VanillaCanvas({
 }: {
   value?: Layout;
   name?: string;
-  id?: number;
   mode: "EDITOR" | "CREATOR";
 }) {
   const router = useRouter();
@@ -23,7 +22,7 @@ export default function VanillaCanvas({
   const setSelectedBox = useCanvasStore((state) => state.setSelectedBox);
   const setName = useCanvasStore((state) => state.setName);
   const setCanvasDimensions = useCanvasStore(
-    (state) => state.setCanvasDimensions
+    (state) => state.setCanvasDimensions,
   );
 
   const loadTemplate = (value: Layout) => {

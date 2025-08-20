@@ -69,11 +69,11 @@ export const ItemList = ({ data }: { data: Layout[] }) => {
                   <PiEyeBold /> View
                 </DropdownMenuItem>
               </Link>
-              {/* <Link href={`/layout-editor/${item.id}/edit`}> */}
-              {/*   <DropdownMenuItem> */}
-              {/*     <Pencil /> Edit */}
-              {/*   </DropdownMenuItem> */}
-              {/* </Link> */}
+              <Link href={`/layout-editor/${item.id}/edit`}>
+                <DropdownMenuItem>
+                  <Pencil /> Edit
+                </DropdownMenuItem>
+              </Link>
               <DeleteLayoutAlert id={item.id} />
             </DropdownMenuContent>
           </DropdownMenu>

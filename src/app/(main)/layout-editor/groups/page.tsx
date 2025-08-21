@@ -1,14 +1,13 @@
-import { getLayoutGroups } from "@/api/layout-group/fetch";
+"use client";
 import { GroupList } from "./components/group-list";
 import { GeneratorForm } from "./components/generator-form";
+import { Search } from "@/components/ui/search";
 
-export const dynamic = "force-dynamic";
-
-export default async function LayoutGroupPage() {
-  const data = (await getLayoutGroups()).data;
+export default function LayoutGroupPage() {
   return (
-    <div>
-      <GroupList list={data} />
+    <div className="space-y-2">
+      <Search />
+      <GroupList />
       <GeneratorForm />
     </div>
   );

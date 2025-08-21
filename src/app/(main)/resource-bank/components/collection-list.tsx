@@ -1,4 +1,5 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Search } from "@/components/ui/search";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useCollections } from "@/hooks/feature/asset/use-collections";
 import { useRouter } from "next/navigation";
@@ -22,10 +23,11 @@ export const CollectionList = ({ type }: { type: CollectionType }) => {
 
   return (
     <ScrollArea className="h-[300px] border rounded-md p-5">
+      <Search search="collection_search" />
       <ToggleGroup
         type="single"
         variant="outline"
-        className="grid grid-cols-5"
+        className="grid grid-cols-5 mt-2"
         value={value}
         onValueChange={setValue}
       >

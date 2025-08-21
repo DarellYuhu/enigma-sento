@@ -2,7 +2,7 @@
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { create } from "zustand";
-import { EllipsisVertical } from "lucide-react";
+import { EllipsisVertical, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PiEyeBold } from "react-icons/pi";
 import Link from "next/link";
@@ -15,6 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import { useLayouts } from "@/hooks/feature/layout/use-layouts";
 
 type State = {
   selected: number[];
@@ -29,12 +30,13 @@ export const useSelectionStore = create<State & Action>((set) => ({
   setSelected: (selected) => set({ selected }),
 }));
 
-export const ItemList = ({ data }: { data: Layout[] }) => {
+export const ItemList = () => {
+  const { data } = useLayouts();
   const { selected, setSelected } = useSelectionStore();
 
   return (
     <div className="grid grid-cols-5 flex-wrap gap-2">
-      {data.map((item) => (
+      {data?.map((item) => (
         <div
           className="group border p-2 rounded-md shadow-md relative flex gap-2 has-[[aria-checked=true]]:border-green-500 cursor-pointer"
           key={item.id}

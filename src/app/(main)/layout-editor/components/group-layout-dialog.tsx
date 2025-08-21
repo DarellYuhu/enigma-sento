@@ -30,6 +30,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useMutation } from "@tanstack/react-query";
 import { SentoClient } from "@/lib/sento-client";
 import { toast } from "sonner";
+import { useLayouts } from "@/hooks/feature/layout/use-layouts";
 
 const formSchema = z.object({
   name: z.string().trim().min(1, "Required"),
@@ -38,8 +39,9 @@ const formSchema = z.object({
 });
 type FromSchema = z.infer<typeof formSchema>;
 
-export const GroupLayoutDialog = ({ layouts }: { layouts: Layout[] }) => {
+export const GroupLayoutDialog = () => {
   const [open, setOpen] = useState(false);
+  const { data: layouts } = useLayouts();
   const closeRef = useRef<HTMLButtonElement | null>(null);
   const selected = useSelectionStore((state) => state.selected);
   const form = useForm<FromSchema>({
@@ -136,7 +138,7 @@ export const GroupLayoutDialog = ({ layouts }: { layouts: Layout[] }) => {
                 <FormItem>
                   <FormLabel>Layouts</FormLabel>
                   {field.value.map((id) => {
-                    const item = layouts.find((layout) => layout.id === id);
+                    const item = layouts?.find((layout) => layout.id === id);
                     return (
                       <div
                         className="group border p-2 rounded-md shadow-md relative flex gap-2"

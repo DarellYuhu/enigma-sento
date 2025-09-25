@@ -112,19 +112,15 @@ const DownloadDialog = ({ selected }: { selected: string[] }) => {
   const [count, setCount] = useState(0);
   const [file, setFile] = useState<File>();
   const { mutate, isPending } = useMutation({
-    mutationFn: async () => {
-      const response = await SentoClient.post(
-        "bundles/download",
-        {
-          bundleIds: selected,
-          count: count || undefined,
-          groupKeys: file,
-        },
-        {
-          responseType: "blob",
-          headers: { "Content-Type": "multipart/form-data" },
-        },
-      );
+    mutationFn: async (body: {
+      bundleIds: string[];
+      count?: number;
+      groupKeys?: File;
+    }) => {
+      const response = await SentoClient.post("bundles/download", body, {
+        responseType: "blob",
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       if (response.data?.size > 0) getDownloadableResponse(response);
     },
     onSuccess() {
@@ -211,7 +207,13 @@ const DownloadDialog = ({ selected }: { selected: string[] }) => {
         <DialogFooter>
           <Button
             disabled={isPending || (count <= 0 && !file)}
-            onClick={() => mutate()}
+            onClick={() =>
+              mutate({
+                bundleIds: selected,
+                count: count || undefined,
+                groupKeys: file,
+              })
+            }
           >
             Submit
           </Button>

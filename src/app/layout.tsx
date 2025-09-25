@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import "react-h5-audio-player/lib/styles.css";
 import "@cyntler/react-doc-viewer/dist/index.css";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -23,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} antialiased`}>
-        {children}
+        <NuqsAdapter>{children}</NuqsAdapter>
         <Toaster />
       </body>
     </html>

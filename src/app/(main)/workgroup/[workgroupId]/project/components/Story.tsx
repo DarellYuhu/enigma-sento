@@ -81,20 +81,13 @@ export const Story = ({
             {story.data?.map((item, idx) => (
               <SectionCard item={item} key={idx} storyId={story._id} />
             ))}
-            {story.contentPerStory &&
-              story.type === "USER_GENERATE" &&
-              (story.section > 1 ? (
-                <UserGenerateContentWithSection
-                  storyId={story._id}
-                  contentPerStory={story.contentPerStory}
-                  section={story.section}
-                />
-              ) : (
-                <UserGeneratedContentForm
-                  storyId={story._id}
-                  fileLength={story.contentPerStory}
-                />
-              ))}
+            {story.contentPerStory && story.type === "USER_GENERATE" && (
+              <UserGenerateContentWithSection
+                storyId={story._id}
+                contentPerStory={story.contentPerStory}
+                section={story.section}
+              />
+            )}
             {status && story.type === "SYSTEM_GENERATE" && (
               <div className="col-span-full">
                 <GenerateContentButton storyId={story._id} />

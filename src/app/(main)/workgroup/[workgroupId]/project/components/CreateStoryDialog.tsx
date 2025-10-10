@@ -27,12 +27,12 @@ export const CreateStoryDialog = ({ projectId }: { projectId: string }) => {
           </DialogDescription>
         </DialogHeader>
         <CreateDraftOnlyAlert projectId={projectId} />
-        <p className="flex items-center text-center text-xs font-semibold text-muted-foreground justify-center">
-          - Or fill this form -
-        </p>
-        <ScrollArea className="h-[420px]">
-          <CreateStoryForm projectId={projectId} />
-        </ScrollArea>
+        {/* <p className="flex items-center text-center text-xs font-semibold text-muted-foreground justify-center"> */}
+        {/*   - Or fill this form - */}
+        {/* </p> */}
+        {/* <ScrollArea className="h-[420px]"> */}
+        {/*   <CreateStoryForm projectId={projectId} /> */}
+        {/* </ScrollArea> */}
       </DialogContent>
     </Dialog>
   );

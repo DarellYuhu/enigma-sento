@@ -90,7 +90,11 @@ export const UserGenerateContentWithSection = ({
                         multiple={true}
                         onValueChange={field.onChange}
                         value={field.value}
-                        accept={{ "image/jpeg": [], "video/mp4": [] }}
+                        accept={{
+                          "image/jpeg": [],
+                          "image/png": [],
+                          "video/mp4": [],
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
